@@ -1,0 +1,26 @@
+// Vista de la pantalla de login
+   Created by mor on 4/05/16.
+extends layout
+
+block content
+    .container.col-sm-6
+        .panel.panel-primary
+            .panel-heading=d_title
+                a.right-align(href = "/new")
+                    span.glyphicon.glyphicon-plus.white
+            .panel-body
+                case error
+                    when 1
+                        #bad-credentials.alert.alert-danger(hidden)
+                            p="Login incorrecto."
+                br
+                form(role="form", method="POST")
+                    .form-group
+                        span.input-group-addon="Usuario"
+                        input.form-control(type="text", name="name", placeholder="usuario")
+                    .form-group
+                        span.input-group-addon="Contraseña"
+                        input.form-control(type="text", name="passwd", placeholder="contraseña")
+                    .form-group
+                        span.icon-input-btn
+                            input.btn.btn-default(type="submit", value="Entrar")
