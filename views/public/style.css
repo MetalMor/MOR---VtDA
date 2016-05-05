@@ -7,5 +7,11 @@
 }
 
 .container {
+    float: none;
+    margin: 0 auto;
     margin-top: 1%;
+}
+
+.text-center {
+    text-align: center;
 }

@@ -24,7 +24,7 @@ var mongo = {
             console.log(top[counter]);
     },
     /**
-     * Inserta un usuario en la BD.
+     * Inserta un usuario en la BD. WORKS
      * @param user Objeto usuario.
      */
     insertUser: function (user) {
@@ -32,33 +32,39 @@ var mongo = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                console.log("[mongo] nuevo usuario: " + user.name);
-                client.collection('users').insertOne({name: user.name, passwd: user.passwd}, db.close());
+                console.log("[mongo] insert user: " + user.name + " - " + user.passwd);
+                client.collection('users').insertOne({name: user.name, passwd: user.passwd}, function(err, result) {
+                    db.close();
+                    return err ? false : true;
+                });
             });
         });
     },
 
     findUserByName: function(user) {
-        var ret;
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                ret = client.collection('users').findOne({name: user.name}, db.close());
+                ret = client.collection('users').findOne({name: user.name}, function(err, doc) {
+                    db.close();
+                    console.log("doc: "+doc);
+                    return doc;
+                });
             });
         });
-        console.log('ret: '+ret);
-        return ret;
     },
 
-    findUser: function(user) {
-        var ret;
+    findUserByCreds: function(user) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                ret = client.collection('users').findOne({name: user.name, passwd: user.passwd}, db.close());
-                return ret;
+                client.collection('users').findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
+                    db.close();
+                    console.log("doc: "+doc);
+                    return doc;
+                });
             });
         });
     },

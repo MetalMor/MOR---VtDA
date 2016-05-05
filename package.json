@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Gestor de partidas de rol de Vampiro: la Edad Oscura [THE ROLL HAS BEGUN ò__ó]",
   "author": "mor@ubuntu-MOR",
+  "license": "GPL-3.0",
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "body-parser": "^1.15.0",
@@ -17,10 +18,10 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "utl": "https://github.com/MetalMor/MOR---VtDA"
+    "utl": "https://github.com/MetalMor/MOR-VtDA"
   },
   "bugs": {
-    "url": "https://github.com/MetalMor/MOR---VtDA/issues"
+    "url": "https://github.com/MetalMor/MOR-VtDA/issues"
   },
   "devDependencies": {}
 }

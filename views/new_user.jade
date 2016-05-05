@@ -3,31 +3,34 @@
 extends layout
 
 block content
-    .container.col-sm-6
+    .container.col-sm-4
         .panel.panel-primary
-            .panel-heading=d_title
+            .panel-heading.text-center=d_title
                 a.right-align(href = "/")
                     span.glyphicon.glyphicon-home.white
             .panel-body
                 case error
                     when 1
-                        #bad-credentials.alert.alert-danger(hidden)
-                            p="Error al recuperar las credenciales"
+                        #bad-credentials.alert.alert-danger
+                            p.text-center="Error al recuperar las credenciales"
                     when 2
-                        #bad-username.alert.alert-danger(hidden)
-                            p="El usuario ya existe."
+                        #bad-username.alert.alert-danger
+                            p.text-center="El usuario ya existe."
                     when 3
-                        #bad-passwd.alert.alert-danger(hidden)
-                            p="Las contraseñas no coinciden."
+                        #bad-username.alert.alert-danger
+                            p.text-center="Debes rellenar todos los campos."
+                    when 4
+                        #bad-passwd.alert.alert-danger
+                            p.text-center="Ambos campos de contraseña deben coincidir."
                 br
                 form(role="form", method="POST")
                     .form-group
-                        span.input-group-addon="Usuario"
-                        input.form-control(type="text", name="name", placeholder="usuario")
+                        span.input-group-addon.text-center="Usuario"
+                        input.form-control(type="text", name="name", placeholder="nombre...")
                     .form-group
-                        span.input-group-addon="Contraseña"
-                        input.form-control(type="text", name="passwd", placeholder="contraseña")
-                        input.form-control(type="text", name="passwd", placeholder="repite")
+                        span.input-group-addon.text-center="Contraseña"
+                        input.form-control(type="password", name="passwd", placeholder="contraseña...")
+                        input.form-control(type="password", name="passwd", placeholder="repite...")
                     .form-group
                         span.icon-input-btn
                             input.btn.btn-default(type="submit", value="Crear")
