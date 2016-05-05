@@ -5,10 +5,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var bodyParser = require('body-parser');
 var sha1 = require('sha1');
-var MongoClient = require('mongodb').MongoClient;
 
 var mongo = require('./mongo.js');
-var dbUrl = 'mongodb://localhost:27017/vtda';
 
 var ViewData = require('./models/ViewData.js');
 var User = require('./models/User.js');
