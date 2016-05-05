@@ -3,4 +3,21 @@
 extends layout
 
 block content
-    h1= d_title
+    .container.col-sm-4
+        .panel.panel-primary
+            .panel-heading.text-center=d_title
+                a.right-align(href = "/"+user.name+"/new")
+                    span.glyphicon.glyphicon-plus.white
+                a.left-align(href = "/")
+                    span.glyphicon.glyphicon-arrow-left.white
+            .panel-body
+                br
+                form(role="form", method="POST")
+                    .form-group
+                        span.input-group-addon.text-center="Partida"
+                        select.form-control(name="game")
+                            each game in games
+                                option=game
+                    .form-group
+                        span.icon-input-btn
+                            input.btn.btn-default(type="submit", value="Entrar")

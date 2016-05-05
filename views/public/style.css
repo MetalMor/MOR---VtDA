@@ -6,6 +6,10 @@
     float: right;
 }
 
+.left-align {
+    float: left;
+}
+
 .container {
     float: none;
     margin: 0 auto;

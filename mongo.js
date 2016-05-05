@@ -27,7 +27,7 @@ var mongo = {
      * Inserta un usuario en la BD. WORKS
      * @param user Objeto usuario.
      */
-    insertUser: function (user) {
+    insertUser: function (user, callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
             db.open(function(err, client) {
@@ -35,35 +35,35 @@ var mongo = {
                 console.log("[mongo] insert user: " + user.name + " - " + user.passwd);
                 client.collection('users').insertOne({name: user.name, passwd: user.passwd}, function(err, result) {
                     db.close();
-                    return err ? false : true;
+                    callback();
                 });
             });
         });
     },
 
-    findUserByName: function(user) {
+    findUserByName: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                ret = client.collection('users').findOne({name: user.name}, function(err, doc) {
+                client.collection('users').findOne({name: user.name}, function(err, doc) {
                     db.close();
-                    console.log("doc: "+doc);
-                    return doc;
+                    console.log("[mongo] doc: "+doc);
+                    callback(doc);
                 });
             });
         });
     },
 
-    findUserByCreds: function(user) {
+    findUserByCreds: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
                 client.collection('users').findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
                     db.close();
-                    console.log("doc: "+doc);
-                    return doc;
+                    console.log("[mongo] doc: "+doc);
+                    callback(doc);
                 });
             });
         });

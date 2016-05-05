@@ -4,6 +4,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var bodyParser = require('body-parser');
+var sha1 = require('sha1');
 var MongoClient = require('mongodb').MongoClient;
 
 var mongo = require('./mongo.js');
@@ -14,6 +15,13 @@ var User = require('./models/User.js');
 
 var PORT = 3000;
 var view;
+var user;
+
+var games = [];
+
+games.push("game1");
+games.push("game3");
+games.push("game2");
 
 // ***** IMPORTA EL MOTOR JADE *****
 app.set('view engine', 'jade');
@@ -29,56 +37,67 @@ app.get('/', function (req, res) {
     res.render(view.file, view.data);
 });
 app.post('/', function(req, res) {
-    // TODO validar usuario
     console.log("[server] validate user login");
-    var user = new User(req.body.name, req.body.passwd);
-    var userFromDb = mongo.findUserByCreds(user);
-    if(typeof userFromDb !== 'undefined') {
-        view = new ViewData('game.jade', user.name+' - VtDA', 'Selección de partida', 0);
-    } else {
-        view = new ViewData('login.jade', 'MOR - VtDA', 'Login', 1);
-    }
-    console.log('userFromDb: ' + userFromDb);
-    res.render(view.file, view.data);
+    user = new User(req.body.name, sha1(req.body.passwd));
+    mongo.findUserByCreds(user, function(u) {
+        if (typeof u != 'undefined' && u !== null) {
+            console.log("[server] userFromDb: "+ u.name);
+            res.redirect('/'+u.name+'/');
+        } else { // ERROR usuario no encontrado
+            view = new ViewData('login.jade', 'MOR - VtDA', 'Login', 1);
+            res.render(view.file, view.data);
+        }
+    });
 });
 
 app.get('/new', function(req, res) {
-    // TODO login usuario (mongo fix)
     console.log("[server] new user creation view");
     view = new ViewData('new_user.jade', 'MOR - VtDA', 'Nuevo Usuario', 0);
     res.render(view.file, view.data);
 });
 
 app.post('/new', function(req, res) {
-    // TODO inserta nuevo usuario (mongo fix)
     console.log("[server] validate new user");
     var passwdArray = req.body.passwd;
-    var newUser = new User(req.body.name, req.body.passwd[0]);
-    var userFromDb = mongo.findUserByName(newUser);
-    view = new ViewData('new_user.jade', 'MOR - VtDA', 'Nuevo Usuario', 1);
-    console.log('passwd: ' + passwdArray);
-    if (!passwdArray.hasOwnProperty('length') || passwdArray[0] !== passwdArray[1]) {
-        view.data.error = 4;
-    } else if(passwdArray[0] == '' || req.body.user == '') {
-        view.data.error = 3;
-    } else if(userFromDb !== null && typeof userFromDb !== 'undefined') {
-        view.data.error = 2;
-    } else {
-        console.log("[server] new user: "+newUser.name);
-        mongo.insertUser(newUser);
-        view = new ViewData('game.jade', newUser.name+' - VtDA', 'Selección de partida', 0);
-    }
-    res.render(view.file, view.data);
+    user = new User(req.body.name, sha1(req.body.passwd[0]));
+    mongo.findUserByName(user, function(u) {
+        view = new ViewData('new_user.jade', 'MOR - VtDA', 'Nuevo Usuario', 1);
+        if (!passwdArray.hasOwnProperty('length') || passwdArray[0] !== passwdArray[1]) { // ERROR distintos passwd
+            view.data.error = 4;
+            res.render(view.file, view.data);
+        } else if(passwdArray[0] == '' || req.body.user == '') { // ERROR empty passwd
+            view.data.error = 3;
+            res.render(view.file, view.data);
+        } else if(u !== null && typeof u !== 'undefined') { // ERROR usuario ya existe
+            view.data.error = 2;
+            res.render(view.file, view.data);
+        } else { // OK
+            mongo.insertUser(user, function() {
+                console.log("[server] new user: "+user.name);
+                view.data.games = games;
+                view.data.user = user;
+                res.redirect('/'+user.name+'/');
+            });
+        }
+    });
 });
 
 app.get('/:user/', function(req, res) {
     // TODO vista elegir partida
-    console.log("[server] game choice view");
-    view = new ViewData('game.jade', 'MOR - VtDA', 'Selección de partida', 0);
-    res.render(view.file, view.data);
+    var userName = req.params.user;
+    if(typeof userName != 'undefined') {
+        console.log("[server] game choice view");
+        if (user.name !== userName) {
+            view.data.error = 1;
+            res.redirect('/');
+        } else {
+            view = new ViewData('game.jade', userName + ' - VtDA', 'Selección de partida: '+userName, 0);
+            view.data.user = user;
+            view.data.games = games;
+            res.render(view.file, view.data);
+        }
+    }
 });
-
-//app.post('/:user');
 
 app.get('/:user/new', function(req, res) {
     // TODO vista crear partida
