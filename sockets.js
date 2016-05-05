@@ -8,7 +8,7 @@
  * @type {Snake} Modelo de objeto snake
  */
 var Snake = require('./snake');
-var mongo = require('./mongo');
+var mongo = require('./db/mongoUsers');
 
 var snakes = [];
 var food;

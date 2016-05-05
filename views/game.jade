@@ -6,7 +6,7 @@ block content
     .container.col-sm-4
         .panel.panel-primary
             .panel-heading.text-center=d_title
-                a.right-align(href = "/"+user.name+"/new")
+                a.right-align(href = "/login/"+user.name+"/new")
                     span.glyphicon.glyphicon-plus.white
                 a.left-align(href = "/")
                     span.glyphicon.glyphicon-arrow-left.white
@@ -17,7 +17,7 @@ block content
                         span.input-group-addon.text-center="Partida"
                         select.form-control(name="game")
                             each game in games
-                                option=game
+                                option=game.name
                     .form-group
                         span.icon-input-btn
                             input.btn.btn-default(type="submit", value="Entrar")
