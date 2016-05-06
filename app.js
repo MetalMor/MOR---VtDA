@@ -16,6 +16,10 @@ var Game = require('./models/Game.js'); // game model
 var PORT = 3000;
 var view, user, game;
 
+/**
+ * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
+ */
+
 var games, users; // users & games list
 mongoGames.listAllGames(function(list) {games = list});
 mongoUsers.listAllUsers(function(list) {users = list});
@@ -157,7 +161,13 @@ app.post('/login/:user/new/', function(req, res) {
             mongoGames.insertGame(game, function(){
                 mongoGames.listAllGames(function(list) {
                     games = list;
-                    res.redirect('/game/'+req.params.user+'/'+game.name);
+                    mongoUsers.findUserByName({name: req.params.user}, function(u) {
+                        user = u;
+                        user.gameList.push(game);
+                        mongoUsers.updateUser(user, function() {
+                            res.redirect('/game/'+user.name+'/'+game.name);
+                        })
+                    });
                 });
             });
         }

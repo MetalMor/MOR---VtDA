@@ -10,6 +10,7 @@ var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
 
 var dbUrl = 'mongodb://localhost:27017/vtda';
+var col = 'games';
 
 var mongoGames = {
 
@@ -18,7 +19,7 @@ var mongoGames = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('games').find().toArray(function(err, doc) {
+                client.collection(col).find().toArray(function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] listing all games: "+doc.length);
@@ -34,7 +35,7 @@ var mongoGames = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('games').insertOne(game, function(err, result) {
+                client.collection(col).insertOne(game, function(err, result) {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] inserted game: "+game.name);
@@ -50,13 +51,12 @@ var mongoGames = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('games').updateOne(
-                    {name: game.name}, {$upsert: {
+                client.collection(col).updateOne({name: game.name}, {$set: game/*{
                             charList: game.charList,
                             npcList: game.npcList,
                             mapList: game.mapList,
                             msgList: game.msgList
-                        }}, function(err, result) {
+                        }*/}, function(err, result) {
                         assert.equal(null, err);
                         console.log("[mongo] updated game: "+game.name);
                         if(callback !== null)
@@ -72,7 +72,7 @@ var mongoGames = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('games').findOne({name: game.name}, function(err, doc) {
+                client.collection(col).findOne({name: game.name}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if(doc !== null) console.log("[mongo] found game: "+doc.name);

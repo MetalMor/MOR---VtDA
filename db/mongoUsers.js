@@ -10,6 +10,11 @@ var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
 
 var dbUrl = 'mongodb://localhost:27017/vtda';
+var col = 'users';
+
+//
+// MEET THE PYRAMID OF DOOM ò___ó
+//
 
 var mongoUsers = {
 
@@ -18,7 +23,7 @@ var mongoUsers = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('users').find().toArray(function(err, doc) {
+                client.collection(col).find().toArray(function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] listing all users: "+doc.length);
@@ -34,7 +39,7 @@ var mongoUsers = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('users').insertOne(user, function(err, result) {
+                client.collection(col).insertOne(user, function(err, result) {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] inserted user: " + user.name);
@@ -50,7 +55,7 @@ var mongoUsers = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('users').findOne({name: user.name}, function(err, doc) {
+                client.collection(col).findOne({name: user.name}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if(doc !== null) console.log("[mongo] found user: "+doc.name);
@@ -67,7 +72,7 @@ var mongoUsers = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                client.collection('users').findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
+                client.collection(col).findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if(doc !== null) console.log("[mongo] found user: "+doc.name);
@@ -77,7 +82,7 @@ var mongoUsers = {
                 });
             });
         });
-    }
+    },
     /**
      * Muestra los 10 jugadores con mayor puntuación
      * @returns {Array} Array de los 10 jugadores con la puntuación más alta
@@ -117,6 +122,20 @@ var mongoUsers = {
         });
         mongoUsers.topTenPlayers();
     }*/
+    updateUser: function(user, callback) {
+        MongoClient.connect(dbUrl, function(err, db) {
+            assert.equal(null, err);
+            db.open(function(err, client) {
+                assert.equal(null, err);
+                console.log("[mongo] preparing user update");
+                client.collection(col).updateOne({name: user.name}, {$set: user}, function(err, result) {
+                    assert.equal(null, err);
+                    console.log("[mongo] updated user: "+user.name);
+                    callback();
+                });
+            });
+        });
+    }
 };
 
 module.exports = mongoUsers;

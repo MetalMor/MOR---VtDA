@@ -22,10 +22,10 @@ block content
                 form(role="form", method="POST")
                     input(hidden, name="user", value=user)
                     .form-group
-                        span.input-group-addon.text-center="Partida"
+                        span.input-group-addon.text-center="Selecciona la partida en la que vas a jugar"
                         select.form-control(name="name")
                             each game in games
                                 option=game.name
                     .form-group
                         span.icon-input-btn
-                            input.btn.btn-danger(type="submit", value="Entrar")
+                            input.btn.btn-danger(type="submit", value="Jugar")
