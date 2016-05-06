@@ -6,23 +6,28 @@ var io = require('socket.io')(server); // asyncronous events
 var bodyParser = require('body-parser'); // POST parameters
 var sha1 = require('sha1'); // pwd encoder
 
-var mongoUsers = require('./db/mongoUsers.js'); // db users controller
-var mongoGames = require('./db/mongoGames.js'); // db games controller
+var mongoUsers = require('./db/mongoUsers'); // db users controller
+var mongoGames = require('./db/mongoGames'); // db games controller
 
-var ViewData = require('./models/ViewData.js'); // view data model
-var User = require('./models/User.js'); // user model
-var Game = require('./models/Game.js'); // game model
+var util = require('./util')
+var ViewData = require('./models/ViewData'); // view data model
+var User = require('./models/User'); // user model
+var Game = require('./models/Game'); // game model
 
 var PORT = 3000;
 var view, user, game;
 
 /**
  * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
+ *
+ *
  */
 
 var games, users; // users & games list
-mongoGames.listAllGames(function(list) {games = list});
-mongoUsers.listAllUsers(function(list) {users = list});
+var setGames = function(list) {games = list};
+var setUsers = function(list) {users = list};
+mongoGames.listAllGames(setGames);
+mongoUsers.listAllUsers(setUsers);
 
 // ***** JADE TEMPLATES *****
 app.set('view engine', 'jade');
@@ -98,6 +103,7 @@ app.post('/login/new', function(req, res) {
 // ESCOGER PARTIDA
 app.get('/login/:user/', function(req, res) {
     var userName = req.params.user;
+    mongoGames.listAllGames(setGames);
     if(typeof userName != 'undefined') {
         console.log("[server] game choice view");
         if (user.name !== userName) {
@@ -165,10 +171,8 @@ app.post('/login/:user/new/', function(req, res) {
                         user = u;
                         user.gameList.push(game);
                         mongoUsers.updateUser(user, function() {
-                            mongoUsers.listAllUsers(function(list) {
-                                users = list;
-                                res.redirect('/game/'+user.name+'/'+game.name); // DAFUQIN CALLBACK HELL D:
-                            });
+                            mongoUsers.listAllUsers(setUsers);
+                            res.redirect('/game/'+user.name+'/'+game.name); // DAFUQIN CALLBACK HELL D:
                         })
                     });
                 });
@@ -179,11 +183,25 @@ app.post('/login/:user/new/', function(req, res) {
 
 // PANTALLA DE JUEGO
 app.get('/game/:user/:game', function(req, res) {
-    // TODO vista de la partida (validar si ha entrado el master o un player)
+    // TODO vista de la partida (validar si ha entrado el master o un player, y en este ultimo caso si tiene una ficha)
     var userName = req.params.user, gameName = req.params.game;
-    console.log("[server] user "+userName+" started playing at "+gameName);
-    view = new ViewData('game_master.jade', userName+' - '+gameName, gameName, 0);
-    res.render(view.file, view.data);
+    var tmpUser = {name: userName}, tmpGame = {name: gameName};
+    mongoUsers.findUserByName(tmpUser, function(u) {
+        user = u;
+        mongoGames.findGameByName(tmpGame, function(g) {
+            game = g;
+            view = new ViewData('panel_master.jade', userName+' - '+gameName, gameName+': '+userName, 0);
+            view.data.user = user;
+            view.data.game = game;
+            var index = util.getIndex(user.gameList, 'name', gameName);
+            if (index>0) { // existe: es el master
+                res.render(view.file, view.data);
+            } else { // no existe: entra como jugador
+                view.file = 'panel_player.jade';
+                res.render(view.file, view.data);
+            }
+        });
+    });
 });
 
 server.listen(PORT);

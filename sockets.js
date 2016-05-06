@@ -7,12 +7,11 @@
  * Control de la comunicación cliente-servidor vía websockets
  * @type {Snake} Modelo de objeto snake
  */
-var Snake = require('./snake');
-var mongo = require('./db/mongoUsers');
+var mongoUsers = require('./db/mongoUsers');
+var mongoGames = require('./db/mongoGames');
 
-var snakes = [];
-var food;
-
+var users = [];
+var games = []
 
 module.exports = function (io) {
     /**

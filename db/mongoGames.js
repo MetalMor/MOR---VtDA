@@ -12,7 +12,7 @@ var assert = require('assert');
 var dbUrl = 'mongodb://localhost:27017/vtda';
 var col = 'games';
 
-var mongoGames = {
+module.exports = {
 
     listAllGames: function(callback) {
         MongoClient.connect(dbUrl, function(err, db) {
@@ -82,8 +82,24 @@ var mongoGames = {
                 });
             });
         });
+    },
+
+    findOwnedList: function(game, field, callback) {
+        console.log("[mongo] looking for list in: "+game.name);
+        MongoClient.connect(dbUrl, function(err, db) {
+            assert.equal(null, err);
+            db.open(function(err, client) {
+                assert.equal(null, err);
+                client.collection(col).findOne({name: game.name}, field, function(err, list) {
+                    db.close();
+                    assert.equal(null, err);
+                    if(list !== null) console.log("[mongo] found game: "+list.name);
+                    else console.log("[mong] game not found: "+game.name);
+                    if(callback !== null)
+                        callback(list);
+                });
+            });
+        });
     }
 
 };
-
-module.exports = mongoGames;
