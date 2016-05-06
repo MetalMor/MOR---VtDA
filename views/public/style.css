@@ -2,16 +2,6 @@ body {
     background-image: url('img/bg/backg02.jpg');
 }
 
-.panel {
-    border-color: black;
-    background-color: gainsboro;
-}
-
-.panel > .panel-heading {
-    background-image: none;
-    background-color: firebrick;
-}
-
 .white {
     color: gainsboro;
 }

@@ -1,0 +1,9 @@
+.panel {
+    border-color: black;
+    background-color: gainsboro;
+}
+
+.panel > .panel-heading {
+    background-image: none;
+    background-color: firebrick;
+}
