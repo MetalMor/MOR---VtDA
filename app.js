@@ -11,11 +11,12 @@ var mongoGames = require('./db/mongoGames.js'); // db games controller
 
 var ViewData = require('./models/ViewData.js'); // view data model
 var User = require('./models/User.js'); // user model
+var Game = require('./models/Game.js'); // game model
 
 var PORT = 3000;
 var view, user, game;
 
-var games = [], users = []; // users & games list
+var games, users; // users & games list
 mongoGames.listAllGames(function(list) {games = list});
 mongoUsers.listAllUsers(function(list) {users = list});
 
@@ -27,16 +28,19 @@ app.use('/public', express.static(__dirname + '/views/public/'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+// ROOT redirecciona al login
 app.get('/', function(req, res) {
-    console.log('[server] redirect to \'/user/\'');
+    console.log('[server] redirect to login');
     res.redirect('/login/');
 });
 
+// LOGIN
 app.get('/login/', function (req, res) {
     console.log("[server] user login view");
     view = new ViewData('user.jade', 'MOR - VtDA', 'Login', 0);
     res.render(view.file, view.data);
 });
+// VALIDACION LOGIN
 app.post('/login/', function(req, res) {
     console.log("[server] validate user login");
     user = new User(req.body.name, sha1(req.body.passwd));
@@ -51,12 +55,13 @@ app.post('/login/', function(req, res) {
     });
 });
 
+// NUEVO USUARIO
 app.get('/login/new', function(req, res) {
     console.log("[server] new user creation view");
     view = new ViewData('user_new.jade', 'MOR - VtDA', 'Nuevo Usuario', 0);
     res.render(view.file, view.data);
 });
-
+// VALIDACION NUEVO USUARIO
 app.post('/login/new', function(req, res) {
     console.log("[server] validate new user");
     var passwdArray = req.body.passwd;
@@ -74,15 +79,19 @@ app.post('/login/new', function(req, res) {
             res.render(view.file, view.data);
         } else { // OK
             mongoUsers.insertUser(user, function() {
-                console.log("[server] new user: "+user.name);
-                view.data.games = games;
-                view.data.user = user;
-                res.redirect('/login/'+user.name+'/');
+                mongoUsers.listAllUsers(function(list) {
+                    users = list;
+                    console.log("[server] new user: "+user.name);
+                    view.data.games = games;
+                    view.data.user = user;
+                    res.redirect('/login/'+user.name+'/');
+                });
             });
         }
     });
 });
 
+// ESCOGER PARTIDA
 app.get('/login/:user/', function(req, res) {
     var userName = req.params.user;
     if(typeof userName != 'undefined') {
@@ -98,32 +107,70 @@ app.get('/login/:user/', function(req, res) {
         }
     }
 });
-
+// VALIDACION PARTIDA ESCOGIDA
 app.post('/login/:user/', function(req, res) {
     // TODO validacion partida escogida
     console.log("[server] validate chosen game");
-});
-
-app.get('/login/:user/new/', function(req, res) {
-    var userName = req.params.user;
-    mongoUsers.findUserByName(userName, function(u) {
-        user = u;
-        console.log("[server] new game creation view");
-        view = new ViewData('game_new.jade', userName+' - VtDA', 'Nuevo Usuario', 0);
-        view.data.user = user;
+    game = {name: req.body.name};
+    view = new ViewData('game.jade', req.params.user+' - VtDA', 'Selección de partida: '+req.params.user, 0);
+    if(game.name === '') {
+        view.data.error = 2;
         res.render(view.file, view.data);
+    }
+    mongoGames.findGameByName(game, function(g) {
+        if(g === null) {
+            view.data.error = 1;
+            res.render(view.file, view.data);
+        } else {
+            res.redirect('/game/'+req.params.user+'/'+game.name);
+        }
     });
 });
 
+// NUEVA PARTIDA
+app.get('/login/:user/new/', function(req, res) {
+    var user = {name: req.params.user};
+    mongoUsers.findUserByName(user, function(u) {
+        if(u === null) {
+            res.redirect('/');
+        } else {
+            user = u;
+            console.log("[server] new game creation view");
+            view = new ViewData('game_new.jade', user.name + ' - VtDA', 'Nueva partida: '+req.params.user, 0);
+            view.data.user = user;
+            res.render(view.file, view.data);
+        }
+    });
+});
+// VALIDACION NUEVA PARTIDA
 app.post('/login/:user/new/', function(req, res) {
-    // TODO validacion nueva partida
     console.log("[server] validate new game");
+    game = {name: req.body.name};
+    mongoGames.findGameByName(game, function(g) {
+        if(g !== null) {
+            console.log("[server] game already exists: "+g.name);
+            view = new ViewData('game_new.jade', req.params.user+' - VtDA', 'Nueva Partida: '+req.params.user, 2);
+            view.data.user = {name: req.params.user};
+            res.render(view.file, view.data);
+        } else {
+            game = new Game(req.body.name);
+            mongoGames.insertGame(game, function(){
+                mongoGames.listAllGames(function(list) {
+                    games = list;
+                    res.redirect('/game/'+req.params.user+'/'+game.name);
+                });
+            });
+        }
+    });
 });
 
+// PANTALLA DE JUEGO
 app.get('/game/:user/:game', function(req, res) {
-    // TODO vista de la partida
+    // TODO vista de la partida (validar si ha entrado el master o un player)
     var userName = req.params.user, gameName = req.params.game;
     console.log("[server] user "+userName+" started playing at "+gameName);
+    view = new ViewData('game_master.jade', userName+' - '+gameName, gameName, 0);
+    res.render(view.file, view.data);
 });
 
 server.listen(PORT);

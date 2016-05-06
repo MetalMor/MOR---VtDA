@@ -3,5 +3,34 @@
 extends layout
 
 block content
-    h1= d_title
+    .container.col-sm-4
+        .panel.panel-primary
+            .panel-heading.text-center=d_title
+                a.right-align(href = "/")
+                    span.glyphicon.glyphicon-home.white
+                a.left-align(href = "/login/"+user.name+"/")
+                    span.glyphicon.glyphicon-arrow-left.white
+            .panel-body
+                case error
+                    when 1
+                        #bad-credentials.alert.alert-danger
+                            p.text-center="Error al recuperar las credenciales"
+                    when 2
+                        #bad-username.alert.alert-danger
+                            p.text-center="La partida ya existe."
+                    when 3
+                        #bad-username.alert.alert-danger
+                            p.text-center="Debes rellenar todos los campos."
+                br
+                form(role="form", method="POST")
+                    //input(hidden, name="user", value=user.name)
+                    .form-group
+                        span.input-group-addon.text-center="Nombre de la partida"
+                        input.form-control(type="text", name="name", placeholder="nombre...")
+                    //.form-group
+                    //    span.input-group-addon.text-center="Imagen"
+                    //    input.form-control(type="button", name="passwd", placeholder="contraseña...")
+                    .form-group
+                        span.icon-input-btn
+                            input.btn.btn-default(type="submit", value="Crear")
 

@@ -1,5 +1,6 @@
 /**
  * Controlador mongoDB para operaciones CRUD de partidas
+ * TODO get game chars list & npcs list & maps list
  *
  * Created by mor on 5/05/16.
  */
@@ -66,6 +67,7 @@ var mongoGames = {
     },
 
     findGameByName: function(game, callback) {
+        console.log("[mongo] looking for game: "+game.name);
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
             db.open(function(err, client) {

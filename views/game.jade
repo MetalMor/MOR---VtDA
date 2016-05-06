@@ -6,16 +6,24 @@ block content
     .container.col-sm-4
         .panel.panel-primary
             .panel-heading.text-center=d_title
-                a.right-align(href = "/login/"+user.name+"/new")
+                a.left-align(href = "/login/"+user.name+"/new")
                     span.glyphicon.glyphicon-plus.white
-                a.left-align(href = "/")
-                    span.glyphicon.glyphicon-arrow-left.white
+                a.right-align(href = "/")
+                    span.glyphicon.glyphicon-home.white
             .panel-body
+                case error
+                    when 1
+                        #bad-username.alert.alert-danger
+                            p.text-center="La partida no existe."
+                    when 2
+                        #bad-username.alert.alert-danger
+                            p.text-center="Debes escoger una partida."
                 br
                 form(role="form", method="POST")
+                    input(hidden, name="user", value=user)
                     .form-group
                         span.input-group-addon.text-center="Partida"
-                        select.form-control(name="game")
+                        select.form-control(name="name")
                             each game in games
                                 option=game.name
                     .form-group
