@@ -165,7 +165,10 @@ app.post('/login/:user/new/', function(req, res) {
                         user = u;
                         user.gameList.push(game);
                         mongoUsers.updateUser(user, function() {
-                            res.redirect('/game/'+user.name+'/'+game.name);
+                            mongoUsers.listAllUsers(function(list) {
+                                users = list;
+                                res.redirect('/game/'+user.name+'/'+game.name); // DAFUQIN CALLBACK HELL D:
+                            });
                         })
                     });
                 });
