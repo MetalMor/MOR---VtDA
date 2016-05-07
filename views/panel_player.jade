@@ -1,9 +1,19 @@
 // Ventana del jugador
+// TODO ficha hidden
    Created by mor on 6/05/16.
 
 extends layout
 
 block content
     #wrapper
-        h1.white= d_title
-        h2.white= "PLAYER: " + user.name
+        #panel.panel.panel-primary
+            .panel-heading=user.name+' - '+game.name
+            .panel-body
+                #stats
+                #data
+                #inv
+                #btns
+        #output.panel.panel-primary
+            .panel-heading="Output"
+            .panel-body
+                textarea.form-control(contenteditable=false, rows="5")

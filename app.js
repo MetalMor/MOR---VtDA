@@ -9,7 +9,7 @@ var sha1 = require('sha1'); // pwd encoder
 var mongoUsers = require('./db/mongoUsers'); // db users controller
 var mongoGames = require('./db/mongoGames'); // db games controller
 
-var util = require('./util')
+var util = require('./util');
 var ViewData = require('./models/ViewData'); // view data model
 var User = require('./models/User'); // user model
 var Game = require('./models/Game'); // game model
@@ -19,6 +19,7 @@ var view, user, game;
 
 /**
  * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
+ * TODO ficha!!! operaciones CRUD del personaje en la BD
  *
  *
  */
@@ -55,7 +56,6 @@ app.post('/login/', function(req, res) {
     user = new User(req.body.name, sha1(req.body.passwd));
     mongoUsers.findUserByCreds(user, function(u) {
         if (u !== null && typeof u != 'undefined') {
-            console.log("[server] userFromDb: "+ u.name);
             res.redirect('/login/'+u.name+'/');
         } else { // ERROR usuario no encontrado
             view = new ViewData('user.jade', 'MOR - VtDA', 'Login', 1);
@@ -80,7 +80,7 @@ app.post('/login/new', function(req, res) {
         if (!passwdArray.hasOwnProperty('length') || passwdArray[0] !== passwdArray[1]) { // ERROR distintos passwd
             view.data.error = 4;
             res.render(view.file, view.data);
-        } else if(passwdArray[0] == '' || req.body.user == '') { // ERROR empty passwd
+        } else if(passwdArray[0] == '' || req.body.user == '') { // ERROR empty fields
             view.data.error = 3;
             res.render(view.file, view.data);
         } else if(u !== null && typeof u !== 'undefined') { // ERROR user already exists
@@ -194,10 +194,14 @@ app.get('/game/:user/:game', function(req, res) {
             view.data.user = user;
             view.data.game = game;
             var index = util.getIndex(user.gameList, 'name', gameName);
-            if (index>0) { // existe: es el master
-                res.render(view.file, view.data);
-            } else { // no existe: entra como jugador
+            console.log("[server] game index: "+index);
+            // TODO falla al unirse a una partida (envia al master a panel_player.jade D: )
+            if (index<0) { // no existe: entra como jugador
+                console.log("[server] logging player in: "+game.name);
                 view.file = 'panel_player.jade';
+                res.render(view.file, view.data);
+            } else { // existe: es el master
+                console.log("[server] logging master in: "+game.name);
                 res.render(view.file, view.data);
             }
         });
