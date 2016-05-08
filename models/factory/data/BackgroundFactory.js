@@ -8,16 +8,25 @@ var StringField = require('./../../object/StringField');
 var FieldsSet = require('./../../object/FieldsSet');
 
 module.exports = function() {
+    this.name = "Datos del trasfondo";
+    this.fields = [
+        new StringField("Dominio"),
+        new StringField("Contactos"),
+        new StringField("Rebaño"),
+        new StringField("Influencia"),
+        new StringField("Mentor"),
+        new StringField("Aliados"),
+        new StringField("Recursos"),
+        new StringField("Criados")
+    ];
+    /**
+     * Retorna un objeto de campos de datos de trasfondo del personaje.
+     * @returns {object}
+     */
     this.initBckg = function() {
-        var bckg = new FIeldsSet("Datos del trasfondo");
-        bckg.fields.push(new StringField("Dominio"));
-        bckg.fields.push(new StringField("Contactos"));
-        bckg.fields.push(new StringField("Rebaño"));
-        bckg.fields.push(new StringField("Influencia"));
-        bckg.fields.push(new StringField("Mentor"));
-        bckg.fields.push(new StringField("Aliados"));
-        bckg.fields.push(new StringField("Recursos"));
-        bckg.fields.push(new StringField("Criados"));
+        var bckg = new FieldsSet(this.name);
+        var fields = this.fields;
+        fields.forEach(function(f) {bckg.fields.push(f)});
         return bckg;
     };
 };

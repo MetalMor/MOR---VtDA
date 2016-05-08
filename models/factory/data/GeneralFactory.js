@@ -9,15 +9,27 @@ var NumericField = require('./../../object/NumericField');
 var FieldsSet = require('./../../object/FieldsSet');
 
 module.exports = function() {
+    /**
+     * Lista de campos de datos generales del personaje.
+     * @type {array}
+     */
+    this.fields = [
+        new StringField("Nombre"),
+        new StringField("Naturaleza"),
+        new StringField("Conducta"),
+        new StringField("Clan"),
+        new NumericField("Generación"),
+        new StringField("Refugio"),
+        new StringField("Concepto")
+    ];
+    /**
+     * Retorna un nuevo objeto de campos de datos generales del personaje.
+     * @returns {object}
+     */
     this.initGeneral = function() {
         var general = new FieldsSet("Datos generales");
-        general.fields.push(new StringField("Nombre"));
-        general.fields.push(new StringField("Naturaleza"));
-        general.fields.push(new StringField("Conducta"));
-        general.fields.push(new StringField("Clan"));
-        general.fields.push(new NumericField("Generación"));
-        general.fields.push(new StringField("Refugio"));
-        general.fields.push(new StringField("Concepto"));
+        var fields = this.fields;
+        fields.forEach(function(f) {general.fields.push(f)});
         return general;
     };
 };

@@ -8,53 +8,101 @@ var RegularStat = require('./../../object/RegularStat');
 var StatsSet = require('./../../object/StatsSet');
 
 module.exports = function() {
+    /**
+     * Lista de objetos de estadísticas de talentos.
+     * @type {array}
+     */
+    this.tal = [
+        new RegularStat("Actuar"),
+        new RegularStat("Alerta"),
+        new RegularStat("Atletismo"),
+        new RegularStat("Callejeo"),
+        new RegularStat("Esquivar"),
+        new RegularStat("Empatía"),
+        new RegularStat("Intimidación"),
+        new RegularStat("Liderazgo"),
+        new RegularStat("Pelea"),
+        new RegularStat("Subterfugio")
+    ];
+    /**
+     * Lista de objetos de estadísticas de técnicas.
+     * @type {array}
+     */
+    this.tech = [
+        new RegularStat("Arma c/c"),
+        new RegularStat("Equitación"),
+        new RegularStat("Etiqueta"),
+        new RegularStat("Herbolaria"),
+        new RegularStat("Música"),
+        new RegularStat("Pericias"),
+        new RegularStat("Sigilo"),
+        new RegularStat("Supervivencia"),
+        new RegularStat("Tiro con arco"),
+        new RegularStat("Trato con animales")
+    ];
+    /**
+     * Lista de objetos de estadísticas de conocimientos.
+     * @type {array}
+     */
+    this.knl = [
+        new RegularStat("Academicismo"),
+        new RegularStat("Ciencias"),
+        new RegularStat("Investigación"),
+        new RegularStat("Leyes"),
+        new RegularStat("Lingüística"),
+        new RegularStat("Medicina"),
+        new RegularStat("Ocultismo"),
+        new RegularStat("Política"),
+        new RegularStat("Sabiduría popular"),
+        new RegularStat("Senescal")
+    ];
+    /**
+     * Retorna un nuevo objeto de conjunto de estadísticas de talentos.
+     * @returns {object}
+     */
     this.initTal = function() {
-        var tal = new StatsSet("Talentos");
-        tal.stats.push(new RegularStat("Actuar"));
-        tal.stats.push(new RegularStat("Alerta"));
-        tal.stats.push(new RegularStat("Atletismo"));
-        tal.stats.push(new RegularStat("Callejeo"));
-        tal.stats.push(new RegularStat("Esquivar"));
-        tal.stats.push(new RegularStat("Empatía"));
-        tal.stats.push(new RegularStat("Intimidación"));
-        tal.stats.push(new RegularStat("Liderazgo"));
-        tal.stats.push(new RegularStat("Pelea"));
-        tal.stats.push(new RegularStat("Subterfugio"));
-        return tal;
+        var ret = new StatsSet("Talentos");
+        var tal = this.tal;
+        tal.forEach(function(s) {ret.stats.push(s)});
+        return ret;
     };
+    /**
+     * Retorna un nuevo objeto de conjunto de estadísticas de técnicas.
+     * @returns {object}
+     */
     this.initTech = function() {
-        var tech = new StatsSet("Técnicas");
-        tech.stats.push(new RegularStat("Arma c/c"));
-        tech.stats.push(new RegularStat("Equitación"));
-        tech.stats.push(new RegularStat("Etiqueta"));
-        tech.stats.push(new RegularStat("Herbolaria"));
-        tech.stats.push(new RegularStat("Música"));
-        tech.stats.push(new RegularStat("Pericias"));
-        tech.stats.push(new RegularStat("Sigilo"));
-        tech.stats.push(new RegularStat("Supervivencia"));
-        tech.stats.push(new RegularStat("Tiro con arco"));
-        tech.stats.push(new RegularStat("Trato con animales"));
-        return tech;
+        var ret = new StatsSet("Técnicas");
+        var tech = this.tech;
+        tech.forEach(function(s) {ret.stats.push(s)});
+        return ret;
     };
+    /**
+     * Retorna un nuevo objeto de conjunto de estadísticas de conocimientos.
+     * @returns {object}
+     */
     this.initKnl = function() {
-        var knl = new StatsSet("Conocimientos");
-        knl.stats.push(new RegularStat("Academicismo"));
-        knl.stats.push(new RegularStat("Ciencias"));
-        knl.stats.push(new RegularStat("Investigación"));
-        knl.stats.push(new RegularStat("Leyes"));
-        knl.stats.push(new RegularStat("Lingüística"));
-        knl.stats.push(new RegularStat("Medicina"));
-        knl.stats.push(new RegularStat("Ocultismo"));
-        knl.stats.push(new RegularStat("Política"));
-        knl.stats.push(new RegularStat("Sabiduría popular"));
-        knl.stats.push(new RegularStat("Senescal"));
-        return knl;
+        var ret = new StatsSet("Conocimientos");
+        var knl = this.knl;
+        knl.forEach(function(s) {ret.stats.push(s)});
+        return ret;
     };
-    this.initSkills = function(tal, tech, knl) {
-        var skills = new StatsSet("Habilidades");
-        skills.stats.push(tal);
-        skills.stats.push(tech);
-        skills.stats.push(knl);
-        return skills;
+    /**
+     * Lista de objetos de conjunto de estadísticas de habilidades.
+     * @type {array}
+     */
+    this.skills = [
+        this.initTal(),
+        this.initTech(),
+        this.initKnl()
+    ];
+    /**
+     * Retorna el objeto de conjunto de estadísticas de habilidades.
+     * @returns {object}
+     */
+    this.initSkills = function() {
+        var ret = new StatsSet("Habilidades");
+        var skills = this.skills;
+        skills.forEach(function(s) {ret.stats.push(s)});
+        return ret;
     };
 };

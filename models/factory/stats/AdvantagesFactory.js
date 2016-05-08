@@ -8,20 +8,54 @@ var RegularStat = require('./../../object/RegularStat');
 var StatsSet = require('./../../object/StatsSet');
 
 module.exports = function() {
+
+    /**
+     * Retorna un nuevo objeto de conjunto de estadisticas de disciplinas.
+     * @returns {object}
+     */
     this.initDisc = function() {return new StatsSet("Disciplinas")};
-    this.initTrf = function() {return new StatsSet("Trasfondos")};
+    /**
+     * Retorna un nuevo objeto de conjunto de estadisticas de trasfondos.
+     * @returns {object}
+     */
+    this.initBckg = function() {return new StatsSet("Trasfondos")};
+    /**
+     * Retorna un nuevo objeto de conjunto de estadisticas de virtudes.
+     * @returns {object}
+     */
     this.initVirt = function() {
-        var virt = new StatsSet("Virtudes");
-        virt.push(new RegularStat("Conciencia"));
-        virt.push(new RegularStat("Autocontrol"));
-        virt.push(new RegularStat("Coraje"));
-        virt.upgradeAll();
-        return virt;
+        var ret = new StatsSet("Virtudes");
+        var virt = this.virt;
+        virt.forEach(function(v) {ret.stats.push(v)});
+        ret.upgradeAll();
+        return ret;
     };
-    this.initAdvtges = function(disc, trf, virt) {
+    /**
+     * Lista de objetos de estadisticas de virtudes.
+     * @type {array}
+     */
+    this.virt = [
+        new RegularStat("Conciencia"),
+        new RegularStat("Autocontrol"),
+        new RegularStat("Coraje")
+    ];
+    /**
+     * Lista de objetos de conjunto de estadísticas de ventajas.
+     * @type {*[]}
+     */
+    this.stats = [
+        this.initDisc(),
+        this.initBckg(),
+        this.initVirt()
+    ];
+    /**
+     * Retorna un nuevo objeto de conjunto de estadisticas de ventajas.
+     * @returns {object}
+     */
+    this.initAdvtges = function() {
         var advtges = new StatsSet("Ventajas");
-        advtges.stats.push(disc);
-        advtges.stats.push(trf);
-        advtges.stats.push(virt);
+        var stats = this.stats;
+        stats.forEach(function(s) {advtges.stats.push(s)});
+        return advtges;
     };
 };

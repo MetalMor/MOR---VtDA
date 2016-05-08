@@ -18,6 +18,10 @@ var col = 'users';
 
 var mongoUsers = {
 
+    /**
+     * Lista todos los usuarios guardados en la BD.
+     * @param callback Función a la que enviar el resultado.
+     */
     listAllUsers: function(callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
@@ -33,6 +37,11 @@ var mongoUsers = {
         });
     },
 
+    /**
+     * Inserta un nuevo usuario en la BD.
+     * @param user Objeto usuario a insertar.
+     * @param callback Función a la que enviar el resultado.
+     */
     insertUser: function (user, callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
@@ -48,6 +57,11 @@ var mongoUsers = {
         });
     },
 
+    /**
+     * Encuentra un usuario en la BD a partir de su identificador nomrbe.
+     * @param user Objeto usuario a encontrar (requiere propiedad "name").
+     * @param callback Función a la que enviar el resultado.
+     */
     findUserByName: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
@@ -64,6 +78,11 @@ var mongoUsers = {
         });
     },
 
+    /**
+     * Encuentra un usuario en la BD a partir de su nombre y contraseña.
+     * @param user Objeto usuario a encontrar (requiere propiedades "name" y "passwd").
+     * @param callback Función a la que enviar el resultado.
+     */
     findUserByCreds: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
@@ -80,6 +99,11 @@ var mongoUsers = {
         });
     },
 
+    /**
+     * Lista todas las partidas de las que el usuario especificado por parámetro es el master.
+     * @param user Objeto usuario del que obtener la lista de partidas.
+     * @param callback Función a la que enviar el resultado.
+     */
     listOwnedGames: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
@@ -95,45 +119,12 @@ var mongoUsers = {
             });
         });
     },
-    /**
-     * Muestra los 10 jugadores con mayor puntuación
-     * @returns {Array} Array de los 10 jugadores con la puntuación más alta
 
-    topTenPlayers: function() {
-        MongoClient.connect(dbUrl, function (err, db) {
-            mongoUsers.top = [];
-            console.log("[mongoUsers] comprobando top");
-            db.open(function(err, client){
-                assert.equal(null, err);
-                var ret = client.collection('snake').find({score: {$exists: true}});
-                ret.sort({score: -1, deaths: 1});
-                ret.limit(10);
-                if(mongoUsers.top.length === 0) {
-                    ret.each(function (err, doc) {
-                        assert.equal(null, err);
-                        if (doc != null && mongoUsers.ten.length < 10) mongoUsers.ten.push(doc);
-                        else db.close();
-                    });
-                }
-            });
-        });
-        //mongoUsers.showTop();
-    },
-    updatePlayerScore: function (snake) {
-        var id = snake.id;
-        MongoClient.connect(dbUrl, function (err, db) {
-            assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
-                console.log("[mongoUsers] actualizando snake: " + id);
-                client.collection('snake').deleteMany({score: {$exists: false}},
-                    client.collection('snake').updateOne({name: id, score: {$exists: true}},
-                        {$set: {score: snake.score, deaths: snake.deaths}}, db.close())
-                );
-            });
-        });
-        mongoUsers.topTenPlayers();
-    }*/
+    /**
+     * Actualiza un objeto usuario en la BD.
+     * @param user Objeto usuario a actualizar (con sus datos nuevos).
+     * @param callback Función a la que enviar el resultado.
+     */
     updateUser: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);

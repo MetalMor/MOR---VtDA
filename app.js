@@ -9,13 +9,18 @@ var sha1 = require('sha1'); // pwd encoder
 var mongoUsers = require('./db/mongoUsers'); // db users controller
 var mongoGames = require('./db/mongoGames'); // db games controller
 
-var util = require('./util');
+var util = require('./util'); // utils
 var ViewData = require('./models/object/ViewData'); // view data model
 var User = require('./models/object/User'); // user model
 var Game = require('./models/object/Game'); // game model
+var CharFactory = require('./models/factory/CharFactory');
 
 var PORT = 3000;
-var view, user, game;
+var view, user, game, char;
+
+var cf = new CharFactory();
+char = cf.initChar();
+util.showProps(char);
 
 /**
  * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL

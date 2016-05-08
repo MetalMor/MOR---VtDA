@@ -8,4 +8,4 @@
 module.exports = function(n) {
     this.name = n;
     this.value = 0;
-}
+};

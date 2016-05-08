@@ -9,16 +9,28 @@ var NumericField = require('./../../object/NumericField');
 var FieldsSet = require('./../../object/FieldsSet');
 
 module.exports = function() {
+    /**
+     * Lista de campos de datos de aspecto del personaje.
+     * @type {Array}
+     */
+    this.fields = [
+        new NumericField("Edad real"),
+        new NumericField("Edad aparente"),
+        new StringField("Pelo"),
+        new StringField("Ojos"),
+        new StringField("Nacionalidad"),
+        new StringField("Sexo"),
+        new NumericField("Altura"),
+        new NumericField("Peso")
+    ];
+    /**
+     * Retorna un nuevo objeto de campos de datos de aspecto del personaje.
+     * @returns {object}
+     */
     this.initLook = function() {
         var look = new FieldsSet("Aspecto");
-        look.fields.push(new NumericField("Edad real"));
-        look.fields.push(new NumericField("Edad aparente"));
-        look.fields.push(new StringField("Pelo"));
-        look.fields.push(new StringField("Ojos"));
-        look.fields.push(new StringField("Nacionalidad"));
-        look.fields.push(new StringField("Sexo"));
-        look.fields.push(new NumericField("Altura"));
-        look.fields.push(new NumericField("Peso"));
+        var fields = this.fields;
+        fields.forEach(function(f) {look.fields.push(f)});
         return look;
     };
 };

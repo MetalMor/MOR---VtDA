@@ -10,28 +10,56 @@ var MiscellaneousFactory = require('./MiscellaneousFactory');
 var SkillsFactory = require('./SkillsFactory');
 
 module.exports = function() {
+    /**
+     * Retorna el objeto de conjunto de estadisticas de ventajas generado por la factoría.
+     * @returns {object}
+     */
     this.initAdvtges = function() {
         var af = new AdvantagesFactory();
-        return af.initAdvtges(af.initDisc(), af.initTrf(), af.initVirt());
+        return af.initAdvtges();
     };
+    /**
+     * Retorna el objeto de conjunto de estadísticas de atributos generado por la factoría.
+     * @returns {object}
+     */
     this.initAttr = function() {
         var af = new AttributesFactory();
-        return af.initAttr(af.initPhy(), af.initSoc(), af.initMen());
+        return af.initAttr();
     };
+    /**
+     * Retorna el objeto de conjunto de estadísticas varias generado por la factoría.
+     * @returns {object}
+     */
     this.initMisc = function() {
         var mf = new MiscellaneousFactory();
-        return mf.initMisc(mf.initOther(), mf.initPath(), mf.initBlood());
+        return mf.initMisc();
     };
+    /**
+     * Retorna el objeto de conjunto de estadísticas de habilidades generado por la factoría.
+     * @returns {object}
+     */
     this.initSkills = function() {
         var sf = new SkillsFactory();
-        return sf.initSkills(sf.initTal(), sf.initTech(), sf.initKnl());
+        return sf.initSkills();
     };
+    /**
+     * Lista de objetos de conjunto de estadísticas.
+     * @type {array}
+     */
+    this.stats = [
+        this.initAttr(),
+        this.initSkills(),
+        this.initAdvtges(),
+        this.initMisc()
+    ];
+    /**
+     * Retorna una nueva lista de objetos de conjunto de estadísticas.
+     * @returns {Array}
+     */
     this.initStats = function() {
-        var stats = [];
-        stats.push(this.initAttr());
-        stats.push(this.initSkills());
-        stats.push(this.initAdvtges());
-        stats.push(this.initMisc());
-        return stats;
+        var ret = [];
+        var stats = this.stats;
+        stats.forEach(function(s) {ret.push(s)});
+        return ret;
     };
 };
