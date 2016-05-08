@@ -3,7 +3,7 @@
 extends layout
 
 block content
-    .container.col-sm-4
+    .container.col-sm-8
         .panel.panel-primary
             .panel-heading.text-center=d_title
                 a.left-align(href = "/login/new")
@@ -15,12 +15,12 @@ block content
                             p.text-center="Credenciales incorrectas."
                 br
                 form(role="form", method="POST")
-                    .form-group
+                    .form-group.col-sm-4
                         span.input-group-addon.text-center="Nombre de usuario"
                         input.form-control(type="text", name="name", placeholder="nombre...")
-                    .form-group
+                    .form-group.col-sm-4
                         span.input-group-addon.text-center="Contraseña"
                         input.form-control(type="password", name="passwd", placeholder="contraseña...")
-                    .form-group
+                    .form-group.col-sm-4
                         span.icon-input-btn
-                            input.btn.btn-danger(type="submit", value="Entrar")
+                            input.btn.btn-danger.btn-lg(type="submit", value="Entrar")

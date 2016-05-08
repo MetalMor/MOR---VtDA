@@ -10,9 +10,9 @@ var mongoUsers = require('./db/mongoUsers'); // db users controller
 var mongoGames = require('./db/mongoGames'); // db games controller
 
 var util = require('./util');
-var ViewData = require('./models/ViewData'); // view data model
-var User = require('./models/User'); // user model
-var Game = require('./models/Game'); // game model
+var ViewData = require('./models/object/ViewData'); // view data model
+var User = require('./models/object/User'); // user model
+var Game = require('./models/object/Game'); // game model
 
 var PORT = 3000;
 var view, user, game;

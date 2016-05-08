@@ -6,9 +6,9 @@
 
 var Action = require('./Action.js');
 
-var SingleAction = function(d, m) {
+var SingleAction = function(s, d, m) {
+    this.prototype = Action;
+    this.source = s;
     this.dif = ag;
     this.mod = m;
 };
-
-SingleAction.prototype = Action;

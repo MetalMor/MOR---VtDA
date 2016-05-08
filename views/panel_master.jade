@@ -5,5 +5,17 @@ extends layout
 
 block content
     #wrapper
-        h1.white= d_title
-        h2.white= "MASTER: "+user.name
+        #panel.panel.panel-primary
+            .panel-heading=user.name+' - '+game.name
+            .panel-body
+                #player-panel
+                    .stats
+                    .data
+                #npc-panel
+                    .stats
+                    .data
+                #map
+                #btns
+        include panel_output
+        include panel_card
+        include panel_action

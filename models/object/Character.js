@@ -4,14 +4,15 @@
  * Created by mor on 4/05/16.
  */
 
-module.exports = function(n, d) {
-    this.name = n;
+module.exports = function(d, s) {
     this.data = d;
-    this.charList = [];
-    this.npcList = [];
-    this.mapList = [];
-    this.mesgList = [];
+    this.stats = s;
+    this.inv = [];
+    this.xp = 0;
+    this.hp = 7;
     this.diceSet = [];
+    this.gain = function(prop, gain) {this[prop] += gain};
+    this.loose = function(prop, loose) {this[prop] -= loose};
     this.setDices = function(qty) {
         for(var i = 0; i < qty; i++) {
             this.diceSet.push(new Dice());

@@ -3,7 +3,7 @@
 extends layout
 
 block content
-    .container.col-sm-4
+    .container.col-sm-8
         .panel.panel-primary
             .panel-heading.text-center=d_title
                 a.left-align(href = "/login/"+user.name+"/new")
@@ -21,11 +21,12 @@ block content
                 br
                 form(role="form", method="POST")
                     input(hidden, name="user", value=user)
-                    .form-group
-                        span.input-group-addon.text-center="Selecciona la partida en la que vas a jugar"
+                    .form-group.col-sm-6
+                        span.input-group-addon.text-center="Selecciona la partida"
                         select.form-control(name="name")
                             each game in games
                                 option=game.name
-                    .form-group
+                    .form-group.col-sm-4
                         span.icon-input-btn
-                            input.btn.btn-danger(type="submit", value="Jugar")
+                            input.btn.btn-danger.btn-lg(type="submit", value="Jugar")
+                #img

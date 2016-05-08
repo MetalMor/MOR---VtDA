@@ -7,3 +7,14 @@
     background-image: none;
     background-color: firebrick;
 }
+
+.form-group {
+    display: inline-block;
+    text-align: center;
+}
+
+.container {
+    float: none;
+    margin: 0 auto;
+    margin-top: 1%;
+}

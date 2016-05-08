@@ -9,11 +9,29 @@ block content
         #panel.panel.panel-primary
             .panel-heading=user.name+' - '+game.name
             .panel-body
+                #img
                 #stats
+                    #attr
+                        #phy
+                        #soc
+                        #men
+                    #skills
+                        #tln
+                        #tech
+                        #knldg
+                    #advtges
+                        #disc
+                        #trf
+                        #vrt
+                        #misc
                 #data
+                    #look
+                        #look-data
+                        #desc
+                    #trf-data
+                    #story
                 #inv
                 #btns
-        #output.panel.panel-primary
-            .panel-heading="Output"
-            .panel-body
-                textarea.form-control(contenteditable=false, rows="5")
+        include panel_output
+        include panel_card
+        include panel_action

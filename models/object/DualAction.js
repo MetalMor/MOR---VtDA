@@ -6,8 +6,8 @@
 
 var Action = require('./Action.js');
 
-var DualAction = function(ag) {
+var DualAction = function(s, n, ag) {
+    this.prototype = Action;
+    this.source = s;
     this.against = ag;
 };
-
-DualAction.prototype = Action;
