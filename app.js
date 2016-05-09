@@ -1,3 +1,7 @@
+/**
+ * It's a beautiful day somewhere else... ^^¡
+ */
+
 var express = require('express'); // express dependencies models
 var fs = require('fs'); // file parser
 var app = require('express')(); // app models
@@ -29,7 +33,6 @@ var setUser = function(u) {user = u};
  * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
  * TODO validar usuarios sin importar mayusculas o minusculas
  * TODO ficha!!! operaciones CRUD del personaje en la BD
- *
  */
 
 mongoGames.listAllGames(setGames);
@@ -93,13 +96,11 @@ app.post('/login/new', function(req, res) {
             res.render(view.file, view.data);
         } else { // OK
             mongoUsers.insertUser(user, function() {
-                mongoUsers.listAllUsers(function(list) {
-                    users = list;
-                    console.log("[server] new user: "+user.name);
-                    view.data.games = games;
-                    view.data.user = user;
-                    res.redirect('/login/'+user.name+'/');
-                });
+                mongoUsers.listAllUsers(setUsers);
+                console.log("[server] new user: "+user.name);
+                view.data.games = games;
+                view.data.user = user;
+                res.redirect('/login/'+user.name+'/');
             });
         }
     });
@@ -187,6 +188,12 @@ app.post('/login/:user/new/', function(req, res) {
 });
 
 // PANTALLA DE JUEGO
+// Hola, "Yo" del futuro! para poder trabajar correctamente con los datos necesarios para generar fichas, has de enviar:
+// - socket.io (ya está puesto, parece)
+// - objeto de utilidad (util.js)
+// - objeto partida
+// - objeto jugador
+// De nada! happy coding :)
 app.get('/game/:user/:game', function(req, res) {
     // TODO vista de la partida (validar si ha entrado el master o un player, y en este ultimo caso si tiene una ficha)
     var userName = req.params.user, gameName = req.params.game;
