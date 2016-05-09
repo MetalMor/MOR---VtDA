@@ -1,8 +1,10 @@
 // Bloque de la ficha de personaje
    Created by mor on 8/05/16.
 
-.container
-    #card
+#sheet.container.overlay
+    a.closebtn(href="javascript:void(0)", onclick="closeNav('sheet')")
+        span.glyphicon.glyphicon-remove
+    .overlay-content
         #img
         #main.panel.panel-primary
             .panel-heading="Datos principales"
@@ -46,4 +48,5 @@
             #trf-data
             #story
         #inv
-
+script(type="text/javascript" src="/public/javascripts/window.js")
+link(rel="stylesheet" href="/public/stylesheets/window.css")

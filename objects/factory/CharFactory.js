@@ -4,7 +4,7 @@
  * Created by mor on 8/05/16.
  */
 
-var Character = require('./../object/Character');
+var Character = require('./../models/Character');
 var DataFactory = require('./data/DataFactory');
 var StatsFactory = require('./stats/StatsFactory');
 

@@ -4,9 +4,9 @@
  * Created by mor on 8/05/16.
  */
 
-var RegularStat = require('./../../object/RegularStat');
-var MaxableStat = require('./../../object/MaxableStat');
-var StatsSet = require('./../../object/StatsSet');
+var RegularStat = require('./../../models/RegularStat');
+var MaxableStat = require('./../../models/MaxableStat');
+var StatsSet = require('./../../models/StatsSet');
 
 module.exports = function() {
     /**

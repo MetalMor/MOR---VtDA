@@ -4,8 +4,8 @@
  * Created by mor on 8/05/16.
  */
 
-var RegularStat = require('./../../object/RegularStat');
-var StatsSet = require('./../../object/StatsSet');
+var RegularStat = require('./../../models/RegularStat');
+var StatsSet = require('./../../models/StatsSet');
 
 module.exports = function() {
     /**

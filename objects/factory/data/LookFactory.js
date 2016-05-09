@@ -4,9 +4,9 @@
  * Created by mor on 8/05/16.
  */
 
-var StringField = require('./../../object/StringField');
-var NumericField = require('./../../object/NumericField');
-var FieldsSet = require('./../../object/FieldsSet');
+var StringField = require('./../../models/StringField');
+var NumericField = require('./../../models/NumericField');
+var FieldsSet = require('./../../models/FieldsSet');
 
 module.exports = function() {
     /**
