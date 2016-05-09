@@ -11,6 +11,7 @@ module.exports = function(d, s) {
     this.xp = 0;
     this.hp = 7;
     this.diceSet = [];
+    this.ready = false;
     this.gain = function(prop, gain) {this[prop] += gain};
     this.loose = function(prop, loose) {this[prop] -= loose};
     this.setDices = function(qty) {

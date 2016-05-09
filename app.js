@@ -43,6 +43,9 @@ app.set('view engine', 'jade');
 
 // ***** ROUTING & SERVER *****
 app.use('/public', express.static(__dirname + '/views/public/'));
+app.use('/css', express.static(__dirname + '/views/public/stylesheets/'));
+app.use('/js', express.static(__dirname + '/views/public/javascripts/'));
+app.use('/img', express.static(__dirname + '/views/public/images/'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -208,7 +211,14 @@ app.get('/game/:user/:game', function(req, res) {
             var index = util.getIndex(user.gameList, 'name', gameName);
             if (index<0) { // no existe: entra como jugador
                 console.log("[server] logging player in: "+game.name);
+                var userCharList = user.charList, gameCharList = game.charList;
                 view.file = views.player;
+                char = util.findCommon(userCharList, gameCharList);
+                if(char === 0) {
+                    var cf = new CharFactory();
+                    char = cf.initChar();
+                }
+                view.data.char = JSON.stringify(char);
                 res.render(view.file, view.data);
             } else { // existe: es el master
                 console.log("[server] logging master in: "+game.name);

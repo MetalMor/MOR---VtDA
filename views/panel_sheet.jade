@@ -1,6 +1,8 @@
 // Bloque de la ficha de personaje
    Created by mor on 8/05/16.
 
+link(rel="stylesheet" href="/css/window.css")
+div#char(hidden)=char
 #sheet.container.overlay
     a.closebtn(href="javascript:void(0)", onclick="closeNav('sheet')")
         span.glyphicon.glyphicon-remove
@@ -9,44 +11,14 @@
         #main.panel.panel-primary
             .panel-heading="Datos principales"
             .panel-body
-                // TODO datos pj
-        #stats
-            #attr.panel.panel-primary
-                .panel-heading="Atributos"
-                .panel-body
-                    table.table-responsive
-                        thead
-                            th="Físicos"
-                            th="Sociales"
-                            th="Mentales"
-                        tbody
-                            tr
-                                td#phy
-                                    table.table-responsive
-                                        tr
-                                            span="Fuerza"
-                                            input(type="number" name="str")
-                                        tr
-                                            span="Destreza"
-                                            input(type="number" name="str")
-                                        tr
-                                            span="Resistencia"
-                                            input(type="number" name="str")
-            #skills
-                #tln
-                #tech
-                #knldg
-            #advtges
-                #disc
-                #trf
-                #vrt
-                #misc
-        #data
-            #look
-                #look-data
-                #desc
-            #trf-data
-            #story
-        #inv
-script(type="text/javascript" src="/public/javascripts/window.js")
-link(rel="stylesheet" href="/public/stylesheets/window.css")
+                table#stats
+                    thead: th="Estadísticas"
+                    tbody
+                #data
+                    #look
+                        #look-data
+                        #desc
+                    #trf-data
+                    #story
+                #inv
+script(type="text/javascript" src="/js/window.js")
