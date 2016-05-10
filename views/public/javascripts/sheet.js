@@ -39,7 +39,8 @@ function table(statsObj) {
     } else if(util.is(util.table, statsObj)) { // es un objeto de conjunto de estadísticas
         var subTable = "", stats = statsObj.stats;
         var tableAdd = function(a) {subTable += a}, len = stats.length;
-        tableAdd("<td><div class='table-hover'><table id='"+statsObj.name.toLowerCase()+"' class='table'><thead><th>"+statsObj.name+"</th></thead><tbody><tr>");
+        tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name.toLowerCase()+"' class='table'>");
+        tableAdd("<thead><th>"+statsObj.name+"</th></thead><tbody><tr>");
         for(var i = 0; i<len; i++) {
             var s = stats[i];
             //tableAdd("<td>"+table(s)+"</td>");
