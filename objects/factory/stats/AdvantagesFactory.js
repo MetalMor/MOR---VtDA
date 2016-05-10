@@ -10,6 +10,26 @@ var StatsSet = require('./../../models/StatsSet');
 module.exports = function() {
 
     /**
+     * Lista de objetos de estadisticas de virtudes.
+     * @type {array}
+     */
+    this.virt = [
+        new RegularStat("Conciencia"),
+        new RegularStat("Autocontrol"),
+        new RegularStat("Coraje")
+    ];
+    this.bckg = [
+        new RegularStat("Dominio"),
+        new RegularStat("Aliados"),
+        new RegularStat("Arsenal"),
+        new RegularStat("Contactos"),
+        new RegularStat("Ganado"),
+        new RegularStat("Influencia"),
+        new RegularStat("Mentor"),
+        new RegularStat("Recursos"),
+        new RegularStat("Estatus")
+    ];
+    /**
      * Retorna un nuevo objeto de conjunto de estadisticas de disciplinas.
      * @returns {object}
      */
@@ -18,7 +38,12 @@ module.exports = function() {
      * Retorna un nuevo objeto de conjunto de estadisticas de trasfondos.
      * @returns {object}
      */
-    this.initBckg = function() {return new StatsSet("Trasfondos")};
+    this.initBckg = function() {
+        var ret = new StatsSet("Trasfondos");
+        var bckg = this.bckg;
+        bckg.forEach(function(b) {ret.stats.push(b)});
+        return ret;
+    };
     /**
      * Retorna un nuevo objeto de conjunto de estadisticas de virtudes.
      * @returns {object}
@@ -30,15 +55,6 @@ module.exports = function() {
         ret.upgradeAll();
         return ret;
     };
-    /**
-     * Lista de objetos de estadisticas de virtudes.
-     * @type {array}
-     */
-    this.virt = [
-        new RegularStat("Conciencia"),
-        new RegularStat("Autocontrol"),
-        new RegularStat("Coraje")
-    ];
     /**
      * Lista de objetos de conjunto de estadísticas de ventajas.
      * @type {*[]}
