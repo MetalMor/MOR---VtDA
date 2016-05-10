@@ -72,7 +72,7 @@ function level(stat) { // OMG OMG OMG IT WORKS!!!! :D :D :D :D so happy 4 dat ^^
 $("table#stats").ready(function() {
     var charJSON = $("div#char").text();
     char = JSON.parse(charJSON);
-    char.stats[3].stats[2].max = 3;
+    char.stats[3].stats[2].max = 7; // testing para ver si pone bien las "bolitas rellenables" de sangre
     table(char.stats);
 });
 

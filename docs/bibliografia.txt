@@ -2,3 +2,12 @@ Docs JavaScript:
 https://developer.mozilla.org/es/
 http://www.w3schools.com/
 https://docs.mongodb.com/
+http://www.i-programmer.info/
+
+Docs Jade:
+http://jade-lang.com/
+
+Info del juego:
+http://whitewolf.wikia.com/wiki/
+Códex Vampiro: la Edad Oscura
+Códex Vampiro: la Mascarada
