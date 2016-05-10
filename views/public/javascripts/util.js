@@ -9,6 +9,33 @@ var util = {
     func: 'Function',
     table: "stats",
     stat: "level",
+    disable: function(id) {
+        $("#"+id).keypress(function (evt) {
+            evt.preventDefault();
+        });
+    },
     is: function(crit, obj) {return obj.hasOwnProperty(crit)},
-    type: function(param, obj) {return Object.prototype.toString.call(obj) === '[object '+param+']'}
+    type: function(param, obj) {return Object.prototype.toString.call(obj) === '[object '+param+']'},
+    clean: function(s) {
+        var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c', "_"];
+        var diacritics =[
+            /[\300-\306]/g, /[\340-\346]/g,  // A, a
+            /[\310-\313]/g, /[\350-\353]/g,  // E, e
+            /[\314-\317]/g, /[\354-\357]/g,  // I, i
+            /[\322-\330]/g, /[\362-\370]/g,  // O, o
+            /[\331-\334]/g, /[\371-\374]/g,  // U, u
+            /[\321]/g, /[\361]/g, // N, n
+            /[\307]/g, /[\347]/g, // C, c
+            " "
+        ];
+
+        for (var i = 0; i < diacritics.length; i++)
+            s = s.replace(diacritics[i],chars[i]);
+        return s.toLowerCase();
+    },
+    fancy: function(s) {
+        s = s.replace('_', ' ');
+        var first = s.substring(0, 1).toUpperCase(), rest = s.substring(1, s.length);
+        return first+rest;
+    }
 };

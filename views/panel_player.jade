@@ -5,6 +5,9 @@
 extends layout
 
 block content
+    #user(hidden)=user
+    #char(hidden)=char
+    #game(hidden)=game
     #wrapper
         #panel.panel.panel-primary
             .panel-heading=user.name+' - '+game.name
@@ -33,5 +36,6 @@ block content
                 #inv
                 #btns
         include panel_output
+        include panel_create
         include panel_sheet
         include panel_action

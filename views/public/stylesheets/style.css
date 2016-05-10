@@ -2,6 +2,14 @@ body {
     background-image: url('/img/bg/backg02.jpg');
 }
 
+table {
+    width: 100%;
+}
+
+th {
+    text-align: center;
+}
+
 .white {
     color: gainsboro;
 }

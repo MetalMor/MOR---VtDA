@@ -19,6 +19,7 @@ var views = require('./objects/system/views');
 var User = require('./objects/models/User'); // user model
 var Game = require('./objects/models/Game'); // game model
 var CharFactory = require('./objects/factory/CharFactory');
+var clans = require('./objects/models/Clans');
 
 var PORT = 3000;
 var cf = new CharFactory();
@@ -206,8 +207,9 @@ app.get('/game/:user/:game', function(req, res) {
         mongoGames.findGameByName(tmpGame, function(g) {
             game = g;
             view = new ViewData(views.master, userName+' - '+gameName, gameName+': '+userName, 0);
-            view.data.user = user;
-            view.data.game = game;
+            view.data.user = JSON.stringify(user);
+            view.data.game = JSON.stringify(game);
+            view.data.clans = clans;
             var index = util.getIndex(user.gameList, 'name', gameName);
             if (index<0) { // no existe: entra como jugador
                 console.log("[server] logging player in: "+game.name);

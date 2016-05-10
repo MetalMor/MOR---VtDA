@@ -2,23 +2,15 @@
    Created by mor on 8/05/16.
 
 link(rel="stylesheet" href="/css/window.css")
-div#char(hidden)=char
-#sheet.container.overlay
+#sheet.container.col-sm-10.overlay
     a.closebtn(href="javascript:void(0)", onclick="closeNav('sheet')")
         span.glyphicon.glyphicon-remove
     .overlay-content
         #img
         #main.panel.panel-primary
-            .panel-heading="Datos principales"
+            .panel-heading="Ficha de estadísticas"
             .panel-body
-                .table-responsive
+                .table-responsive.text-center
                     table#stats.table
                         thead: th="Estadísticas"
                         tbody
-                #data
-                    #look
-                        #look-data
-                        #desc
-                    #trf-data
-                    #story
-                #inv
