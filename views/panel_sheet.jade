@@ -11,9 +11,10 @@ div#char(hidden)=char
         #main.panel.panel-primary
             .panel-heading="Datos principales"
             .panel-body
-                table#stats
-                    thead: th="Estadísticas"
-                    tbody
+                .table-hover
+                    table#stats.table
+                        thead: th="Estadísticas"
+                        tbody
                 #data
                     #look
                         #look-data
@@ -21,4 +22,3 @@ div#char(hidden)=char
                     #trf-data
                     #story
                 #inv
-script(type="text/javascript" src="/js/window.js")

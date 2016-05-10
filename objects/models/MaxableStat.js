@@ -7,6 +7,7 @@
 module.exports = function(n, m) {
     this.name = n;
     this.level = 0;
+    this.limit = n === "Sangre" ? 20 : 10;
     this.max = m;
     this.setMod = function(m) {this.max = m};
     this.addLevel = function() {this.level++};
