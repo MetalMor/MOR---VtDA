@@ -6,6 +6,7 @@
 .panel > .panel-heading {
     background-image: none;
     background-color: firebrick;
+    color: snow;
 }
 
 .form-group {

@@ -207,8 +207,10 @@ app.get('/game/:user/:game', function(req, res) {
         mongoGames.findGameByName(tmpGame, function(g) {
             game = g;
             view = new ViewData(views.master, userName+' - '+gameName, gameName+': '+userName, 0);
-            view.data.user = JSON.stringify(user);
-            view.data.game = JSON.stringify(game);
+            view.data.userJSON = JSON.stringify(user);
+            view.data.gameJSON = JSON.stringify(game);
+            view.data.user = user;
+            view.data.game = game;
             view.data.clans = clans;
             var index = util.getIndex(user.gameList, 'name', gameName);
             if (index<0) { // no existe: entra como jugador
@@ -220,7 +222,8 @@ app.get('/game/:user/:game', function(req, res) {
                     var cf = new CharFactory();
                     char = cf.initChar();
                 }
-                view.data.char = JSON.stringify(char);
+                view.data.charJSON = JSON.stringify(char);
+                view.data.char = char;
                 res.render(view.file, view.data);
             } else { // existe: es el master
                 console.log("[server] logging master in: "+game.name);

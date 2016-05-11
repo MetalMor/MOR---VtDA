@@ -5,15 +5,14 @@
 extends ../layout
 
 block content
-    #user(hidden)=user
-    #char(hidden)=char
-    #game(hidden)=game
+    #user(hidden)=userJSON
+    #char(hidden)=charJSON
+    #game(hidden)=gameJSON
     #wrapper
         #panel.panel.panel-primary
             .panel-heading=user.name+' - '+game.name
             .panel-body
-
-        include panel_output
-        include panel_data
-        include panel_sheet
-        include panel_action
+            include panel_output
+            include panel_data
+            include panel_sheet
+            include panel_action

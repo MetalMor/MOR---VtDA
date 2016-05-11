@@ -1,0 +1,28 @@
+//
+   Created by mor on 11/05/2016.
+
+form(role="form")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Edad (real)"
+        input.form-control.mandatory(type="number", id="real-age", min="1", placeholder="edad...", value="150")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Edad (aparente)"
+        input.form-control.mandatory(type="number", id="supposed-age", min="1", placeholder="edad...", value="45")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Pelo"
+        input.form-control.mandatory(type="text", id="hair", placeholder="descripción...", value="grasiento")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Ojos"
+        input.form-control.mandatory(type="text", id="eyes", placeholder="descripción...", value="marrones y con legañas")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Sexo"
+        select.form-control(id="sex")
+            option="Otro"
+            option="Mujer"
+            option="Hombre"
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Altura (cm)"
+        input.form-control.mandatory(type="number", min="50", max="250", id="height", placeholder="...", value="168")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Peso (kg)"
+        input.form-control.mandatory(type="number", min="1", max="200", id="weight", placeholder="...", value="60")

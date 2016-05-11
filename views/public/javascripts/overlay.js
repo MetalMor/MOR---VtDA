@@ -33,7 +33,7 @@ var overlay = {
                 overlay.close(id, '100', function() {
                     $('#emptyFields').css('width', '100%')
                 });
-            }, 1500);
+            }, 2000);
         });
     }
 };

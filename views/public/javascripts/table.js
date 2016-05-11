@@ -1,8 +1,11 @@
 /**
+ * Controla las funciones de construcción y manipulación de la tabla.
  * Created by mor on 10/05/16.
  */
-
 var table = {
+    /**
+     * Contenedor de objetos para insertar adecuadamente los iconos de nivel.
+     */
     icons: {
         set: {class:"set", file: "set_level_icon.png"},
         unset: {class: "unset", file: "unset_level_icon.png"},
@@ -12,7 +15,7 @@ var table = {
      * Mediante recursividad, construye una tabla a partir de un objeto de estadísticas. Si el objeto es un array, dibujará
      * una tabla de una fila para cada posición. Si es un objeto de estadísticas
      * @param statsObj
-     * @returns {*}
+     * @returns {string}
      */
     build: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) { // es un objeto de estadística singular

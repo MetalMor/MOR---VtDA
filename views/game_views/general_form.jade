@@ -1,0 +1,27 @@
+//
+   Created by mor on 11/05/2016.
+
+form(role="form")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Nombre del personaje"
+        input.form-control.mandatory(type="text", id="name", placeholder="nombre...", value="pepito")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Naturaleza"
+        input.form-control.mandatory(type="text", id="nature", placeholder="naturaleza...", value="marrano")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Conducta"
+        input.form-control.mandatory(type="text", id="demeanor", placeholder="conducta...", value="borracho")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Clan"
+        select.form-control(id="clan")
+            each clan in clans
+                option=clan
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Generación"
+        input.form-control.mandatory(type="number", id="generation", min="4", max="14", value="13")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Refugio"
+        input.form-control.mandatory(type="text", id="haven", placeholder="refugio...", value="villapepinos")
+    .form-group.col-sm-4
+        span.input-group-addon.text-center="Concepto"
+        input.form-control.mandatory(type="text", id="concept", placeholder="concepto...", value="prueba")

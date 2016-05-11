@@ -4,10 +4,10 @@
  */
 
 module.exports = {
-    user: 'user.jade',
-    newUser: 'user_new.jade',
-    game: 'game.jade',
-    newGame: 'game_new.jade',
-    master: 'panel_master.jade',
-    player: 'panel_player.jade'
+    user: 'login_views/user.jade',
+    newUser: 'login_views/user_new.jade',
+    game: 'login_views/game.jade',
+    newGame: 'login_views/game_new.jade',
+    master: 'game_views/panel_master.jade',
+    player: 'game_views/panel_player.jade'
 };

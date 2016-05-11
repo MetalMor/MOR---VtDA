@@ -9,13 +9,35 @@ var util = {
     func: 'Function',
     table: "stats",
     stat: "level",
-    disable: function(id) {
-        $("#"+id).keypress(function (evt) {
+    /**
+     * Deshabilita la funcionalidad de escribir en un input especificado.
+     * @param selector Selector del/los elemento/s
+     */
+    disable: function(selector) {
+        $(selector).keypress(function (evt) {
             evt.preventDefault();
         });
     },
+    /**
+     * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
+     * @param crit Tipo requerido
+     * @param obj Objeto a comprobar
+     * @returns {boolean}
+     */
     is: function(crit, obj) {return obj.hasOwnProperty(crit)},
-    type: function(param, obj) {return Object.prototype.toString.call(obj) === '[object '+param+']'},
+    /**
+     * Retorna si el objeto es del tipo especificado en base a su prototipo.
+     * @param crit Tipo requerido
+     * @param obj Objeto a comprobar
+     * @returns {boolean}
+     */
+    type: function(crit, obj) {return Object.prototype.toString.call(obj) === '[object '+crit+']'},
+    /**
+     * En una cadena de caracteres enviada por parámetro: elimina todas las tildes, convierte los espacios en guiones
+     * bajos y cambia las mayúsculas por minúsculas.
+     * @param s String a transformar
+     * @returns {string}
+     */
     clean: function(s) {
         var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c', "_"];
         var diacritics =[
@@ -33,10 +55,16 @@ var util = {
             s = s.replace(diacritics[i],chars[i]);
         return s.toLowerCase();
     },
+    /**
+     * Revierte el proceso de la función "clean", a excepción de las tildes: restaura los espacios y convierte la
+     * primera letra en mayúscula.
+     * @param s String a transformar.
+     * @returns {string}
+     */
     fancy: function(s) {
         s = s.replace('_', ' ');
-        var first = s.substring(0, 1).toUpperCase(), rest = s.substring(1, s.length);
-        return first+rest;
+        var first = s.substring(0, 1).toUpperCase(), other = s.substring(1, s.length);
+        return first+other;
     },
     /**
      * Retorna el índice en el array del atributo con el nombre y el valor especificados.
@@ -49,5 +77,18 @@ var util = {
         for(var i = 0; i < array.length; i += 1) if(array[i][attr] === value) return i;
         return -1;
     },
-    printChar: function() {console.log("[client] char: "+JSON.stringify(char, null, 4))}
+    /**
+     * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
+     */
+    printChar: function() {console.log("[client] char: "+JSON.stringify(char, null, 4))},
+    /**
+     * Valida si ninguno de los inputs dentro de un elemento especificado por parámetro está vacío.
+     * @param id Elemento del que validar los inputs
+     * @returns {boolean}
+     */
+    allInputsSet: function(id) {
+        return !($('#'+id+' .mandatory').filter(function(){
+            return $.trim(this.value).length === 0;
+        }).length > 0);
+    }
 };

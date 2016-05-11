@@ -12,11 +12,13 @@ if (window["WebSocket"]) {
             var charElement;
             if((charElement = $("div#char")).length) {
                 char = JSON.parse(charElement.text());
+                overlay.showAlert('advice');
                 overlay.open('data');
-                util.disable('generation');
+                util.disable('#generation');
                 $("input#next").on('click', function(){button.submitCharData()});
                 //openNav('sheet');
             }
+            util.printChar();
             /*socket.emit('id', id);
             socket.on('top', function(ten) {
                 var element = $("ol#top");

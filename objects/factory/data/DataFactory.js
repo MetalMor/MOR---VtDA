@@ -43,8 +43,8 @@ module.exports = function() {
      */
     this.fields = [
         this.initGeneral(),
-        this.initBckg(),
-        this.initLook()
+        this.initLook(),
+        this.initBckg()
     ];
     /**
      * Retorna un nuevo array de objetos de datos del personaje.
