@@ -18,7 +18,7 @@ if (window["WebSocket"]) {
                 $("input#next").on('click', function(){button.submitCharData()});
                 //openNav('sheet');
             }
-            util.printChar();
+            //util.printChar();
             /*socket.emit('id', id);
             socket.on('top', function(ten) {
                 var element = $("ol#top");

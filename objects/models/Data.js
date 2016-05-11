@@ -6,4 +6,5 @@
 
 module.exports = function(f) {
     this.fields = [];
+    this.story = "";
 };

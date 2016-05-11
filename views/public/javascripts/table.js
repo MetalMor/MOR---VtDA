@@ -20,7 +20,7 @@ var table = {
     build: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) { // es un objeto de estadística singular
             return "<tr><td>"+statsObj.name+"</td><td id='"+util.clean(statsObj.name)+"'>"+this.level(statsObj)+"</td></tr>"; // <-- ACABA RECURSIVIDAD
-        } else if(util.is(util.table, statsObj)) { // es un objeto de conjunto de estadísticas
+        } else if(util.is(util.stats, statsObj)) { // es un objeto de conjunto de estadísticas
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a}, len = stats.length;
             tableAdd("<td><div class='table-responsive'><table id='"+util.clean(statsObj.name)+"' class='table'>");

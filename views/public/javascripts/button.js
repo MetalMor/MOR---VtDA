@@ -17,16 +17,22 @@ var button = {
             inputs.push(this.getInputs(0));
             inputs.push(this.getInputs(1));
             inputs.push(this.getInputs(2));
-            inputs.forEach(function(i) { // NO RULA
-                charData.forEach(function(d) {
-                    d.fields.forEach(function(f) {
-                        f.value = i.shift();
-                    });
+            var inputsGroup, counter = 0;
+            while(inputs.length > 0) {
+                inputsGroup = inputs.shift();
+                charData[counter].fields.forEach(function(f) {
+                    f.value = inputsGroup.shift();
                 });
-            });
-            util.printChar();
+                counter++;
+            }
+            console.log(charUtils.findStat(char, 'Apariencia'));
+            charUtils.setStat(char, 'Apariencia', false);
+            console.log(charUtils.findStat(char, 'Apariencia'));
+            console.log(charUtils.findData(char, 'Generación'));
+            charUtils.setData(char, 'Generación', 4);
+            console.log(charUtils.findData(char, 'Generación'));
             table.build(char.stats, "stats");
-            table.build(clan.getDiscs(clanName), 'disciplinas'); // carga las disciplinas del clan escogido
+            table.build(charUtils.getDiscs(clanName), 'disciplinas'); // carga las disciplinas del charUtils escogido
             overlay.open('sheet');
         } else {
             overlay.showAlert('emptyFields');
@@ -48,6 +54,7 @@ var button = {
             temp.push($("input#supposed-age").val());
             temp.push($("input#hair").val());
             temp.push($("input#eyes").val());
+            temp.push($("input#nationality").val());
             temp.push($("select#sex").val());
             temp.push($("input#height").val());
             temp.push($("input#weight").val());
@@ -68,10 +75,7 @@ var button = {
     modStats: function(clanName) {
         var charStats = char.stats;
         if(clanName === 'Nosferatu') { // si eres nosferatu no tienes apariencia
-            var attrIndex = util.getIndex(charStats, 'name', 'Atributos');
-            var socIndex = util.getIndex(charStats[attrIndex].stats, 'name', 'Sociales');
-            var lookIndex = util.getIndex(charStats[attrIndex].stats[socIndex].stats, 'name', 'Apariencia');
-            charStats[attrIndex].stats[socIndex].stats[lookIndex].level = 0;
+            charUtils.setStat(char, 'Apariencia', false);
         }
     }
 };

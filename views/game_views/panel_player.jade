@@ -9,10 +9,10 @@ block content
     #char(hidden)=charJSON
     #game(hidden)=gameJSON
     #wrapper
-        #panel.panel.panel-primary
+        #panel.panel.panel-primary(hidden)
             .panel-heading=user.name+' - '+game.name
             .panel-body
             include panel_output
-            include panel_data
-            include panel_sheet
-            include panel_action
+        include panel_data
+        include panel_sheet
+        include panel_action

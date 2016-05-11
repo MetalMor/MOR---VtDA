@@ -7,8 +7,11 @@ var util = {
     obj: 'Object',
     arr: 'Array',
     func: 'Function',
-    table: "stats",
+    stats: "stats",
+    data: "fields",
     stat: "level",
+    field: "value",
+    char: "xp",
     /**
      * Deshabilita la funcionalidad de escribir en un input especificado.
      * @param selector Selector del/los elemento/s
@@ -18,6 +21,8 @@ var util = {
             evt.preventDefault();
         });
     },
+    isUndefined: function(o) {return typeof o === 'undefined'},
+    isBoolean: function(o) {return typeof o === 'boolean'},
     /**
      * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
      * @param crit Tipo requerido
@@ -76,6 +81,34 @@ var util = {
     getIndex: function(array, attr, value) {
         for(var i = 0; i < array.length; i += 1) if(array[i][attr] === value) return i;
         return -1;
+    },
+    findStat: function(obj, name) {
+        var tmpRet;
+        if(util.is(util.stat, obj)) {
+            if(obj.name === name) return obj.level;
+        } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
+            var self = this, ret;
+            obj.stats.forEach(function(o) {
+                tmpRet = self.findStat(o, name);
+                if(!self.isUndefined(tmpRet)) ret = tmpRet;
+            });
+            return ret;
+        }
+    },
+    findData: function(obj, name) {
+        var tmpRet;
+        if(util.is(util.field, obj)) {
+            if(obj.name === name) {return obj.value;}
+        } else {
+            var prop, ret, self = this;
+            if(util.is(util.data, obj)) prop = 'fields';
+            else if(util.is(util.char, obj)) prop = 'data';
+            obj[prop].forEach(function(o) {
+                tmpRet = self.findData(o, name);
+                if(!self.isUndefined(tmpRet)) ret = tmpRet;
+            });
+            return ret;
+        }
     },
     /**
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.

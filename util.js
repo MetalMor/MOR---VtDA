@@ -8,12 +8,24 @@ module.exports = {
     obj: 'Object',
     arr: 'Array',
     func: 'Function',
+    stats: "stats",
+    data: "fields",
+    stat: "level",
+    field: "value",
+    char: "xp",
     /**
      * Retorna un objeto apto para ser enviado a una query de la base de datos como parámetro de inclusión en el resultado.
      * @param field Campo string a mostrar.
      * @returns {boolean}
      */
     queryField: function(field) {return {}[field] = true},
+    /**
+     * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
+     * @param crit Tipo requerido
+     * @param obj Objeto a comprobar
+     * @returns {boolean}
+     */
+    is: function(crit, obj) {return obj.hasOwnProperty(crit)},
     /**
      * Comprueba si un objeto es del tipo especificado.
      * @param param Tipo (string)

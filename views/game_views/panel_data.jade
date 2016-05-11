@@ -1,7 +1,7 @@
 //
    Created by mor on 10/05/16.
 
-#data.container.col-sm-10.overlay
+#data.col-sm-10.overlay(hidden)
     .panel.panel-default
         .panel-heading.text-center="Datos generales"
         #general.panel-body
@@ -22,4 +22,3 @@
             #emptyFields.alert.alert-danger(hidden)
                 p.text-center="Debes rellenar todos los campos."
             include backgrounds_form
-    input#next.btn.btn-danger.btn-lg.right-align(type="button", value="Siguiente")
