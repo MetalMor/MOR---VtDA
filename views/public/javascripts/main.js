@@ -4,35 +4,17 @@
  * Created by mor on 9/05/16.
  */
 var char;
-/**
- * Abre un elemento desplegable
- * @param selectorId ID del elemento (string)
- */
-function openNav(selectorId) {
-    var element = $("#"+selectorId);
-    element.fadeIn('fast', function() {element.css('width', '100%')});
-}
-/**
- * Cierra un elemento desplegable
- * @param selectorId ID del elemento (string)
- */
-function closeNav(selectorId) {
-    var element = $("#"+selectorId);
-    element.fadeOut('fast', function() {element.css('width', '0%')});
-}
 
 if (window["WebSocket"]) {
     $('#wrapper').ready(function() {
         var socket = io.connect(document.location.href);
         function connect() {
-            var charJSON;
-            if((charJSON = $("div#char")).length) {
-                char = JSON.parse(charJSON.text());
-                char.stats[3].stats[2].max = 7; // testing para ver si pone bien las "bolitas rellenables" de sangre
+            var charElement;
+            if((charElement = $("div#char")).length) {
+                char = JSON.parse(charElement.text());
+                overlay.open('data');
                 util.disable('generation');
-                table.build(char.stats, "stats");
-                table.build(clan.getDiscs('Malkavian'), 'disciplinas');
-                openNav('create');
+                $("input#next").on('click', function(){button.submitCharData()});
                 //openNav('sheet');
             }
             /*socket.emit('id', id);

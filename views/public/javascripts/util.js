@@ -37,5 +37,17 @@ var util = {
         s = s.replace('_', ' ');
         var first = s.substring(0, 1).toUpperCase(), rest = s.substring(1, s.length);
         return first+rest;
-    }
+    },
+    /**
+     * Retorna el índice en el array del atributo con el nombre y el valor especificados.
+     * @param array Array en el que buscar
+     * @param attr Nombre del atributo a encontrar
+     * @param value Criterio de valor del atributo
+     * @returns {number}
+     */
+    getIndex: function(array, attr, value) {
+        for(var i = 0; i < array.length; i += 1) if(array[i][attr] === value) return i;
+        return -1;
+    },
+    printChar: function() {console.log("[client] char: "+JSON.stringify(char, null, 4))}
 };

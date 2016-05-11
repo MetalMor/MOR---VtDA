@@ -1,0 +1,19 @@
+// Ventana del jugador
+// TODO ficha hidden
+   Created by mor on 6/05/16.
+
+extends ../layout
+
+block content
+    #user(hidden)=user
+    #char(hidden)=char
+    #game(hidden)=game
+    #wrapper
+        #panel.panel.panel-primary
+            .panel-heading=user.name+' - '+game.name
+            .panel-body
+
+        include panel_output
+        include panel_data
+        include panel_sheet
+        include panel_action
