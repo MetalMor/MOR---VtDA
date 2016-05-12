@@ -1,34 +1,36 @@
 /**
- * It's a beautiful day somewhere else... ^^¡
+ * It's a raining somewhere else... ^^¡
  */
 
-var express = require('express'); // express dependencies models
-var fs = require('fs'); // file parser
-var app = require('express')(); // app models
-var server = require('http').Server(app); // server models
-var io = require('socket.io')(server); // asyncronous client-server communication
-var bodyParser = require('body-parser'); // POST parameters
-var sha1 = require('sha1'); // pwd encoder
+var express = require('express'), // express dependencies models
+    fs = require('fs'), // file parser
+    app = require('express')(), // app models
+    server = require('http').Server(app), // server models
+    io = require('socket.io')(server), // asyncronous client-server communication
+    bodyParser = require('body-parser'), // POST parameters
+    sha1 = require('sha1'); // pwd encoder
 
-var mongoUsers = require('./db/mongoUsers'); // db users controller
-var mongoGames = require('./db/mongoGames'); // db games controller
+var mongoUsers = require('./db/mongoUsers'), // db users controller
+    mongoGames = require('./db/mongoGames'); // db games controller
 
-var util = require('./util'); // utils
-var ViewData = require('./objects/system/ViewData'); // view data model
-var views = require('./objects/system/views');
-var User = require('./objects/models/User'); // user model
-var Game = require('./objects/models/Game'); // game model
-var CharFactory = require('./objects/factory/CharFactory');
-var clans = require('./objects/models/Clans');
+var util = require('./util'), // utils
+    ViewData = require('./objects/system/ViewData'), // view data model
+    views = require('./objects/system/views'),
+    User = require('./objects/models/User'), // user model
+    Game = require('./objects/models/Game'), // game model
+    CharFactory = require('./objects/factory/CharFactory'),
+    clans = require('./objects/models/Clans');
 
-var PORT = 3000;
+var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000,
+    IP = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+
 var cf = new CharFactory();
-var view, user, game, char = cf.initChar();
-var games, users; // users & games list
-var setGames = function(list) {games = list};
-var setUsers = function(list) {users = list};
-var setGame = function(g) {game = g};
-var setUser = function(u) {user = u};
+var view, user, game, char = cf.initChar(),
+    games, users; // users & games list
+var setGames = function(list) {games = list},
+    setUsers = function(list) {users = list},
+    setGame = function(g) {game = g},
+    setUser = function(u) {user = u};
 
 /**
  * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
@@ -41,6 +43,8 @@ mongoUsers.listAllUsers(setUsers);
 
 // ***** JADE TEMPLATES *****
 app.set('view engine', 'jade');
+app.set('port', PORT);
+app.set('ipaddr', IP);
 
 // ***** ROUTING & SERVER *****
 app.use('/public', express.static(__dirname + '/views/public/'));
