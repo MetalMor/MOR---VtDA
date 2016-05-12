@@ -10,6 +10,11 @@ th {
     text-align: center;
 }
 
+.fancy-write {
+    /*font-family: 'Kaushan Script', cursive;*/
+    font-family: Papyrus;
+}
+
 .white {
     color: gainsboro;
 }

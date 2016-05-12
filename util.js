@@ -14,6 +14,40 @@ module.exports = {
     field: "value",
     char: "xp",
     /**
+     * En una cadena de caracteres enviada por parámetro: elimina todas las tildes, convierte los espacios en guiones
+     * bajos y cambia las mayúsculas por minúsculas.
+     * @param s String a transformar
+     * @returns {string}
+     */
+    clean: function(s) {
+        var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
+        var diacritics =[
+            /[\300-\306]/g, /[\340-\346]/g,  // A, a
+            /[\310-\313]/g, /[\350-\353]/g,  // E, e
+            /[\314-\317]/g, /[\354-\357]/g,  // I, i
+            /[\322-\330]/g, /[\362-\370]/g,  // O, o
+            /[\331-\334]/g, /[\371-\374]/g,  // U, u
+            /[\321]/g, /[\361]/g, // N, n
+            /[\307]/g, /[\347]/g // C, c
+        ];
+
+        for (var i = 0; i < diacritics.length; i++)
+            s = s.replace(diacritics[i],chars[i]);
+        while(s.indexOf(' ')>0) {s = s.replace(" ", "_")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
+        return s.toLowerCase();
+    },
+    /**
+     * Revierte el proceso de la función "clean", a excepción de las tildes: restaura los espacios y convierte la
+     * primera letra en mayúscula.
+     * @param s String a transformar.
+     * @returns {string}
+     */
+    fancy: function(s) {
+        while(s.indexOf('_')>0) {s = s.replace("_", " ")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
+        var first = s.substring(0, 1).toUpperCase(), other = s.substring(1, s.length);
+        return first+other;
+    },
+    /**
      * Retorna un objeto apto para ser enviado a una query de la base de datos como parámetro de inclusión en el resultado.
      * @param field Campo string a mostrar.
      * @returns {boolean}
@@ -44,6 +78,12 @@ module.exports = {
         for(var i = 0; i < array.length; i += 1) if(array[i][attr] === value) return i;
         return -1;
     },
+    /**
+     * Busca, en dos listas diferentes, el primer elemento en común
+     * @param one
+     * @param other
+     * @returns {number}
+     */
     findCommon: function(one, other) {
         one.forEach(function(a) {
             console.log("[util] checking user char list: "+ a.name);

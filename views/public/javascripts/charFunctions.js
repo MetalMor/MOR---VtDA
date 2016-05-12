@@ -3,7 +3,7 @@
  * Created by mor on 10/05/16.
  */
 
-var charUtils = {
+var charFunctions = {
     /**
      * Lista de disciplinas de cada clan
      */
@@ -35,9 +35,18 @@ var charUtils = {
         for(var clan in clans)
             if(clanName === clan && (util.type(util.arr, clans[clan]) && clans[clan].length == 3))
                 clans[clan].forEach(
-                    function(disc) {ret.push(self.createDisc(disc))}
+                    function(disc) {ret.push(self.createDisc(util.clean(disc)))}
                 );
+
         return ret;
+    },
+    /**
+     * Guarda la lista de disciplinas en el objeto modelo.
+     * @param list
+     */
+    setDiscs: function(list) {
+        var discs = char.stats[2].stats[0].stats;
+        if(discs.length <= 0) char.stats[2].stats[0].stats = list;
     },
     /**
      * Crea un objeto de disciplina a partir del nombre
@@ -57,12 +66,12 @@ var charUtils = {
     findStat: function(obj, name) {
         var tmpRet;
         if(util.is(util.stat, obj)) {
-            if(obj.name === name) return obj.level;
+            if(obj.name === name) return obj;
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var self = this, ret;
             obj.stats.forEach(function(o) {
-                tmpRet = self.findStat(o, name);
-                if(!util.isUndefined(tmpRet)) ret = tmpRet;
+                if(util.isUndefined(ret)) ret = self.findStat(o, name);
+                //if(!util.isUndefined(tmpRet)) ret = tmpRet;
             });
             return ret;
         }
@@ -76,14 +85,14 @@ var charUtils = {
     findData: function(obj, name) {
         var tmpRet;
         if(util.is(util.field, obj)) {
-            if(obj.name === name) {return obj.value;}
+            if(obj.name === name) {return obj;}
         } else {
             var prop, ret, self = this;
             if(util.is(util.data, obj)) prop = 'fields';
             else if(util.is(util.char, obj)) prop = 'data';
             obj[prop].forEach(function(o) {
-                tmpRet = self.findData(o, name);
-                if(!util.isUndefined(tmpRet)) ret = tmpRet;
+                if(util.isUndefined(ret)) ret = self.findData(o, name);
+                //if(!util.isUndefined(tmpRet)) ret = tmpRet;
             });
             return ret;
         }

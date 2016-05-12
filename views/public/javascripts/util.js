@@ -44,7 +44,7 @@ var util = {
      * @returns {string}
      */
     clean: function(s) {
-        var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c', "_"];
+        var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
         var diacritics =[
             /[\300-\306]/g, /[\340-\346]/g,  // A, a
             /[\310-\313]/g, /[\350-\353]/g,  // E, e
@@ -52,12 +52,12 @@ var util = {
             /[\322-\330]/g, /[\362-\370]/g,  // O, o
             /[\331-\334]/g, /[\371-\374]/g,  // U, u
             /[\321]/g, /[\361]/g, // N, n
-            /[\307]/g, /[\347]/g, // C, c
-            " "
+            /[\307]/g, /[\347]/g // C, c
         ];
 
         for (var i = 0; i < diacritics.length; i++)
             s = s.replace(diacritics[i],chars[i]);
+        while(s.indexOf(' ')>0) {s = s.replace(" ", "_")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         return s.toLowerCase();
     },
     /**
@@ -67,7 +67,7 @@ var util = {
      * @returns {string}
      */
     fancy: function(s) {
-        s = s.replace('_', ' ');
+        while(s.indexOf('_')>0) {s = s.replace("_", " ")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         var first = s.substring(0, 1).toUpperCase(), other = s.substring(1, s.length);
         return first+other;
     },
@@ -81,34 +81,6 @@ var util = {
     getIndex: function(array, attr, value) {
         for(var i = 0; i < array.length; i += 1) if(array[i][attr] === value) return i;
         return -1;
-    },
-    findStat: function(obj, name) {
-        var tmpRet;
-        if(util.is(util.stat, obj)) {
-            if(obj.name === name) return obj.level;
-        } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
-            var self = this, ret;
-            obj.stats.forEach(function(o) {
-                tmpRet = self.findStat(o, name);
-                if(!self.isUndefined(tmpRet)) ret = tmpRet;
-            });
-            return ret;
-        }
-    },
-    findData: function(obj, name) {
-        var tmpRet;
-        if(util.is(util.field, obj)) {
-            if(obj.name === name) {return obj.value;}
-        } else {
-            var prop, ret, self = this;
-            if(util.is(util.data, obj)) prop = 'fields';
-            else if(util.is(util.char, obj)) prop = 'data';
-            obj[prop].forEach(function(o) {
-                tmpRet = self.findData(o, name);
-                if(!self.isUndefined(tmpRet)) ret = tmpRet;
-            });
-            return ret;
-        }
     },
     /**
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.

@@ -1,9 +1,13 @@
 /**
- * Script para controlar los botones de la interfaz
+ * Objeto para controlar los botones de la interfaz
  * Created by becari on 11/05/2016.
  */
-
 var button = {
+    /**
+     * Guarda los datos del formulario y procede a construir la tabla. Según el clan, printará sus correspondientes disciplinas.
+     * Si alguno de los campos está vacío, simplemente se muestra un alert encima del formulario que informará de que quedan
+     * campos sin rellenar.
+     */
     submitCharData: function() {
         if(util.allInputsSet()) {
             overlay.close('data');
@@ -25,19 +29,22 @@ var button = {
                 });
                 counter++;
             }
-            console.log(charUtils.findStat(char, 'Apariencia'));
-            charUtils.setStat(char, 'Apariencia', false);
-            console.log(charUtils.findStat(char, 'Apariencia'));
-            console.log(charUtils.findData(char, 'Generación'));
-            charUtils.setData(char, 'Generación', 4);
-            console.log(charUtils.findData(char, 'Generación'));
+            var discs = charFunctions.getDiscs(clanName);
             table.build(char.stats, "stats");
-            table.build(charUtils.getDiscs(clanName), 'disciplinas'); // carga las disciplinas del charUtils escogido
+            table.build(discs, 'disciplinas'); // carga las disciplinas del charUtils escogido
+            charFunctions.setDiscs(discs);
+            button.setTableButtons('stats');
             overlay.open('sheet');
         } else {
             overlay.showAlert('emptyFields');
         }
     },
+    /**
+     * Guarda los datos de los inputs del formulario en un array bidimensional. Lo he hecho un poco con el ojete, pero bueno,
+     * no tenía ganas de más recursividades por el momento.
+     * @param crit
+     * @returns {Array}
+     */
     getInputs: function(crit) {
         var temp = [], ret = [];
         //<editor-fold desc="Coge los inputs del formulario en la variable temp..." default="collapsed">
@@ -72,10 +79,40 @@ var button = {
         temp.forEach(function(s) {ret.push(util.fancy(s))});
         return ret;
     },
+    /**
+     * Realiza las modificaciones necesarias a las estadísticas del personaje a partir del nombre del clan.
+     * @param clanName Nombre del clan del personaje.
+     */
     modStats: function(clanName) {
-        var charStats = char.stats;
         if(clanName === 'Nosferatu') { // si eres nosferatu no tienes apariencia
-            charUtils.setStat(char, 'Apariencia', false);
+            charFunctions.setStat(char, 'apariencia', 0);
         }
+    },
+    /**
+     * Establece los eventos de botones de la tabla del personaje.
+     * @param id Tabla o fila de la que establecer el evento.
+     */
+    setTableButtons: function(id) {
+        var levelButtons = $('#'+id+' img[class]'), self;
+        levelButtons.each(function() {
+            self = $(this);
+            if(util.isUndefined($(this).attr('onclick')))
+                $(this).click(function() {
+                    button.statButtonClick($(this).closest('td[id]').attr('id'), $(this).attr('class'))
+                });
+        });
+    },
+    /**
+     * Función destinada a llamarse al hacer clic en uno de los iconos de nivel de la ficha del personaje.
+     * @param id String identificador del elemento padre del icpno (correspondiente a la estadistica a la que pertenece)
+     * @param cls Clase del icono: set, unset o max
+     */
+    statButtonClick: function(id, cls) {
+        if(cls === table.icons.unset.class) {
+            mode = true
+        } else if(cls === table.icons.set.class) {
+            mode = false;
+        }
+        table.modStat(id, mode);
     }
 };

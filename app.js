@@ -6,7 +6,7 @@ var express = require('express'); // express dependencies models
 var fs = require('fs'); // file parser
 var app = require('express')(); // app models
 var server = require('http').Server(app); // server models
-var io = require('socket.io')(server); // asyncronous events
+var io = require('socket.io')(server); // asyncronous client-server communication
 var bodyParser = require('body-parser'); // POST parameters
 var sha1 = require('sha1'); // pwd encoder
 
@@ -233,8 +233,7 @@ app.get('/game/:user/:game', function(req, res) {
     });
 });
 
-server.listen(PORT);
-console.log('[server] started at port ' + PORT);
+server.listen(PORT, function() {console.log('[server] started at port ' + PORT)});
 
 // ***** EJECUTA LOS SOCKETS! *****
 //require('./sockets.js')(io);

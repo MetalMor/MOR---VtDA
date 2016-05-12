@@ -19,12 +19,12 @@ var table = {
      */
     build: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) { // es un objeto de estadística singular
-            return "<tr><td>"+statsObj.name+"</td><td id='"+util.clean(statsObj.name)+"'>"+this.level(statsObj)+"</td></tr>"; // <-- ACABA RECURSIVIDAD
+            return "<tr><td>"+util.fancy(statsObj.name)+"</td><td id='"+statsObj.name+"'>"+this.level(statsObj)+"</td></tr>"; // <-- ACABA RECURSIVIDAD
         } else if(util.is(util.stats, statsObj)) { // es un objeto de conjunto de estadísticas
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a}, len = stats.length;
-            tableAdd("<td><div class='table-responsive'><table id='"+util.clean(statsObj.name)+"' class='table'>");
-            tableAdd("<thead><th>"+statsObj.name+"</th></thead><tbody><tr>");
+            tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
+            tableAdd("<thead><th>"+util.fancy(statsObj.name)+"</th></thead><tbody><tr>");
             stats.forEach(function(s) {tableAdd(self.build(s, tableId))}); // <-- RECURSIVIDAD HERE
             tableAdd("</tr></tbody></table></div></td>");
             return subTable;
@@ -34,6 +34,28 @@ var table = {
             var contentAdd = function(a) {content += a};
             statsObj.forEach(function(s){contentAdd("<tr>"+self.build(s, tableId)+"</tr>")}); // <-- RECURSIVIDAD HERE
             mainTable.append(content);
+        }
+    },
+    /**
+     * Actualiza el display de todas las estadísticas de la tabla del personaje (aún hay que probarlo).
+     */
+    updateAll: function() {
+        var elements = $('td[id]'), self = this, id;
+        elements.forEach(function(e) {
+            id = e.attr('id');
+            self.update(id);
+        });
+    },
+    /**
+     * Actualiza el display de una estadística de la tabla del personaje especificada por parámetro
+     * @param name Nombre (id) de la estadística
+     */
+    update: function(name) {
+        var statElement = $('#'+name), stat = charFunctions.findStat(char, name);
+        if (!util.isUndefined(stat)) {
+            statElement.empty();
+            statElement.append(this.level(stat));
+            button.setTableButtons(name);
         }
     },
     /**
@@ -53,5 +75,15 @@ var table = {
             ret += "<img class='"+icon.class+"' src='" +iconsDir+icon.file + "'>";
         }
         return ret;
+    },
+    /**
+     * Modifica una estadística (tanto en la tabla como en el objeto modelo).
+     * @param id Identificador de la estadística
+     * @param mode Especifica el tipo de cambio: boolean true incrementa, false decrementa. Si es un número, redefine
+     * la estadística con ese valor.
+     */
+    modStat: function(id, mode) {
+        charFunctions.setStat(char, id, mode);
+        table.update(id);
     }
 };
