@@ -25,13 +25,6 @@ var charFunctions = {
         ventrue: ['Dominación', 'Fortaleza', 'Presencia']
     },
     /**
-     * Filtro para modificaciones de apariencia de un personaje del clan Nosferatu
-     * @returns {boolean}
-     */
-    lookRestriction: function(id) {
-        return !(util.clean(charFunctions.findData(char, 'clan').value) === 'nosferatu' && id === 'apariencia');
-    },
-    /**
      * Realiza las modificaciones necesarias a las estadísticas del personaje a partir del nombre del clan.
      * @param clanName Nombre del clan del personaje.
      */
@@ -72,6 +65,28 @@ var charFunctions = {
     createDisc: function(n) {
         return {name: n, level: 0, limit: 10, mod: 0,
             setMod: function(m) {this.mod = m}, addLevel: function() {this.level++}};
+    },
+    /**
+     * Retorna el padre de la estadística especificada en string
+     * @param obj Objeto en el que buscar
+     * @param name Estadistica de la que se requiere el padre
+     */
+    findParent: function(obj, name) {
+        var sup = obj.stats, sub, childs, ret;
+        sup.forEach(function(stats) {
+            sub = stats.stats;
+            if(util.isUndefined(ret))
+                sub.forEach(function(stat) {
+                    if(stat.name === name) ret = stats;
+                    if(util.isUndefined(ret)) {
+                        childs = stat.stats;
+                        childs.forEach(function (s) {
+                            if (s.name === name) ret = stat;
+                        });
+                    }
+                });
+        });
+        return ret;
     },
     /**
      * Obtiene mediante recursividad la estadística requerida de un personaje especificado por parámetro.
@@ -119,12 +134,12 @@ var charFunctions = {
      * @param name Nombre de la estadística a redefinir.
      * @param value Nuevo valor de la estadística. Si es boolean, true incrementa el valor y false lo decrementa.
      */
-    setStat: function(obj, name, value) {
+    setStat: function(obj, stat, value) {
         if(util.is(util.stat, obj)) {
-            if(obj.name === name) util.isBoolean(value) ? value ? obj.level++ : obj.level-- : obj.level = value;
+            if(obj.name === stat.name) util.isBoolean(value) ? value ? obj.level++ : obj.level-- : obj.level = value;
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var self = this;
-            obj.stats.forEach(function(o) {self.setStat(o, name, value)});
+            obj.stats.forEach(function(o) {self.setStat(o, stat, value)});
         }
     },
     /**

@@ -16,7 +16,6 @@ if (window["WebSocket"]) {
                 overlay.open('data');
                 util.disable('#generation');
                 $("input#next").on('click', function(){button.submitCharData()});
-                util.printChar();
                 //openNav('sheet');
             }
             //util.printChar();

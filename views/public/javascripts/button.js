@@ -36,6 +36,7 @@ var button = {
             table.build(discs, 'disciplinas');
             charFunctions.setDiscs(discs);
             button.setTableButtons('stats');
+            util.printChar();
             overlay.open('sheet');
         } else {
             overlay.showAlert('emptyFields');
@@ -89,7 +90,7 @@ var button = {
         var levelButtons = $('#'+id+' img[class]');
         levelButtons.each(function() {
             var attrName = $(this).closest('td[id]').attr('id');
-            if(charFunctions.lookRestriction(attrName) && util.isUndefined($(this).attr('onclick')))
+            if(restrict.lookRestriction(attrName) && util.isUndefined($(this).attr('onclick')))
                 $(this).click(function() {
                     button.statButtonClick(attrName, $(this).attr('class'))
                 });
@@ -118,15 +119,18 @@ var button = {
         } else if(cls === table.icons.set.class) {
             mode = false;
         }
-        var stat = charFunctions.findStat(char, id);
+        var stat = charFunctions.findStat(char, id),
+            parent = charFunctions.findParent(char, id);
         if(mode) {
-            if(stat.initPoints > 0) {
-                stat.initPoints--;
-                table.modStat(id, mode);
+            if(parent.initPoints > 0) {
+                parent.initPoints--;
+                table.modStat(stat, mode);
+                table.updateInitPoints(parent);
             }
-        } else {
-            stat.initPoints++;
-            table.modStat(id, mode);
+        } else if(restrict.levelZeroRestriction(stat)) {
+            parent.initPoints++;
+            table.modStat(stat, mode);
+            table.updateInitPoints(parent);
         }
     }
 };

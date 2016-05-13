@@ -24,7 +24,10 @@ var table = {
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a}, len = stats.length;
             tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
-            tableAdd("<thead><th>"+util.fancy(statsObj.name)+ "</th></thead><tbody><tr>");
+            tableAdd("<thead><th>"+util.fancy(statsObj.name)+ "</th>");
+            if(!util.isUndefined(statsObj.initPoints))
+                tableAdd("<th>"+statsObj.initPoints+"</th>");
+            tableAdd("</thead><tbody><tr>");
             stats.forEach(function(s) {tableAdd(self.build(s, tableId))}); // <-- RECURSIVIDAD HERE
             tableAdd("</tr></tbody></table></div></td>");
             return subTable;
@@ -35,6 +38,9 @@ var table = {
             statsObj.forEach(function(s){contentAdd("<tr>"+self.build(s, tableId)+"</tr>")}); // <-- RECURSIVIDAD HERE
             mainTable.append(content);
         }
+    },
+    updateInitPoints: function(stat) {
+        $("table#"+stat.name+" th:nth-child(2)").text(stat.initPoints);
     },
     /**
      * Actualiza el display de todas las estadísticas de la tabla del personaje (aún hay que probarlo).
@@ -82,10 +88,10 @@ var table = {
      * @param mode Especifica el tipo de cambio: boolean true incrementa, false decrementa. Si es un número, redefine
      * la estadística con ese valor.
      */
-    modStat: function(id, mode) {
-        if(charFunctions.lookRestriction(id)) {
-            charFunctions.setStat(char, id, mode);
-            table.update(id);
+    modStat: function(stat, mode) {
+        if(restrict.lookRestriction(stat)) {
+            charFunctions.setStat(char, stat, mode);
+            table.update(stat.name);
         }
     }
 };
