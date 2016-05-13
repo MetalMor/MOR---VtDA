@@ -25,6 +25,22 @@ var charFunctions = {
         ventrue: ['Dominación', 'Fortaleza', 'Presencia']
     },
     /**
+     * Filtro para modificaciones de apariencia de un personaje del clan Nosferatu
+     * @returns {boolean}
+     */
+    lookRestriction: function(id) {
+        return !(util.clean(charFunctions.findData(char, 'clan').value) === 'nosferatu' && id === 'apariencia');
+    },
+    /**
+     * Realiza las modificaciones necesarias a las estadísticas del personaje a partir del nombre del clan.
+     * @param clanName Nombre del clan del personaje.
+     */
+    modStats: function(clanName) {
+        if(clanName === 'Nosferatu') { // si eres nosferatu no tienes apariencia
+            charFunctions.setStat(char, 'apariencia', 0);
+        }
+    },
+    /**
      * Retorna la lista de disciplinas del clan especificado
      * @param n Nombre del clan
      * @returns {Array}

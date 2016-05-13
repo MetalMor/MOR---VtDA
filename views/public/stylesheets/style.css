@@ -11,8 +11,19 @@ th {
 }
 
 .fancy-write {
-    /*font-family: 'Kaushan Script', cursive;*/
-    font-family: Papyrus;
+    font-family: 'Kaushan Script', cursive;
+}
+
+table.prefs {
+    background-color: #d59392;
+}
+
+table.prefs tbody>tr:nth-child(odd) {
+    background-color: #fc8c84;
+}
+
+table.prefs td {
+    width: 15%;
 }
 
 .white {

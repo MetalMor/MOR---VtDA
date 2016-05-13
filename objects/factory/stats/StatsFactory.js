@@ -39,7 +39,7 @@ module.exports = function() {
      * @returns {object}
      */
     this.initSkills = function() {
-        var sf = new SkillsFactory();
+        var ret, sf = new SkillsFactory();
         return sf.initSkills();
     };
     /**

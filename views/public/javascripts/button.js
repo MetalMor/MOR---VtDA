@@ -14,7 +14,7 @@ var button = {
             var charData = char.data;
             var clanName = $("select#clan").val();
             clanName = typeof clanName === 'undefined' ? 'Assamita guerrero' : clanName;
-            this.modStats(clanName); // realiza las modificaciones pertinentes a la ficha según el clan
+            charFunctions.modStats(clanName); // realiza las modificaciones pertinentes a la ficha según el clan
             // Guarda los valores de los inputs en un array para ser insertados
             //var len = charData.length;
             var inputs = [];
@@ -30,8 +30,10 @@ var button = {
                 counter++;
             }
             var discs = charFunctions.getDiscs(clanName);
+            prefs.setPrefs('atributos', prefs.getPrefs('attr'));
+            prefs.setPrefs('habilidades', prefs.getPrefs('skills'));
             table.build(char.stats, "stats");
-            table.build(discs, 'disciplinas'); // carga las disciplinas del charUtils escogido
+            table.build(discs, 'disciplinas');
             charFunctions.setDiscs(discs);
             button.setTableButtons('stats');
             overlay.open('sheet');
@@ -80,30 +82,33 @@ var button = {
         return ret;
     },
     /**
-     * Realiza las modificaciones necesarias a las estadísticas del personaje a partir del nombre del clan.
-     * @param clanName Nombre del clan del personaje.
-     */
-    modStats: function(clanName) {
-        if(clanName === 'Nosferatu') { // si eres nosferatu no tienes apariencia
-            charFunctions.setStat(char, 'apariencia', 0);
-        }
-    },
-    /**
      * Establece los eventos de botones de la tabla del personaje.
      * @param id Tabla o fila de la que establecer el evento.
      */
     setTableButtons: function(id) {
-        var levelButtons = $('#'+id+' img[class]'), self;
+        var levelButtons = $('#'+id+' img[class]');
         levelButtons.each(function() {
-            self = $(this);
-            if(util.isUndefined($(this).attr('onclick')))
+            var attrName = $(this).closest('td[id]').attr('id');
+            if(charFunctions.lookRestriction(attrName) && util.isUndefined($(this).attr('onclick')))
                 $(this).click(function() {
-                    button.statButtonClick($(this).closest('td[id]').attr('id'), $(this).attr('class'))
+                    button.statButtonClick(attrName, $(this).attr('class'))
                 });
+        });
+    },
+    setPrefsButtons: function(id) {
+        var prefsButtons = $('table#'+id+' span');
+        levelButtons.each(function() {
+            var buttonType = $(this).attr('class');
+            if(buttonType === 'up') {
+
+            } else if (buttonType === 'down') {
+
+            }
         });
     },
     /**
      * Función destinada a llamarse al hacer clic en uno de los iconos de nivel de la ficha del personaje.
+     * // TODO controlar initPoints
      * @param id String identificador del elemento padre del icpno (correspondiente a la estadistica a la que pertenece)
      * @param cls Clase del icono: set, unset o max
      */
@@ -113,6 +118,15 @@ var button = {
         } else if(cls === table.icons.set.class) {
             mode = false;
         }
-        table.modStat(id, mode);
+        var stat = charFunctions.findStat(char, id);
+        if(mode) {
+            if(stat.initPoints > 0) {
+                stat.initPoints--;
+                table.modStat(id, mode);
+            }
+        } else {
+            stat.initPoints++;
+            table.modStat(id, mode);
+        }
     }
 };

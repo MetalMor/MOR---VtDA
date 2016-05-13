@@ -24,7 +24,7 @@ var table = {
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a}, len = stats.length;
             tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
-            tableAdd("<thead><th>"+util.fancy(statsObj.name)+"</th></thead><tbody><tr>");
+            tableAdd("<thead><th>"+util.fancy(statsObj.name)+ "</th></thead><tbody><tr>");
             stats.forEach(function(s) {tableAdd(self.build(s, tableId))}); // <-- RECURSIVIDAD HERE
             tableAdd("</tr></tbody></table></div></td>");
             return subTable;
@@ -83,7 +83,9 @@ var table = {
      * la estadística con ese valor.
      */
     modStat: function(id, mode) {
-        charFunctions.setStat(char, id, mode);
-        table.update(id);
+        if(charFunctions.lookRestriction(id)) {
+            charFunctions.setStat(char, id, mode);
+            table.update(id);
+        }
     }
 };

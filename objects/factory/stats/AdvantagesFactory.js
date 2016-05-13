@@ -33,7 +33,11 @@ module.exports = function() {
      * Retorna un nuevo objeto de conjunto de estadisticas de disciplinas.
      * @returns {object}
      */
-    this.initDisc = function() {return new StatsSet("Disciplinas")};
+    this.initDisc = function() {
+        var ret = new StatsSet("Disciplinas");
+        ret.initPoints = 4;
+        return ret;
+    };
     /**
      * Retorna un nuevo objeto de conjunto de estadisticas de trasfondos.
      * @returns {object}
@@ -42,6 +46,7 @@ module.exports = function() {
         var ret = new StatsSet("Trasfondos");
         var bckg = this.bckg;
         bckg.forEach(function(b) {ret.stats.push(b)});
+        ret.initPoints = 5;
         return ret;
     };
     /**
@@ -53,6 +58,7 @@ module.exports = function() {
         var virt = this.virt;
         virt.forEach(function(v) {ret.stats.push(v)});
         ret.upgradeAll();
+        ret.initPoints = 7;
         return ret;
     };
     /**

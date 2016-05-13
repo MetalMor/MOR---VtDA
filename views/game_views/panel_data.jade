@@ -7,14 +7,14 @@
         #general.panel-body
             #advice.alert.alert-info(hidden)
                 p.text-center="Cuando acabes de rellenar la ficha, pulsa el botón 'Siguiente'."
-            #emptyFields.alert.alert-danger(hidden)
-                p.text-center="Debes rellenar todos los campos."
             include general_form
+    .panel.panel-default
+        .panel-heading.text-center="Preferencias de estadísticas"
+        #statprefs.panel-body
+            include statprefs_form
     .panel.panel-default
         .panel-heading.text-center="Aspecto"
         #look.panel-body
-            #emptyFields.alert.alert-danger(hidden)
-                p.text-center="Debes rellenar todos los campos."
             include look_form
     .panel.panel-default
         .panel-heading.text-center="Datos de trasfondo"

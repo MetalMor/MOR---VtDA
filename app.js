@@ -43,6 +43,8 @@ mongoUsers.listAllUsers(setUsers);
 
 // ***** JADE TEMPLATES *****
 app.set('view engine', 'jade');
+
+// ***** ENV VARS *****
 app.set('port', PORT);
 app.set('ipaddr', IP);
 
@@ -51,6 +53,7 @@ app.use('/public', express.static(__dirname + '/views/public/'));
 app.use('/css', express.static(__dirname + '/views/public/stylesheets/'));
 app.use('/js', express.static(__dirname + '/views/public/javascripts/'));
 app.use('/img', express.static(__dirname + '/views/public/images/'));
+app.use('/lib', express.static(__dirname + '/views/public/libraries/'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -237,7 +240,7 @@ app.get('/game/:user/:game', function(req, res) {
     });
 });
 
-server.listen(PORT, function() {console.log('[server] started at port ' + PORT)});
+server.listen(PORT, IP, function() {console.log('[server] started at port ' + PORT)});
 
 // ***** EJECUTA LOS SOCKETS! *****
 //require('./sockets.js')(io);

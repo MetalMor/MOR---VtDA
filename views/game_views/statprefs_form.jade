@@ -1,0 +1,30 @@
+//
+   Created by mor on 12/05/16.
+
+mixin arrow-up(c)
+    if c > 0
+        span.up.glyphicon.glyphicon-arrow-up
+
+mixin arrow-down(c, lim)
+    if c < lim
+        span.down.glyphicon.glyphicon-arrow-down
+
+mixin prefs-table-content(name, list)
+    - var counter = 0
+    - var len = list.length-1
+    thead: th.text-center=name
+    tbody
+        each stat in list
+            tr
+                td: +arrow-up(counter)
+                each item in stat
+                    td: label=item
+                td: +arrow-down(counter, len)
+                - counter++
+
+.col-sm-6
+    table.table#attr-prefs.prefs.text-center
+        +prefs-table-content("Estadísticas", [["Físicos", 7], ["Sociales", 5], ["Mentales", 3]])
+.col-sm-6
+    table.table#skills-prefs.prefs.text-center
+        +prefs-table-content("Habilidades", [["Talentos", 13], ["Técnicas", 9], ["Conocimientos", 5]])
