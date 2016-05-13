@@ -22,20 +22,6 @@ if (window["WebSocket"]) {
                 $("input#next").on('click', function(){button.submitCharData()});
                 //openNav('sheet');
             }
-            //util.printChar();
-            /*socket.emit('id', id);
-            socket.on('top', function(ten) {
-                var element = $("ol#top");
-                console.log("server top: " + ten);
-                if(!top.compare(ten)) {
-                    element.empty();
-                    for(var counter = 0; counter < 10; counter++)
-                        element.append(topEntry(ten[counter]));
-                }
-            });
-            socket.on('snakes', function(data) {
-                drawMap(data);
-            });*/
         }
         connect();
     });
