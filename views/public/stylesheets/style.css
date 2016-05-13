@@ -26,6 +26,10 @@ table.prefs td {
     width: 15%;
 }
 
+table.prefs td:last-child {
+    width: 5%;
+}
+
 td>img:not([class='max']) {
     cursor: pointer;
 }

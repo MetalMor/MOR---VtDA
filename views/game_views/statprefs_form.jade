@@ -3,11 +3,11 @@
 
 mixin arrow-up(c)
     if c > 0
-        span.up.glyphicon.glyphicon-arrow-up
+        span.prev.left-align.glyphicon.glyphicon-arrow-up
 
 mixin arrow-down(c, lim)
     if c < lim
-        span.down.glyphicon.glyphicon-arrow-down
+        span.next.right-align.glyphicon.glyphicon-arrow-down
 
 mixin prefs-table-content(name, list)
     - var counter = 0
@@ -16,10 +16,12 @@ mixin prefs-table-content(name, list)
     tbody
         each stat in list
             tr
-                td: +arrow-up(counter)
                 each item in stat
-                    td: label=item
-                td: +arrow-down(counter, len)
+                    - type = typeof item
+                    td: label(class=type)=item
+                td.text-center
+                    +arrow-up(counter)
+                    +arrow-down(counter, len)
                 - counter++
 
 .col-sm-6

@@ -9,7 +9,7 @@ var prefs = {
      * @returns {Array}
      */
     getPrefs: function(which) {
-        var sub = [], prefs = [], list = $('table#'+which+'-prefs tr>td:nth-child(3) label');
+        var sub = [], prefs = [], list = $('table#'+which+'-prefs label.number');
         list.each(function() {
             prefs.push(parseInt($(this).text()));
         });
@@ -29,15 +29,21 @@ var prefs = {
             }
             superCounter++
         }
-        /*stats.forEach(function(sg) {
-            if(sg.name === which) {
-                group = sg.stats;
-                group.forEach(function(s) {
-                    s.initPoints = prefs.shift();
-                });
-            } else if(sg.name === 'otros') {
-                group = sg.stats;
-            }
-        });*/
+    },
+    modPrefs: function(row, mode) {
+        console.log(JSON.stringify(row, false, 4));
+        console.log(mode);
+        var labelSelector = 'label.number';
+        var newRow = row[mode]().find(labelSelector),
+            oldRow = row.find(labelSelector),
+            newText = newRow.text(), oldText = oldRow.text();
+        newRow.fadeOut('fast', function() {
+            newRow.fadeIn('fast');
+            newRow.text(oldText);
+        });
+        oldRow.fadeOut('fast', function() {
+            oldRow.fadeIn('fast');
+            oldRow.text(newText);
+        });
     }
 };

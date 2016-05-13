@@ -29,7 +29,7 @@ module.exports = function() {
      * @type {array}
      */
     this.tech = [
-        new RegularStat("Armas c/c"),
+        new RegularStat("Armas melé"),
         new RegularStat("Equitación"),
         new RegularStat("Etiqueta"),
         new RegularStat("Herbolaria"),

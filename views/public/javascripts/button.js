@@ -97,14 +97,24 @@ var button = {
         });
     },
     setPrefsButtons: function(id) {
-        var prefsButtons = $('table#'+id+' span');
-        levelButtons.each(function() {
-            var buttonType = $(this).attr('class');
-            if(buttonType === 'up') {
-
-            } else if (buttonType === 'down') {
-
-            }
+        var rowList = $('table#'+id+'-prefs tr'),
+            row, spanList, spanBtn, spanClass, btn;
+        rowList.each(function() {
+            row = $(this);
+            spanList = row.find('span');
+            spanList.each(function() {
+                spanBtn = $(this);
+                spanBtn.click(function() {
+                    btn = $(this);
+                    row = btn.parent().parent();
+                    var spanClassList = btn.attr('class').split(/\s+/);
+                    spanClassList.forEach(function(c) {
+                        if(c === 'prev' || c === 'next')
+                            spanClass = c;
+                    });
+                    prefs.modPrefs(row, spanClass);
+                })
+            });
         });
     },
     /**
