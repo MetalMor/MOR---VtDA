@@ -26,6 +26,7 @@ module.exports = function() {
         var ret = new StatsSet("Otros");
         var misc = this.misc;
         misc.forEach(function(s) {ret.stats.push(s)});
+        ret.initPoints = 0;
         return ret;
     };
 };

@@ -9,6 +9,7 @@ var util = require('./../../util');
 module.exports = function(n) {
     this.name = util.clean(n);
     this.stats = [];
+    this.initPoints = 0;
     this.upgradeAll = function() {
         this.stats.forEach(function(stat) {
             if(stat.hasOwnProperty("upgradeAll")) stat.upgradeAll();

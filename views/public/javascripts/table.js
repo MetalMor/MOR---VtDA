@@ -25,7 +25,7 @@ var table = {
             var tableAdd = function(a) {subTable += a}, len = stats.length;
             tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
             tableAdd("<thead><th>"+util.fancy(statsObj.name)+ "</th>");
-            if(!util.isUndefined(statsObj.initPoints))
+            if(!util.isUndefined(statsObj.initPoints) && statsObj.initPoints > 0)
                 tableAdd("<th>"+statsObj.initPoints+"</th>");
             tableAdd("</thead><tbody><tr>");
             stats.forEach(function(s) {tableAdd(self.build(s, tableId))}); // <-- RECURSIVIDAD HERE
@@ -39,6 +39,10 @@ var table = {
             mainTable.append(content);
         }
     },
+    /**
+     * Actualiza el display de los puntos iniciales de una estadística
+     * @param stat
+     */
     updateInitPoints: function(stat) {
         $("table#"+stat.name+" th:nth-child(2)").text(stat.initPoints);
     },
@@ -64,6 +68,28 @@ var table = {
             button.setTableButtons(name);
         }
     },
+    updateOther: function() {
+        var stats = charFunctions.findStat(char, 'otros').stats,
+            autctrlLvl = charFunctions.findStat(char, 'autocontrol').level,
+            conscLvl = charFunctions.findStat(char, 'conciencia').level,
+            corLvl = charFunctions.findStat(char, 'coraje').level;
+        stats.forEach(function(s) {
+            switch(s.name) {
+                case 'fuerza_de_voluntad':
+                    table.modStat(s, corLvl);
+                    break;
+                case 'camino':
+                    table.modStat(s, autctrlLvl+conscLvl);
+                    break;
+                default:
+                    if(s.max === 0) {
+                        s.max = parseInt(charFunctions.findData(char, 'generacion').value);
+                        table.update(s.name);
+                    }
+                    break;
+            }
+        });
+    },
     /**
      * Retorna el nivel de una estadística convertida en una cadena de elementos img que lo representan
      * @param stat
@@ -84,7 +110,7 @@ var table = {
     },
     /**
      * Modifica una estadística (tanto en la tabla como en el objeto modelo).
-     * @param id Identificador de la estadística
+     * @param stat Objeto de la estadística
      * @param mode Especifica el tipo de cambio: boolean true incrementa, false decrementa. Si es un número, redefine
      * la estadística con ese valor.
      */

@@ -1,8 +1,7 @@
 /**
- * Objeto para controlar la apertura y cierre de overlays
- * Created by becari on 11/05/2016.
+ * Objeto para controlar los overlays
+ * Created by mor on 11/05/2016.
  */
-
 var overlay = {
     /**
      * Cierra un elemento desplegable
@@ -26,7 +25,10 @@ var overlay = {
             if(callback) callback();
         });
     },
-
+    /**
+     * Muestra un panel de alerta.
+     * @param id Id del panel.
+     */
     showAlert: function(id) {
         overlay.open(id, '100', function() {
             setTimeout(function() {

@@ -4,6 +4,7 @@
  */
 
 var charFunctions = {
+    setReady: function(char, ready) {char.ready = ready},
     /**
      * Lista de disciplinas de cada clan
      */
@@ -71,14 +72,14 @@ var charFunctions = {
      * @param obj Objeto en el que buscar
      * @param name Estadistica de la que se requiere el padre
      */
-    findParent: function(obj, name) {
+    findParent2: function(obj, name) {
         var sup = obj.stats, sub, childs, ret;
         sup.forEach(function(stats) {
             sub = stats.stats;
             if(util.isUndefined(ret))
                 sub.forEach(function(stat) {
                     if(stat.name === name) ret = stats;
-                    if(util.isUndefined(ret)) {
+                    if(util.isUndefined(ret) && util.is(util.stats, stat)) {
                         childs = stat.stats;
                         childs.forEach(function (s) {
                             if (s.name === name) ret = stat;
@@ -88,6 +89,18 @@ var charFunctions = {
         });
         return ret;
     },
+    findParent: function(obj, name, parent) {
+        var ret;
+        if(!util.isUndefined(parent)) {
+            if(obj.name === name) return parent;
+        } if(util.is(util.stats, obj) || util.is(util.char, obj)) {
+            var self = this;
+            obj.stats.forEach(function(o) {
+                if(util.isUndefined(ret)) ret = self.findParent(o, name, obj)
+            });
+            return ret;
+        }
+    },
     /**
      * Obtiene mediante recursividad la estadística requerida de un personaje especificado por parámetro.
      * @param obj Objeto en el que buscar la estadística
@@ -95,11 +108,11 @@ var charFunctions = {
      * @returns {*}
      */
     findStat: function(obj, name) {
-        var tmpRet;
         if(util.is(util.stat, obj)) {
             if(obj.name === name) return obj;
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var self = this, ret;
+            if(obj.name === name) ret = obj;
             obj.stats.forEach(function(o) {
                 if(util.isUndefined(ret)) ret = self.findStat(o, name);
                 //if(!util.isUndefined(tmpRet)) ret = tmpRet;

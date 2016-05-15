@@ -9,7 +9,7 @@ var button = {
      * campos sin rellenar.
      */
     submitCharData: function() {
-        if(util.allInputsSet()) {
+        if(util.allInputsSet('data')) {
             overlay.close('data');
             var charData = char.data;
             var clanName = $("select#clan").val();
@@ -18,9 +18,9 @@ var button = {
             // Guarda los valores de los inputs en un array para ser insertados
             //var len = charData.length;
             var inputs = [];
-            inputs.push(this.getInputs(0));
-            inputs.push(this.getInputs(1));
-            inputs.push(this.getInputs(2));
+            inputs.push(button.getInputs(0));
+            inputs.push(button.getInputs(1));
+            inputs.push(button.getInputs(2));
             var inputsGroup, counter = 0;
             while(inputs.length > 0) {
                 inputsGroup = inputs.shift();
@@ -37,9 +37,22 @@ var button = {
             charFunctions.setDiscs(discs);
             button.setTableButtons('stats');
             util.printChar();
+            table.updateOther();
             overlay.open('sheet');
         } else {
             overlay.showAlert('emptyFields');
+        }
+    },
+    submitSheet: function(socket, sheet) {
+        var id = 'sheet';
+        if(restrict.fullSheet(id)) {
+            charFunctions.setReady(char, true);
+            charFunctions.setXP(char, 15);
+            socket.emit('initChar', sheet);
+            overlay.close(id);
+            // TODO valida y guarda toda la movida
+            // pone boolean ready a true y carga la XP inicial
+            // envia objeto personaje al servidor via sockets
         }
     },
     /**
@@ -131,16 +144,20 @@ var button = {
         }
         var stat = charFunctions.findStat(char, id),
             parent = charFunctions.findParent(char, id);
-        if(mode) {
-            if(parent.initPoints > 0) {
-                parent.initPoints--;
-                table.modStat(stat, mode);
-                table.updateInitPoints(parent);
+
+        if(restrict.notUpdatable(stat)) {
+            if(mode && parent.initPoints > 0) {
+                    parent.initPoints--;
+                    table.modStat(stat, mode);
+                    table.updateInitPoints(parent);
+            } else if(!mode && restrict.levelZeroRestriction(stat) && parent.initPoints >= 0) {
+                if(!char.ready) {
+                    parent.initPoints++;
+                    table.modStat(stat, mode);
+                    table.updateInitPoints(parent);
+                }
             }
-        } else if(restrict.levelZeroRestriction(stat)) {
-            parent.initPoints++;
-            table.modStat(stat, mode);
-            table.updateInitPoints(parent);
+            table.updateOther();
         }
     }
 };

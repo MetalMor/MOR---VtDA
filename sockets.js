@@ -18,7 +18,12 @@ module.exports = function (io) {
         var user;
         var char;
         var game;
-        socket.on('initChar', function(user) {});
+        socket.on('initChar', function(sheet) {
+            user = sheet.user;
+            char = sheet.char;
+            game = sheet.game;
+            console.log("[server] new character " + char.name + "(" + user.name + ") at game : " + game.name);
+        });
     });
     ///**
     // * Controla la conexión de un jugador. Le asigna una id y configura los sockets que se comunican con el cliente.

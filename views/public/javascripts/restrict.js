@@ -15,5 +15,21 @@ var restrict = {
         var parent = charFunctions.findParent(char, stat.name),
             supParent = charFunctions.findParent(char, parent.name);
         return !(stat.level === 1 && (parent.name === 'virtudes' || supParent.name === 'atributos'));
+    },
+    notUpdatable: function(stat) {
+        if(stat.name === 'sangre') return false;
+        var parent = charFunctions.findParent(char, stat.name);
+        return !(parent.initPoints === 0 && parent.name === 'otros');
+    },
+    fullSheet: function(statsObj) {
+        return true; // de momento salto esto
+        if(util.is(util.stats, statsObj) && statsObj.hasOwnProperty('initPoints')) {
+
+        } else if(util.is(util.char, statsObj)) {
+            var stats = statsObj.stats, ret;
+            stats.forEach(function(stat) {
+
+            });
+        }
     }
 };

@@ -7,7 +7,7 @@ var util = {
     obj: 'Object',
     arr: 'Array',
     func: 'Function',
-    stats: "stats",
+    stats: "initPoints",
     data: "fields",
     stat: "level",
     field: "value",
