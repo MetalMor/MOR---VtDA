@@ -144,7 +144,7 @@ var charFunctions = {
     /**
      * Define mediante recursividad el nivel de una estadística del personaje especificados por parámetro.
      * @param obj Objeto en el que definir el nivel de la estadística
-     * @param name Nombre de la estadística a redefinir.
+     * @param stat Nombre de la estadística a redefinir.
      * @param value Nuevo valor de la estadística. Si es boolean, true incrementa el valor y false lo decrementa.
      */
     setStat: function(obj, stat, value) {

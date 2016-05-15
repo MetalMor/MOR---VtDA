@@ -19,7 +19,8 @@ var util = require('./util'), // utils
     User = require('./objects/models/User'), // user model
     Game = require('./objects/models/Game'), // game model
     CharFactory = require('./objects/factory/CharFactory'),
-    clans = require('./objects/models/Clans');
+    clans = require('./objects/models/Clans'),
+    generations = require('./objects/models/Generations');
 
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000,
     IP = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
@@ -219,6 +220,7 @@ app.get('/game/:user/:game', function(req, res) {
             view.data.user = user;
             view.data.game = game;
             view.data.clans = clans;
+            view.data.gens = generations;
             var index = util.getIndex(user.gameList, 'name', gameName);
             if (index<0) { // no existe: entra como jugador
                 console.log("[server] logging player in: "+game.name);

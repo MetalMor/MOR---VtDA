@@ -76,6 +76,7 @@ var table = {
         stats.forEach(function(s) {
             switch(s.name) {
                 case 'fuerza_de_voluntad':
+                    s.max = corLvl;
                     table.modStat(s, corLvl);
                     break;
                 case 'camino':
@@ -103,7 +104,8 @@ var table = {
         for(var i = 1; i<=lim; i++) {
             if(stat.hasOwnProperty('max'))  icon = i<=max ? icons.maxable : icons.unset;
             else if(i>level) icon = icons.unset;
-            else icon = icons.set;
+            //else icon = icons.set;
+            if(i<=level) icon = icons.set;
             ret += "<img class='"+icon.class+"' src='" +iconsDir+icon.file + "'>";
         }
         return ret;

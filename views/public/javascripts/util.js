@@ -16,36 +16,44 @@ var util = {
      * Deshabilita la funcionalidad de escribir en un input especificado.
      * @param selector Selector del/los elemento/s
      */
-    disable: function(selector) {
+    disable: function (selector) {
         $(selector).keypress(function (evt) {
             evt.preventDefault();
         });
     },
-    isUndefined: function(o) {return typeof o === 'undefined'},
-    isBoolean: function(o) {return typeof o === 'boolean'},
+    isUndefined: function (o) {
+        return typeof o === 'undefined'
+    },
+    isBoolean: function (o) {
+        return typeof o === 'boolean'
+    },
     /**
      * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
      * @param crit Tipo requerido
      * @param obj Objeto a comprobar
      * @returns {boolean}
      */
-    is: function(crit, obj) {return obj.hasOwnProperty(crit)},
+    is: function (crit, obj) {
+        return obj.hasOwnProperty(crit)
+    },
     /**
      * Retorna si el objeto es del tipo especificado en base a su prototipo.
      * @param crit Tipo requerido
      * @param obj Objeto a comprobar
      * @returns {boolean}
      */
-    type: function(crit, obj) {return Object.prototype.toString.call(obj) === '[object '+crit+']'},
+    type: function (crit, obj) {
+        return Object.prototype.toString.call(obj) === '[object ' + crit + ']'
+    },
     /**
      * En una cadena de caracteres enviada por parámetro: elimina todas las tildes, convierte los espacios en guiones
      * bajos y cambia las mayúsculas por minúsculas.
      * @param s String a transformar
      * @returns {string}
      */
-    clean: function(s) {
-        var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
-        var diacritics =[
+    clean: function (s) {
+        var chars = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u', 'N', 'n', 'C', 'c'];
+        var diacritics = [
             /[\300-\306]/g, /[\340-\346]/g,  // A, a
             /[\310-\313]/g, /[\350-\353]/g,  // E, e
             /[\314-\317]/g, /[\354-\357]/g,  // I, i
@@ -56,8 +64,10 @@ var util = {
         ];
 
         for (var i = 0; i < diacritics.length; i++)
-            s = s.replace(diacritics[i],chars[i]);
-        while(s.indexOf(' ')>0) {s = s.replace(" ", "_")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
+            s = s.replace(diacritics[i], chars[i]);
+        while (s.indexOf(' ') > 0) {
+            s = s.replace(" ", "_")
+        } // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         return s.toLowerCase();
     },
     /**
@@ -66,10 +76,12 @@ var util = {
      * @param s String a transformar.
      * @returns {string}
      */
-    fancy: function(s) {
-        while(s.indexOf('_')>0) {s = s.replace("_", " ")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
+    fancy: function (s) {
+        while (s.indexOf('_') > 0) {
+            s = s.replace("_", " ")
+        } // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         var first = s.substring(0, 1).toUpperCase(), other = s.substring(1, s.length);
-        return first+other;
+        return first + other;
     },
     /**
      * Retorna el índice en el array del atributo con el nombre y el valor especificados.
@@ -78,22 +90,50 @@ var util = {
      * @param value Criterio de valor del atributo
      * @returns {number}
      */
-    getIndex: function(array, attr, value) {
-        for(var i = 0; i < array.length; i += 1) if(array[i][attr] === value) return i;
+    getIndex: function (array, attr, value) {
+        for (var i = 0; i < array.length; i += 1) if (array[i][attr] === value) return i;
         return -1;
     },
     /**
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
      */
-    printChar: function() {console.log("[client] char: "+JSON.stringify(char, null, 4))},
+    printChar: function () {
+        console.log("[client] char: " + JSON.stringify(char, null, 4))
+    },
     /**
      * Valida si ninguno de los inputs dentro de un elemento especificado por parámetro está vacío.
      * @param id Elemento del que validar los inputs
      * @returns {boolean}
      */
-    allInputsSet: function(id) {
-        return !($('#'+id+' .mandatory').filter(function(){
+    allInputsSet: function (id) {
+        return !($('#' + id + ' .mandatory').filter(function () {
             return $.trim(this.value).length === 0;
         }).length > 0);
+    },
+    romanize: function (num) {
+        if (!+num)
+            return false;
+        var digits = String(+num).split(""),
+            key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+                "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+                "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
+            roman = "",
+            i = 3;
+        while (i--)
+            roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+        return Array(+digits.join("") + 1).join("M") + roman;
+    },
+    deromanize: function (str) {
+        var str = str.toUpperCase(),
+            validator = /^M*(?:D?C{0,3}|C[MD])(?:L?X{0,3}|X[CL])(?:V?I{0,3}|I[XV])$/,
+            token = /[MDLV]|C[MD]?|X[CL]?|I[XV]?/g,
+            key = {M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1},
+            num = 0, m;
+        if (!(str && validator.test(str)))
+            return false;
+        while (m = token.exec(str))
+            num += key[m[0]];
+        return num;
     }
+
 };

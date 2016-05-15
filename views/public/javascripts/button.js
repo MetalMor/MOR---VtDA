@@ -69,7 +69,7 @@ var button = {
             temp.push($("input#nature").val());
             temp.push($("input#demeanor").val());
             temp.push($("select#clan").val());
-            temp.push($("input#generation").val());
+            temp.push(util.deromanize($("select#generation").val()).toString());
             temp.push($("input#haven").val());
             temp.push($("input#concept").val());
         } else if(crit === 1) {
