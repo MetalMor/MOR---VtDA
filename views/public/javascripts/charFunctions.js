@@ -4,16 +4,46 @@
  */
 
 var charFunctions = {
+    /**
+     * Define un personaje como inicializado y preparado para jugar
+     * @param char Personaje a preparar
+     * @param ready Parametro de preparacion
+     */
     setReady: function(char, ready) {char.ready = ready},
+    /**
+     * Da a un personaje un valor de experiencia
+     * @param char Personaje
+     * @param xp Experiencia a definir
+     */
     setXP: function(char, xp) {char.xp = xp},
+    /**
+     * Define el nombre del usuario propietario del personaje
+     * @param char Personaje
+     * @param user Usuario propietario
+     */
     setOwner: function(char, user) {char.owner = user.name},
+    /**
+     * Añade un personaje a la lista de personajes o npcs de una partida
+     * @param char Personaje
+     * @param list Lista a la que añadirlo ('npc' o 'char')
+     * @param game Partida a la que añadirlo
+     */
     addCharacter: function(char, list,  game) {game[list+'List'].push(char)},
+    /**
+     * Calcula la reserva de sangre inicial de un vampiro
+     * @param char Personaje
+     */
     initBlood: function(char) {
         var blood = charFunctions.findStat(char, 'sangre');
         blood.level = Math.floor(Math.random()*blood.max+1);
         charFunctions.setStat(char, 'sangre', blood);
         table.updateOther();
     },
+    /**
+     * Calcula la reserva de sangre máxima de un vampiro en base a su generación
+     * @param char Personaje
+     * @returns {number}
+     */
     maxBlood: function(char) {
         var gen = parseInt(charFunctions.findData(char, 'generacion').value);
         var bloodEqv = [0, 300, 200, 100, 50, 40, 30, 20, 15, 14, 13, 12, 11, 10];
