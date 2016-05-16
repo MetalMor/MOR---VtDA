@@ -7,6 +7,6 @@
 module.exports = function(n, pwd) {
     this.name = n;
     this.passwd = pwd;
-    this.charList = [];
+    //this.charList = [];
     this.gameList = [];
 };

@@ -16,20 +16,28 @@ var restrict = {
             supParent = charFunctions.findParent(char, parent.name);
         return !(stat.level === 1 && (parent.name === 'virtudes' || supParent.name === 'atributos'));
     },
+    levelThreeRestriction: function(stat) {
+        var parent = charFunctions.findParent(char, stat.name),
+            supParent = charFunctions.findParent(char, parent.name);
+        return !(supParent.name === 'habilidades' && stat.level >= 3 && parent.initPoints > 0);
+    },
     notUpdatable: function(stat) {
         if(stat.name === 'sangre') return false;
         var parent = charFunctions.findParent(char, stat.name);
         return !(parent.initPoints === 0 && parent.name === 'otros');
     },
     fullSheet: function(statsObj) {
-        return true; // de momento salto esto
-        if(util.is(util.stats, statsObj) && statsObj.hasOwnProperty('initPoints')) {
-
-        } else if(util.is(util.char, statsObj)) {
-            var stats = statsObj.stats, ret;
-            stats.forEach(function(stat) {
-
-            });
+        if(statsObj.hasOwnProperty('initPoints'))
+            if(statsObj.initPoints > 0) return false;
+        if(util.is(util.char, statsObj)) {
+            var stats = statsObj.stats, ret = true, tmpRet;
+            if(ret)
+                stats.forEach(function(stat) {
+                    if(util.is(util.stats, stat))
+                        tmpRet = restrict.fullSheet(stat);
+                        if(!util.isUndefined(tmpRet)) ret = tmpRet
+                });
+            return ret;
         }
     }
 };

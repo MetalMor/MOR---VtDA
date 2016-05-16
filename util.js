@@ -8,11 +8,66 @@ module.exports = {
     obj: 'Object',
     arr: 'Array',
     func: 'Function',
-    stats: "stats",
+    stats: "initPoints",
     data: "fields",
     stat: "level",
     field: "value",
     char: "xp",
+
+    /**
+     * Importa las funciones de utilidad para personajes
+     */
+    charFunctions: require('./views/public/javascripts/charFunctions'),
+
+    /**
+     * Valida si un objeto es un numero
+     * @param o Objet a validar
+     * @returns {boolean}
+     */
+    isNumber: function(o) {return !isNaN(parseFloat(o)) },
+
+    /**
+     * Valida si un objeto es un string
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isString: function(o) {return $type(o) === 'string' || o instanceof String},
+
+    /**
+     * Valida si un objeto es indefinido
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isUndefined: function (o) {
+        return typeof o === 'undefined'
+    },
+
+    /**
+     * Valida si un objeto es booleano
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isBoolean: function (o) {
+        return typeof o === 'boolean'
+    },
+    /**
+     * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
+     * @param crit Tipo requerido
+     * @param obj Objeto a comprobar
+     * @returns {boolean}
+     */
+    is: function (crit, obj) {
+        return obj.hasOwnProperty(crit)
+    },
+    /**
+     * Retorna si el objeto es del tipo especificado en base a su prototipo.
+     * @param crit Tipo requerido
+     * @param obj Objeto a comprobar
+     * @returns {boolean}
+     */
+    type: function (crit, obj) {
+        return Object.prototype.toString.call(obj) === '[object ' + crit + ']'
+    },
     /**
      * En una cadena de caracteres enviada por parámetro: elimina todas las tildes, convierte los espacios en guiones
      * bajos y cambia las mayúsculas por minúsculas.
@@ -54,20 +109,6 @@ module.exports = {
      */
     queryField: function(field) {return {}[field] = true},
     /**
-     * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
-     * @param crit Tipo requerido
-     * @param obj Objeto a comprobar
-     * @returns {boolean}
-     */
-    is: function(crit, obj) {return obj.hasOwnProperty(crit)},
-    /**
-     * Comprueba si un objeto es del tipo especificado.
-     * @param param Tipo (string)
-     * @param obj Objeto a comprobar
-     * @returns {boolean}
-     */
-    type: function(param, obj) {return Object.prototype.toString.call(obj) === '[models '+param+']'},
-    /**
      * Retorna el índice en el array del atributo con el nombre y el valor especificados.
      * @param array Array en el que buscar
      * @param attr Nombre del atributo a encontrar
@@ -79,24 +120,23 @@ module.exports = {
         return -1;
     },
     /**
-     * Busca, en dos listas diferentes, el primer elemento en común
-     * @param one
-     * @param other
-     * @returns {number}
+     * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
      */
-    findCommon: function(one, other) {
-        one.forEach(function(a) {
-            console.log("[util] checking user char list: "+ a.name);
-            other.forEach(function(b) {
-                console.log("[util] checking game char list: "+ b.name);
-                if(a.name === b.name) {
-                    console.log("[util] found character: " + b.name);
-                    return b;
-                }
-            });
+    printJson: function (obj) {
+        console.log("[client] char: " + JSON.stringify(obj, null, 4))
+    },
+    /**
+     * Busca, en un objeto partida, el personaje perteneciente a un usuario
+     * @param user Usuario a validar
+     * @param game Partida en la que buscar
+     * @returns {*}
+     */
+    findChar: function(user, game) {
+        var userName = user.name, charList = game.charList, ret = 0;
+        charList.forEach(function(c) {
+            if(c.owner === userName) ret = c;
         });
-        console.log("[util] no char in game");
-        return 0;
+        return ret;
     },
     /**
      * Printa por la consola mediante recursividad las propiedades de un objeto (para testing)
@@ -111,5 +151,40 @@ module.exports = {
             else if (this.type(obj, a)) for (var x in a) this.showProps(a[x]); // si es un objeto, lo mismo q antes
             else if (type != 'undefined' && type != 'object' && a !== "") console.log('[server] prop: ' + a); // si es un tipo primitivo, muestra su valor
         }
+    },
+    /**
+     * Convierte un númro entero a números romanos
+     * @param num Número a convertir
+     * @returns {string}
+     */
+    romanize: function (num) {
+        if (!+num)
+            return false;
+        var digits = String(+num).split(""),
+            key = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM",
+                "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC",
+                "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
+            roman = "",
+            i = 3;
+        while (i--)
+            roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+        return Array(+digits.join("") + 1).join("M") + roman;
+    },
+    /**
+     * Convierte un número romano a entero.
+     * @param str Número romano a convertir
+     * @returns {number}
+     */
+    deromanize: function (str) {
+        var str = str.toUpperCase(),
+            validator = /^M*(?:D?C{0,3}|C[MD])(?:L?X{0,3}|X[CL])(?:V?I{0,3}|I[XV])$/,
+            token = /[MDLV]|C[MD]?|X[CL]?|I[XV]?/g,
+            key = {M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1},
+            num = 0, m;
+        if (!(str && validator.test(str)))
+            return false;
+        while (m = token.exec(str))
+            num += key[m[0]];
+        return num;
     }
 };

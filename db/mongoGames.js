@@ -8,6 +8,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
+var util = require('./../util');
 
 var dbUrl = 'mongodb://localhost:27017/vtda';
 var col = 'games';
@@ -65,6 +66,8 @@ module.exports = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
+                if(!util.isUndefined(game._id))
+                    delete game._id;
                 client.collection(col).updateOne({name: game.name}, {$set: game}, function(err, result) {
                         assert.equal(null, err);
                         console.log("[mongo] updated game: "+game.name);

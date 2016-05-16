@@ -9,20 +9,23 @@
  */
 var mongoUsers = require('./db/mongoUsers');
 var mongoGames = require('./db/mongoGames');
+var util = require('./util');
 
 var users = [];
-var games = []
+var games = [];
 
 module.exports = function (io) {
     io.on('connection', function(socket) {
-        var user;
-        var char;
-        var game;
+        var user, char, game;
+        var charFunctions = util.charFunctions;
+        console.log('[socket] user connected');
         socket.on('initChar', function(sheet) {
             user = sheet.user;
             char = sheet.char;
             game = sheet.game;
-            console.log("[server] new character " + char.name + "(" + user.name + ") at game : " + game.name);
+            mongoGames.updateGame(game, function() {
+                console.log("[socket] new character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game : " + game.name);
+            });
         });
     });
     ///**

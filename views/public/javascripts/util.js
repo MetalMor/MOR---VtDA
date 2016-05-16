@@ -21,11 +21,33 @@ var util = {
             evt.preventDefault();
         });
     },
+    /**
+     * Valida si un objeto es un numero
+     * @param o Objet a validar
+     * @returns {boolean}
+     */
+    isNumber: function(o) {return !isNaN(parseFloat(o)) },
+    /**
+     * Valida si un objeto es un string
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isString: function(o) {return $type(o) === 'string' || o instanceof String},
+    /**
+     * Valida si un objeto es indefinido
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
     isUndefined: function (o) {
-        return typeof o === 'undefined'
+        return $.type(o) === 'undefined'
     },
+    /**
+     * Valida si un objeto es booleano
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
     isBoolean: function (o) {
-        return typeof o === 'boolean'
+        return $.type(o) === 'boolean'
     },
     /**
      * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.
@@ -97,8 +119,8 @@ var util = {
     /**
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
      */
-    printChar: function () {
-        console.log("[client] char: " + JSON.stringify(char, null, 4))
+    printJson: function (obj) {
+        console.log("[client] char: " + JSON.stringify(obj, null, 4))
     },
     /**
      * Valida si ninguno de los inputs dentro de un elemento especificado por parámetro está vacío.
@@ -110,6 +132,11 @@ var util = {
             return $.trim(this.value).length === 0;
         }).length > 0);
     },
+    /**
+     * Convierte un númro entero a números romanos
+     * @param num Número a convertir
+     * @returns {string}
+     */
     romanize: function (num) {
         if (!+num)
             return false;
@@ -123,6 +150,11 @@ var util = {
             roman = (key[+digits.pop() + (i * 10)] || "") + roman;
         return Array(+digits.join("") + 1).join("M") + roman;
     },
+    /**
+     * Convierte un número romano a entero.
+     * @param str Número romano a convertir
+     * @returns {number}
+     */
     deromanize: function (str) {
         var str = str.toUpperCase(),
             validator = /^M*(?:D?C{0,3}|C[MD])(?:L?X{0,3}|X[CL])(?:V?I{0,3}|I[XV])$/,
@@ -135,5 +167,4 @@ var util = {
             num += key[m[0]];
         return num;
     }
-
 };

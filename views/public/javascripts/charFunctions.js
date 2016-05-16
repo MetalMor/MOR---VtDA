@@ -5,6 +5,20 @@
 
 var charFunctions = {
     setReady: function(char, ready) {char.ready = ready},
+    setXP: function(char, xp) {char.xp = xp},
+    setOwner: function(char, user) {char.owner = user.name},
+    addCharacter: function(char, list,  game) {game[list+'List'].push(char)},
+    initBlood: function(char) {
+        var blood = charFunctions.findStat(char, 'sangre');
+        blood.level = Math.floor(Math.random()*blood.max+1);
+        charFunctions.setStat(char, 'sangre', blood);
+        table.updateOther();
+    },
+    maxBlood: function(char) {
+        var gen = parseInt(charFunctions.findData(char, 'generacion').value);
+        var bloodEqv = [0, 300, 200, 100, 50, 40, 30, 20, 15, 14, 13, 12, 11, 10];
+        return bloodEqv[gen];
+    },
     /**
      * Lista de disciplinas de cada clan
      */
@@ -129,7 +143,7 @@ var charFunctions = {
     findData: function(obj, name) {
         var tmpRet;
         if(util.is(util.field, obj)) {
-            if(obj.name === name) {return obj;}
+            if(obj.name === name) {return obj}
         } else {
             var prop, ret, self = this;
             if(util.is(util.data, obj)) prop = 'fields';
@@ -149,7 +163,17 @@ var charFunctions = {
      */
     setStat: function(obj, stat, value) {
         if(util.is(util.stat, obj)) {
-            if(obj.name === stat.name) util.isBoolean(value) ? value ? obj.level++ : obj.level-- : obj.level = value;
+            if(obj.name === stat.name) {
+                if(util.isBoolean(value)) {
+                    if (value) obj.level++;
+                    else obj.level--;
+                } else if (util.isNumber(value) && value > 0) {
+                    obj.level = value;
+                } else if (util.is(util.stat, value) || util.is(util.stats, value)) {
+                    obj = value;
+                }
+                //util.isBoolean(value) ? value ? obj.level++ : obj.level-- : obj.level = value;
+            }
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var self = this;
             obj.stats.forEach(function(o) {self.setStat(o, stat, value)});
@@ -162,8 +186,9 @@ var charFunctions = {
      * @param value Nuevo valor del campo de datos.
      */
     setData: function(obj, name, value) {
-        if(util.is(util.field, obj)) {
-            if(obj.name === name) obj.value = value;
+        if(util.is(util.field, obj) && obj.name === name) {
+            if(util.isString(value) || util.isNumber(value)) obj.value = value;
+            else if (util.is(util.field, value)) obj = value;
         } else {
             var prop, self = this;
             if(util.is(util.data, obj)) prop = 'fields';
@@ -172,3 +197,9 @@ var charFunctions = {
         }
     }
 };
+
+if(typeof module !== 'undefined' && module !== null) {
+    if (typeof util === 'undefined')
+        var util = require('./../../../util');
+    module.exports = charFunctions;
+}

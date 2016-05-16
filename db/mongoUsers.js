@@ -130,6 +130,8 @@ var mongoUsers = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
+                if(!util.isUndefined(user._id))
+                    delete user._id;
                 console.log("[mongo] preparing user update");
                 client.collection(col).updateOne({name: user.name}, {$set: user}, function(err, result) {
                     assert.equal(null, err);

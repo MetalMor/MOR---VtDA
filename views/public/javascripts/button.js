@@ -36,20 +36,22 @@ var button = {
             table.build(discs, 'disciplinas');
             charFunctions.setDiscs(discs);
             button.setTableButtons('stats');
-            util.printChar();
             table.updateOther();
             overlay.open('sheet');
         } else {
             overlay.showAlert('emptyFields');
         }
     },
-    submitSheet: function(socket, sheet) {
-        var id = 'sheet';
-        if(restrict.fullSheet(id)) {
+    submitSheet: function(socket, char, user, game) {
+        if(restrict.fullSheet(char)) {
             charFunctions.setReady(char, true);
             charFunctions.setXP(char, 15);
-            socket.emit('initChar', sheet);
-            overlay.close(id);
+            charFunctions.initBlood(char);
+            charFunctions.setOwner(char, user);
+            charFunctions.addCharacter(char, 'char', game);
+            sockets.initChar(socket, char, user, game);
+            util.printJson(char);
+            //overlay.close('sheet');
             // TODO valida y guarda toda la movida
             // pone boolean ready a true y carga la XP inicial
             // envia objeto personaje al servidor via sockets
@@ -146,11 +148,11 @@ var button = {
             parent = charFunctions.findParent(char, id);
 
         if(restrict.notUpdatable(stat)) {
-            if(mode && parent.initPoints > 0) {
+            if(mode && parent.initPoints > 0 && restrict.levelThreeRestriction(stat)) {
                     parent.initPoints--;
                     table.modStat(stat, mode);
                     table.updateInitPoints(parent);
-            } else if(!mode && restrict.levelZeroRestriction(stat) && parent.initPoints >= 0) {
+            } else if(!mode && parent.initPoints >= 0 && restrict.levelZeroRestriction(stat)) {
                 if(!char.ready) {
                     parent.initPoints++;
                     table.modStat(stat, mode);

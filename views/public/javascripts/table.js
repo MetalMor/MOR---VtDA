@@ -83,10 +83,9 @@ var table = {
                     table.modStat(s, autctrlLvl+conscLvl);
                     break;
                 default:
-                    if(s.max === 0) {
-                        s.max = parseInt(charFunctions.findData(char, 'generacion').value);
-                        table.update(s.name);
-                    }
+                    if(s.max === 0)
+                        s.max = charFunctions.maxBlood(char);
+                    table.update(s.name);
                     break;
             }
         });

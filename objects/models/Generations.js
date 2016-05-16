@@ -15,4 +15,4 @@ module.exports = [
     {name: 'XI', maxLvl: 5, maxBlood: 12, maxWaste: 1},
     {name: 'XII', maxLvl: 5, maxBlood: 11, maxWaste: 1},
     {name: 'XIII', maxLvl: 5, maxBlood: 10, maxWaste: 1}
-];
+].reverse();

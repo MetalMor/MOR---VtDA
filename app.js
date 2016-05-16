@@ -224,9 +224,8 @@ app.get('/game/:user/:game', function(req, res) {
             var index = util.getIndex(user.gameList, 'name', gameName);
             if (index<0) { // no existe: entra como jugador
                 console.log("[server] logging player in: "+game.name);
-                var userCharList = user.charList, gameCharList = game.charList;
                 view.file = views.player;
-                char = util.findCommon(userCharList, gameCharList);
+                char = util.findChar(user, game);
                 if(char === 0) {
                     var cf = new CharFactory();
                     char = cf.initChar();
@@ -245,4 +244,4 @@ app.get('/game/:user/:game', function(req, res) {
 server.listen(PORT, IP, function() {console.log('[server] started at port ' + PORT)});
 
 // ***** EJECUTA LOS SOCKETS! *****
-//require('./sockets.js')(io);
+require('./sockets.js')(io);
