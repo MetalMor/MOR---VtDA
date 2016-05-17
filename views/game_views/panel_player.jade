@@ -1,5 +1,4 @@
 // Ventana del jugador
-// TODO ficha hidden
    Created by mor on 6/05/16.
 
 extends ../layout
@@ -8,11 +7,16 @@ block content
     #user(hidden)=userJSON
     #char(hidden)=charJSON
     #game(hidden)=gameJSON
-    #wrapper
-        #panel.panel.panel-primary(hidden)
-            .panel-heading=user.name+' - '+game.name
-            .panel-body
-            include panel_output
-        include panel_data
-        include panel_sheet
-        include panel_action
+    #wrapper.overlay
+        .overlay-content
+            #panel.panel.panel-primary(hidden)
+                .panel-heading=user.name+' - '+game.name
+                .panel-body
+                    .table-responsive
+                        table#show-data.table
+                            thead: th="Datos del personaje"
+                            tbody
+                include panel_output
+            include panel_data
+            include panel_sheet
+            include panel_action

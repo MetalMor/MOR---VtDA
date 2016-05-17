@@ -27,7 +27,8 @@ if (window["WebSocket"]) {
                         button.submitSheet(socket, char, user, game)
                     });
                 } else {
-                    alert('got char');
+                    overlay.open('wrapper');
+                    table.showData(char, 'show-data');
                 }
             }
         }

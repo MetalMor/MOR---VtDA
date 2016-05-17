@@ -50,11 +50,9 @@ var button = {
             charFunctions.setOwner(char, user);
             charFunctions.addCharacter(char, 'char', game);
             sockets.initChar(socket, char, user, game);
-            util.printJson(char);
-            //overlay.close('sheet');
-            // TODO valida y guarda toda la movida
-            // pone boolean ready a true y carga la XP inicial
-            // envia objeto personaje al servidor via sockets
+            overlay.close('sheet');
+            table.showData(char, 'show-data');
+            overlay.open('show-data');
         }
     },
     /**

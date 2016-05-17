@@ -22,7 +22,7 @@ var table = {
             return "<tr><td>"+util.fancy(statsObj.name)+"</td><td id='"+statsObj.name+"'>"+this.level(statsObj)+"</td></tr>"; // <-- ACABA RECURSIVIDAD
         } else if(util.is(util.stats, statsObj)) { // es un objeto de conjunto de estadísticas
             var subTable = "", stats = statsObj.stats, self = this;
-            var tableAdd = function(a) {subTable += a}, len = stats.length;
+            var tableAdd = function(a) {subTable += a};
             tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
             tableAdd("<thead><th>"+util.fancy(statsObj.name)+ "</th>");
             if(!util.isUndefined(statsObj.initPoints) && statsObj.initPoints > 0)
@@ -36,6 +36,25 @@ var table = {
             var content = "", self = this;
             var contentAdd = function(a) {content += a};
             statsObj.forEach(function(s){contentAdd("<tr>"+self.build(s, tableId)+"</tr>")}); // <-- RECURSIVIDAD HERE
+            mainTable.append(content);
+        }
+    },
+    showData: function(dataObj, tableId) {
+        if(util.is(util.field, dataObj)) {
+            return "<tr><td>"+util.fancy(dataObj.name)+"</td><td id='"+dataObj.name+"'>"+dataObj.value+"</td></tr>"; // <-- ACABA RECURSIVIDAD
+        } else if(util.is(util.fields, dataObj)) {
+            var subTable = "", fields = dataObj.fields, self = this;
+            var tableAdd = function(a) {subTable += a};
+            tableAdd("<td><div class='table-responsive'><table id='"+dataObj.name+"' class='table'>");
+            tableAdd("<thead><th>"+util.fancy(dataObj.name)+"</th>");
+            tableAdd("</thead><tbody><tr>");
+            fields.forEach(function(d) {tableAdd(self.showData(d, tableId))});
+            tableAdd("</tr></tbody></table></div></td>");
+        } else if(util.is(util.char, dataObj)) {
+            var mainTable = $("table#"+tableId+">tbody");
+            var content = "", self = this;
+            var contentAdd = function(a) {content+=a};
+            dataObj.forEach(function(d) {contentAdd("<tr>"+self.showData(d, tableId)+"</tr>")});
             mainTable.append(content);
         }
     },
