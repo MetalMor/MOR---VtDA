@@ -51,8 +51,7 @@ var button = {
             charFunctions.addCharacter(char, 'char', game);
             sockets.initChar(socket, char, user, game);
             overlay.close('sheet');
-            table.showData(char, 'show-data');
-            overlay.open('show-data');
+            overlay.playerPanel(socket);
         }
     },
     /**
@@ -90,6 +89,7 @@ var button = {
             temp.push($("textarea#allies").val());
             temp.push($("textarea#resources").val());
             temp.push($("textarea#servants").val());
+            char.story = $("textarea#story").val();
         }
         //</editor-fold>
         temp.forEach(function(s) {ret.push(util.fancy(s))});
@@ -128,6 +128,29 @@ var button = {
                     prefs.modPrefs(row, spanClass);
                 })
             });
+        });
+    },
+    openPanel: function(id, own) {
+        overlay.show(id);
+        own.removeClass('glyphicon-plus opener');
+        own.addClass('glyphicon-minus closer');
+    },
+    closePanel: function(id, own) {
+        overlay.hide(id);
+        own.removeClass('glyphicon-minus closer');
+        own.addClass('glyphicon-plus opener');
+    },
+    setPanelButton: function(panelId) {
+        $('#'+panelId+'>.panel-heading>span.glyphicon').click(function() {
+            var cls = $(this).attr('class'), mode,
+                panel = $('#'+panelId+' .panel-body'), own = $(this);
+            if(cls.indexOf('opener') > 0) {
+                mode = 'openPanel';
+            } else if(cls.indexOf('closer') > 0) {
+                mode = 'closePanel';
+            }
+            if(!util.isUndefined(mode))
+                button[mode](panel, own);
         });
     },
     /**

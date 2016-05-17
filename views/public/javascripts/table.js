@@ -41,20 +41,21 @@ var table = {
     },
     showData: function(dataObj, tableId) {
         if(util.is(util.field, dataObj)) {
-            return "<tr><td>"+util.fancy(dataObj.name)+"</td><td id='"+dataObj.name+"'>"+dataObj.value+"</td></tr>"; // <-- ACABA RECURSIVIDAD
-        } else if(util.is(util.fields, dataObj)) {
+            var value = dataObj.name === 'generacion' ? util.romanize(dataObj.value) : dataObj.value;
+            return "<tr><td>"+util.fancy(dataObj.name)+"</td><td id='"+dataObj.name+"'>"+value+"</td></tr>"; // <-- ACABA RECURSIVIDAD
+        } else if(util.is(util.data, dataObj)) {
             var subTable = "", fields = dataObj.fields, self = this;
             var tableAdd = function(a) {subTable += a};
             tableAdd("<td><div class='table-responsive'><table id='"+dataObj.name+"' class='table'>");
-            tableAdd("<thead><th>"+util.fancy(dataObj.name)+"</th>");
-            tableAdd("</thead><tbody><tr>");
+            tableAdd("<thead><th>"+util.fancy(dataObj.name)+"</th></thead><tbody><tr>");
             fields.forEach(function(d) {tableAdd(self.showData(d, tableId))});
             tableAdd("</tr></tbody></table></div></td>");
+            return subTable;
         } else if(util.is(util.char, dataObj)) {
             var mainTable = $("table#"+tableId+">tbody");
-            var content = "", self = this;
+            var content = "", self = this, data = dataObj.data;
             var contentAdd = function(a) {content+=a};
-            dataObj.forEach(function(d) {contentAdd("<tr>"+self.showData(d, tableId)+"</tr>")});
+            data.forEach(function(d) {contentAdd("<tr class='col-sm-4'>"+self.showData(d, tableId)+"</tr>")});
             mainTable.append(content);
         }
     },

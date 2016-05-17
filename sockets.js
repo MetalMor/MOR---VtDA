@@ -5,6 +5,7 @@
  */
 /**
  * Control de la comunicación cliente-servidor vía websockets
+ * - TODO adaptar charFunctions.js al servidor (no coge el ojeto util)
  * @type {Snake} Modelo de objeto snake
  */
 var mongoUsers = require('./db/mongoUsers');

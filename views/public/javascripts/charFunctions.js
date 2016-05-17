@@ -3,6 +3,9 @@
  * Created by mor on 10/05/16.
  */
 
+if(typeof util === 'undefined' || util === null)
+    var util = require('./../../../util');
+
 var charFunctions = {
     /**
      * Define un personaje como inicializado y preparado para jugar
@@ -229,7 +232,6 @@ var charFunctions = {
 };
 
 if(typeof module !== 'undefined' && module !== null) {
-    if (typeof util === 'undefined')
-        var util = require('./../../../util');
+    var util = require('./../../../util');
     module.exports = charFunctions;
 }

@@ -7,16 +7,21 @@ block content
     #user(hidden)=userJSON
     #char(hidden)=charJSON
     #game(hidden)=gameJSON
-    #wrapper.overlay
-        .overlay-content
-            #panel.panel.panel-primary(hidden)
-                .panel-heading=user.name+' - '+game.name
-                .panel-body
-                    .table-responsive
-                        table#show-data.table
-                            thead: th="Datos del personaje"
-                            tbody
-                include panel_output
-            include panel_data
-            include panel_sheet
-            include panel_action
+    include panel_data
+    include panel_sheet
+    include panel_action
+    #wrapper
+        .container
+            #panel.panel.panel-primary.overlay(hidden)
+                    .panel-heading=user.name+' - '+game.name
+                    .panel-body.overlay-content
+                        #char-data.panel.panel-primary
+                            .panel-heading="Datos del personaje"
+                                span#char-data-button.glyphicon.glyphicon-minus.right-align.closer
+                            .panel-body
+                                .table-responsive
+                                    table#show-data.table
+                                        tbody
+                                .container.col-sm-6="Historia"
+                                    p#story=char.story
+                    include panel_output

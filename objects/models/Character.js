@@ -10,6 +10,7 @@ module.exports = function(d, s) {
     this.inv = [];
     this.xp = 15;
     this.hp = 7;
+    this.story;
     this.diceSet = [];
     this.ready = false;
     this.gain = function(prop, gain) {this[prop] += gain};

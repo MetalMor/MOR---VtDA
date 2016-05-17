@@ -16,20 +16,10 @@ if (window["WebSocket"]) {
                 char = JSON.parse(charElement.text());
                 user = JSON.parse($("div#user").text());
                 game = JSON.parse($("div#game").text());
-                if (!char.ready) {
-                    overlay.showAlert('advice');
-                    overlay.open('data');
-                    button.setPrefsButtons('attr');
-                    button.setPrefsButtons('skills');
-                    util.disable('#generation');
-                    $("input#next").click(button.submitCharData);
-                    $("button#submit").click(function () {
-                        button.submitSheet(socket, char, user, game)
-                    });
-                } else {
-                    overlay.open('wrapper');
-                    table.showData(char, 'show-data');
-                }
+                if (!char.ready)
+                    overlay.initCharPanel(socket);
+                else
+                    overlay.playerPanel(socket);
             }
         }
         connect();
