@@ -1,9 +1,11 @@
 /**
- * Objeto que contiene diversas utilidades para el objeto personaje..
- * Created by mor on 10/05/16.
+ * Funciones para el personaje en el lado servidor
+ * Created by mor on 18/05/2016.
  */
 
-var charFunctions = {
+var util = require('./util');
+
+module.exports = {
     /**
      * Define un personaje como inicializado y preparado para jugar
      * @param char Personaje a preparar

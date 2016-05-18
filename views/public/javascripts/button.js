@@ -109,6 +109,10 @@ var button = {
                 });
         });
     },
+    /**
+     * Define las funciones que se disparan al clicar sobre los botones de la tabla de preferencias
+     * @param id Identificador de la tabla de preferencias
+     */
     setPrefsButtons: function(id) {
         var rowList = $('table#'+id+'-prefs tr'),
             row, spanList, spanBtn, spanClass, btn;
@@ -130,16 +134,34 @@ var button = {
             });
         });
     },
+    /**
+     * Función que abre un panel desplegable.
+     * @param id Identificador del panel
+     * @param own Objeto del botón que ha lanzado la función
+     */
     openPanel: function(id, own) {
         overlay.show(id);
-        own.removeClass('glyphicon-plus opener');
-        own.addClass('glyphicon-minus closer');
+        if(!util.isUndefined(own)) {
+            own.removeClass('glyphicon-plus opener');
+            own.addClass('glyphicon-minus closer');
+        }
     },
+    /**
+     * Función que cierra un panel desplegable
+     * @param id Identificador del panel
+     * @param own Objeto del botón que ha lanzado la función
+     */
     closePanel: function(id, own) {
         overlay.hide(id);
-        own.removeClass('glyphicon-minus closer');
-        own.addClass('glyphicon-plus opener');
+        if(!util.isUndefined(own)) {
+            own.removeClass('glyphicon-minus closer');
+            own.addClass('glyphicon-plus opener');
+        }
     },
+    /**
+     * Define el botón de apertura/cierre de un panel desplegable
+     * @param panelId Identificador del panel desplegable
+     */
     setPanelButton: function(panelId) {
         $('#'+panelId+'>.panel-heading>span.glyphicon').click(function() {
             var cls = $(this).attr('class'), mode,
@@ -155,7 +177,6 @@ var button = {
     },
     /**
      * Función destinada a llamarse al hacer clic en uno de los iconos de nivel de la ficha del personaje.
-     * // TODO controlar initPoints
      * @param id String identificador del elemento padre del icpno (correspondiente a la estadistica a la que pertenece)
      * @param cls Clase del icono: set, unset o max
      */
@@ -168,8 +189,8 @@ var button = {
         var stat = charFunctions.findStat(char, id),
             parent = charFunctions.findParent(char, id);
 
-        if(restrict.notUpdatable(stat)) {
-            if(mode && parent.initPoints > 0 && restrict.levelThreeRestriction(stat)) {
+        if(restrict.notUpdatable(stat) && restrict.lookRestriction(stat)) {
+            if(mode && parent.initPoints > 0 && restrict.maxLevelRestriction(stat)) {
                     parent.initPoints--;
                     table.modStat(stat, mode);
                     table.updateInitPoints(parent);

@@ -15,11 +15,6 @@ module.exports = {
     char: "xp",
 
     /**
-     * Importa las funciones de utilidad para personajes
-     */
-    charFunctions: require('./views/public/javascripts/charFunctions'),
-
-    /**
      * Valida si un objeto es un numero
      * @param o Objet a validar
      * @returns {boolean}
@@ -31,7 +26,7 @@ module.exports = {
      * @param o Objeto a validar
      * @returns {boolean}
      */
-    isString: function(o) {return $type(o) === 'string' || o instanceof String},
+    isString: function(o) {return typeof o === 'string' || o instanceof String},
 
     /**
      * Valida si un objeto es indefinido

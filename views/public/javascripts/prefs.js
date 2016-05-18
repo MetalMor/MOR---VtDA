@@ -31,8 +31,6 @@ var prefs = {
         }
     },
     modPrefs: function(row, mode) {
-        console.log(JSON.stringify(row, false, 4));
-        console.log(mode);
         var labelSelector = 'label.number';
         var newRow = row[mode]().find(labelSelector),
             oldRow = row.find(labelSelector),

@@ -16,10 +16,16 @@ var restrict = {
             supParent = charFunctions.findParent(char, parent.name);
         return !(stat.level === 1 && (parent.name === 'virtudes' || supParent.name === 'atributos'));
     },
-    levelThreeRestriction: function(stat) {
+    maxLevelRestriction: function(stat) {
         var parent = charFunctions.findParent(char, stat.name),
             supParent = charFunctions.findParent(char, parent.name);
-        return !(supParent.name === 'habilidades' && stat.level >= 3 && parent.initPoints > 0);
+        if(supParent.name === 'habilidades')
+            maxLvl = 3;
+        else if(supParent.name === 'atributos')
+            maxLvl = 5;
+        else
+            maxLvl = 50; // unreachable level!! ^^
+        return !(stat.level >= maxLvl && parent.initPoints > 0);
     },
     notUpdatable: function(stat) {
         if(stat.name === 'sangre') return false;

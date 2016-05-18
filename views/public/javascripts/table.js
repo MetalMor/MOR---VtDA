@@ -81,7 +81,7 @@ var table = {
      * @param name Nombre (id) de la estadística
      */
     update: function(name) {
-        var statElement = $('#'+name), stat = charFunctions.findStat(char, name);
+        var statElement = $('td#'+name), stat = charFunctions.findStat(char, name);
         if (!util.isUndefined(stat)) {
             statElement.empty();
             statElement.append(this.level(stat));
@@ -136,9 +136,7 @@ var table = {
      * la estadística con ese valor.
      */
     modStat: function(stat, mode) {
-        if(restrict.lookRestriction(stat)) {
-            charFunctions.setStat(char, stat, mode);
-            table.update(stat.name);
-        }
+        charFunctions.setStat(char, stat, mode);
+        table.update(stat.name);
     }
 };

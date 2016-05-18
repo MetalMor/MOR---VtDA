@@ -4,7 +4,7 @@
  */
 var overlay = {
     /**
-     * Cierra un elemento desplegable
+     * Cierra una ventana desplegable
      * @param id ID del elemento (string)
      */
     close: function(id, sp, callback) {
@@ -15,7 +15,7 @@ var overlay = {
         });
     },
     /**
-     * Abre un elemento desplegable
+     * Abre una ventana desplegable
      * @param id ID del elemento (string)
      */
     open: function(id, sp, callback) {
@@ -25,6 +25,12 @@ var overlay = {
             if(callback) callback();
         });
     },
+    /**
+     * Cierra un panel desplegable
+     * @param element Elemento a cerrar
+     * @param sp Velocidad de la animación
+     * @param callback Función que se llamará al terminar
+     */
     hide: function(element, sp, callback) {
         var speed = sp ? sp : 'fast';
         element.fadeOut(speed, function() {
@@ -32,6 +38,12 @@ var overlay = {
             if(callback) callback();
         });
     },
+    /**
+     * Abre un panel desplegable
+     * @param element Elemento a abrir
+     * @param sp Velocidad de la animación
+     * @param callback Función que se llamará al terminar
+     */
     show: function(element, sp, callback) {
         var speed = sp ? sp : 'fast';
         element.fadeIn(speed, function() {
@@ -52,6 +64,10 @@ var overlay = {
             }, 2000);
         });
     },
+    /**
+     * Muestra la ventana de creación del personaje
+     * @param socket Conector WS del cliente
+     */
     initCharPanel: function(socket) {
         overlay.showAlert('advice');
         overlay.open('data');
@@ -63,12 +79,18 @@ var overlay = {
             button.submitSheet(socket, char, user, game)
         });
     },
+    /**
+     * Muestra la ventana de información del personaje
+     * @param socket Conector WS del cliente
+     */
     playerPanel: function(socket) {
-        var panel = $('#panel');
+        var panel = $('#panel'),
+            sheet = {user: user, game: game, char: char};
         panel.attr('hidden', 'false');
         overlay.open('panel');
         button.setPanelButton('char-data');
         panel.fadeIn('slow');
         table.showData(char, 'show-data');
+        socket.emit('loginChar', sheet);
     }
 };
