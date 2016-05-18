@@ -101,8 +101,12 @@ module.exports = function() {
      */
     this.initSkills = function() {
         var ret = new StatsSet("Habilidades");
-        var skills = this.skills;
-        skills.forEach(function(s) {ret.stats.push(s)});
+        var skills = this.skills, stats;
+        skills.forEach(function(stat) {
+            stats = stat.stats;
+            stats.forEach(function(s) {s.cost = 2});
+            ret.stats.push(stat)
+        });
         return ret;
     };
 };

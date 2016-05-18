@@ -10,6 +10,8 @@ module.exports = function(n) {
     this.level = 0;
     this.limit = n === "Sangre" ? 20 : 10;
     this.max = 0
+    if(typeof c !== 'undefined')
+        this.cost = c;
     this.setMod = function(m) {this.max = m};
     this.addLevel = function() {this.level++};
     this.decLevel = function() {this.level--};

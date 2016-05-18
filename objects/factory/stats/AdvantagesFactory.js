@@ -56,7 +56,10 @@ module.exports = function() {
     this.initVirt = function() {
         var ret = new StatsSet("Virtudes");
         var virt = this.virt;
-        virt.forEach(function(v) {ret.stats.push(v)});
+        virt.forEach(function(v) {
+            v.cost = 2;
+            ret.stats.push(v)
+        });
         ret.upgradeAll();
         ret.initPoints = 7;
         return ret;

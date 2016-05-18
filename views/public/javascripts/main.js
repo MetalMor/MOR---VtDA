@@ -16,10 +16,12 @@ if (window["WebSocket"]) {
                 char = JSON.parse(charElement.text());
                 user = JSON.parse($("div#user").text());
                 game = JSON.parse($("div#game").text());
-                if (!char.ready)
-                    overlay.initCharPanel(socket);
-                else
-                    overlay.playerPanel(socket);
+                if (!util.isUndefined(char)) {
+                    if (!char.ready)
+                        overlay.initCharPanel(socket);
+                    else
+                        overlay.playerPanel(socket);
+                }
             }
         }
         connect();

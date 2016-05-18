@@ -89,8 +89,10 @@ var overlay = {
         panel.attr('hidden', 'false');
         overlay.open('panel');
         button.setPanelButton('char-data');
+        button.setPanelButton('char-stats');
         panel.fadeIn('slow');
         table.showData(char, 'show-data');
+        table.showStats(char, 'show-stats');
         socket.emit('loginChar', sheet);
     }
 };

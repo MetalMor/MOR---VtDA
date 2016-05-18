@@ -14,8 +14,8 @@ module.exports = function() {
      * @type {array}
      */
     this.misc = [
-        new MaxableStat("Fuerza de Voluntad"),
-        new RegularStat("Camino"),
+        new MaxableStat("Fuerza de Voluntad", 1),
+        new RegularStat("Camino", 2),
         new MaxableStat("Sangre")
     ];
     /**

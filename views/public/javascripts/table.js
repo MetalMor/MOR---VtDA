@@ -39,6 +39,12 @@ var table = {
             mainTable.append(content);
         }
     },
+    /**
+     * Genera una tabla que muestra el contenido de los campos de datos del personaje
+     * @param dataObj Objeto personaje/conjunto de campos/campo de datos
+     * @param tableId Identificador de la tabla.
+     * @returns {*}
+     */
     showData: function(dataObj, tableId) {
         if(util.is(util.field, dataObj)) {
             var value = dataObj.name === 'generacion' ? util.romanize(dataObj.value) : dataObj.value;
@@ -56,6 +62,37 @@ var table = {
             var content = "", self = this, data = dataObj.data;
             var contentAdd = function(a) {content+=a};
             data.forEach(function(d) {contentAdd("<tr class='col-sm-4'>"+self.showData(d, tableId)+"</tr>")});
+            mainTable.append(content);
+        }
+    },
+    /**
+     * Genera una tabla que muestra las estadsíticas que posee un personaje
+     * @param statsObj Obj
+     * @param tableId
+     * @returns {*}
+     */
+    showStats: function(statsObj, tableId) {
+        if(util.is(util.stat, statsObj)) {
+            var name = util.fancy(statsObj.name), level = statsObj.level;
+            if(statsObj.level > 0) {
+                name = "<b>"+name+"</b>";
+                level = "<b>"+level+"</b>";
+            }
+            return "<tr><td><span class='glyphicon glyphicon-arrow-up'></span><span class='glyphicon glyphicon-arrow-down'></span></td>" +
+                "<td>"+name+"</td><td id='"+statsObj.name+"'>"+level+"</td></tr>"
+        } else if(util.is(util.stats, statsObj)) {
+            var subTable = "", stats = statsObj.stats, self = this;
+            var tableAdd = function(a) {subTable += a};
+            tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
+            tableAdd("<thead><th></th><th>"+util.fancy(statsObj.name)+"</th></thead><tbody><tr>");
+            stats.forEach(function(s) {tableAdd(self.showStats(s, tableId))});
+            tableAdd("</tr></tbody></table></div></td>");
+            return subTable;
+        } else if(util.is(util.char, statsObj)) {
+            var mainTable = $("table#"+tableId+">tbody");
+            var content = "", self = this, stats = statsObj.stats;
+            var contentAdd = function(a) {content+=a};
+            stats.forEach(function(s) {contentAdd("<tr>"+self.showStats(s, tableId)+"</tr>")});
             mainTable.append(content);
         }
     },
@@ -88,6 +125,9 @@ var table = {
             button.setTableButtons(name);
         }
     },
+    /**
+     * Actualiza el display de las estadísticas excluidas de la puntuacion inicial
+     */
     updateOther: function() {
         var stats = charFunctions.findStat(char, 'otros').stats,
             autctrlLvl = charFunctions.findStat(char, 'autocontrol').level,

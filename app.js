@@ -9,9 +9,11 @@ var express = require('express'), // express dependencies models
     io = require('socket.io')(server), // asyncronous client-server communication
     bodyParser = require('body-parser'), // POST parameters
     sha1 = require('sha1'); // pwd encoder
+console.log('[server] init dependencies');
 
 var mongoUsers = require('./db/mongoUsers'), // db users controller
     mongoGames = require('./db/mongoGames'); // db games controller
+console.log('[server] init db objects');
 
 var util = require('./util'), // utils
     ViewData = require('./objects/system/ViewData'), // view data model
@@ -21,9 +23,11 @@ var util = require('./util'), // utils
     CharFactory = require('./objects/factory/CharFactory'),
     clans = require('./objects/models/Clans'),
     generations = require('./objects/models/Generations');
+console.log('[server] init models');
 
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000,
     IP = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+console.log('[server] init env vars');
 
 var cf = new CharFactory();
 var view, user, game, char = cf.initChar(),
@@ -32,6 +36,7 @@ var setGames = function(list) {games = list},
     setUsers = function(list) {users = list},
     setGame = function(g) {game = g},
     setUser = function(u) {user = u};
+console.log('[server] init server vars');
 
 /**
  * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
@@ -44,10 +49,12 @@ mongoUsers.listAllUsers(setUsers);
 
 // ***** JADE TEMPLATES *****
 app.set('view engine', 'jade');
+console.log('[server] view engine set');
 
 // ***** ENV VARS *****
 app.set('port', PORT);
 app.set('ipaddr', IP);
+console.log('[server] env vars set');
 
 // ***** ROUTING & SERVER *****
 app.use('/public', express.static(__dirname + '/views/public/'));
@@ -55,14 +62,18 @@ app.use('/css', express.static(__dirname + '/views/public/stylesheets/'));
 app.use('/js', express.static(__dirname + '/views/public/javascripts/'));
 app.use('/img', express.static(__dirname + '/views/public/images/'));
 app.use('/lib', express.static(__dirname + '/views/public/libraries/'));
+console.log('[server] static files\' routes set');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+console.log('[server] body-parser set');
 
 // ROOT redirecciona al login
 app.get('/', function(req, res) {
     console.log('[server] redirect to login');
     res.redirect('/login/');
 });
+console.log('[server] root route set');
 
 // LOGIN
 app.get('/login/', function (req, res) {
@@ -70,6 +81,7 @@ app.get('/login/', function (req, res) {
     view = new ViewData(views.user, 'MOR - VtDA', 'Login', 0);
     res.render(view.file, view.data);
 });
+console.log('[server] login route set');
 // VALIDACION LOGIN
 app.post('/login/', function(req, res) {
     console.log("[server] validate user login");
@@ -83,6 +95,7 @@ app.post('/login/', function(req, res) {
         }
     });
 });
+console.log('[server] login validation set');
 
 // NUEVO USUARIO
 app.get('/login/new', function(req, res) {
@@ -90,6 +103,8 @@ app.get('/login/new', function(req, res) {
     view = new ViewData(views.newUser, 'MOR - VtDA', 'Nuevo Usuario', 0);
     res.render(view.file, view.data);
 });
+console.log('[server] new user route set');
+
 // VALIDACION NUEVO USUARIO
 app.post('/login/new', function(req, res) {
     console.log("[server] validate new user");
@@ -117,6 +132,7 @@ app.post('/login/new', function(req, res) {
         }
     });
 });
+console.log('[server] new user validation set');
 
 // ESCOGER PARTIDA
 app.get('/login/:user/', function(req, res) {
@@ -135,6 +151,8 @@ app.get('/login/:user/', function(req, res) {
         }
     }
 });
+console.log('[server] game choice route set');
+
 // VALIDACION PARTIDA ESCOGIDA
 app.post('/login/:user/', function(req, res) {
     // TODO validacion partida escogida
@@ -154,6 +172,7 @@ app.post('/login/:user/', function(req, res) {
         }
     });
 });
+console.log('[server] game choice validation set');
 
 // NUEVA PARTIDA
 app.get('/login/:user/new/', function(req, res) {
@@ -170,6 +189,8 @@ app.get('/login/:user/new/', function(req, res) {
         }
     });
 });
+console.log('[server] new game route set');
+
 // VALIDACION NUEVA PARTIDA
 app.post('/login/:user/new/', function(req, res) {
     console.log("[server] validate new game");
@@ -198,16 +219,10 @@ app.post('/login/:user/new/', function(req, res) {
         }
     });
 });
+console.log('[server] new game validation set');
 
 // PANTALLA DE JUEGO
-// Hola, "Yo" del futuro! para poder trabajar correctamente con los datos necesarios para generar fichas, has de enviar:
-// - socket.io (ya está puesto, parece)
-// - objeto de utilidad (util.js)
-// - objeto partida
-// - objeto jugador
-// De nada! happy coding :)
 app.get('/game/:user/:game', function(req, res) {
-    // TODO vista de la partida (validar si ha entrado el master o un player, y en este ultimo caso si tiene una ficha)
     var userName = req.params.user, gameName = req.params.game;
     var tmpUser = {name: userName}, tmpGame = {name: gameName};
     mongoUsers.findUserByName(tmpUser, function(u) {
@@ -240,6 +255,7 @@ app.get('/game/:user/:game', function(req, res) {
         });
     });
 });
+console.log('[server] game panel route set');
 
 server.listen(PORT, IP, function() {console.log('[server] started at port ' + PORT)});
 

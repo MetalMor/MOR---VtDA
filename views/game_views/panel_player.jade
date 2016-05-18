@@ -24,4 +24,12 @@ block content
                                         tbody
                                 .container.col-sm-6="Historia"
                                     p#story=char.story
-                    include panel_output
+                        #char-stats.panel.panel-primary
+                            .panel-heading="Ficha del personaje"
+                                span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
+                                span#char-xp.left-align="XP: "+char.xp
+                            .panel-body
+                                .table-responsive
+                                    table#show-stats.table
+                                        tbody
+            include panel_output

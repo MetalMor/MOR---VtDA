@@ -48,8 +48,12 @@ module.exports = function() {
     ];
     this.initAttr = function() {
         var ret = new StatsSet("Atributos");
-        var attr = this.attr;
-        attr.forEach(function(s) {ret.stats.push(s)});
+        var attr = this.attr, stats;
+        attr.forEach(function(stat) {
+            stats = stat.stats;
+            stats.forEach(function(s) {s.cost = 5});
+            ret.stats.push(stat)
+        });
         ret.upgradeAll();
         return ret;
     };

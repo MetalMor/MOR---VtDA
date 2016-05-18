@@ -113,8 +113,7 @@ var charFunctions = {
      * @returns {object}
      */
     createDisc: function(n) {
-        return {name: n, level: 0, limit: 10, mod: 0,
-            setMod: function(m) {this.mod = m}, addLevel: function() {this.level++}};
+        return {name: n, level: 0, limit: 10, mod: 0, cost: 7};
     },
     /**
      * Retorna el padre de la estadística especificada en string
