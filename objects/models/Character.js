@@ -8,7 +8,8 @@ module.exports = function(d, s) {
     this.data = d;
     this.stats = s;
     this.inv = [];
-    this.xp = 15;
+    this.xp = 0;
+    this.fp = 15;
     this.hp = 7;
     this.story;
     this.diceSet = [];

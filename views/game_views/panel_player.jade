@@ -13,24 +13,24 @@ block content
     #wrapper
         .container
             #panel.panel.panel-primary.overlay(hidden)
-                    .panel-heading=user.name+' - '+game.name
-                    .panel-body.overlay-content
-                        #char-data.panel.panel-primary
-                            .panel-heading="Datos del personaje"
-                                span#char-data-button.glyphicon.glyphicon-minus.right-align.closer
-                            .panel-body
-                                .table-responsive
-                                    table#show-data.table
-                                        tbody
-                                .container.col-sm-6.bg-white
-                                    b="Historia"
-                                    p#story=char.story
-                        #char-stats.panel.panel-primary
-                            .panel-heading="Ficha del personaje"
-                                span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
-                                span#char-xp.left-align="XP: "+char.xp
-                            .panel-body
-                                .table-responsive
-                                    table#show-stats.table
-                                        tbody
-            include panel_output
+                .panel-heading=user.name+' - '+game.name
+                .panel-body.overlay-content
+                    #char-data.panel.panel-primary
+                        .panel-heading="Datos del personaje"
+                            span#char-data-button.glyphicon.glyphicon-minus.right-align.closer
+                        .panel-body
+                            .table-responsive
+                                table#show-data.table
+                                    tbody
+                            .container.col-sm-6.bg-white
+                                b="Historia"
+                                p#story=char.story
+                    #char-stats.panel.panel-primary
+                        .panel-heading="Ficha del personaje"
+                            span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
+                            span#char-xp.left-align
+                        .panel-body
+                            .table-responsive
+                                table#show-stats.table
+                                    tbody
+                include panel_output

@@ -42,6 +42,14 @@ var util = {
         return $.type(o) === 'undefined'
     },
     /**
+     * Valida si un objeto es nulo
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isNull: function(o) {
+        return o === null;
+    },
+    /**
      * Valida si un objeto es booleano
      * @param o Objeto a validar
      * @returns {boolean}
@@ -104,6 +112,14 @@ var util = {
         } // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         var first = s.substring(0, 1).toUpperCase(), other = s.substring(1, s.length);
         return first + other;
+    },
+    /**
+     * Retorna las clases de un elemento en forma de array
+     * @param element Elemento del que retornar la lista de clases
+     * @returns {Array}
+     */
+    getClassList: function(element) {
+        return element.attr('class').split(/\s+/)
     },
     /**
      * Retorna el índice en el array del atributo con el nombre y el valor especificados.

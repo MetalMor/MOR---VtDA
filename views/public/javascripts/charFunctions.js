@@ -70,6 +70,20 @@ var charFunctions = {
         ventrue: ['Dominación', 'Fortaleza', 'Presencia']
     },
     /**
+     * Incrementa el nivel de una estadística y actualiza los datos en el display de la ficha del personaje
+     * @param stat Estadística a incrementar
+     */
+    growStat: function(stat) {
+        console.log('[client] clicked on ' + stat.name + '(' + stat.level + ')');
+        var cost = charFunctions.xpCost(stat);
+        stat.level++;
+        charFunctions.setStat(char, stat, stat);
+        charFunctions.withdrawXp(cost);
+        table.updateXp(char);
+        table.update(stat.name); // CAMBIAR ESTA LINEA POR UNA FUNCION ESPECIALIZADA PARA ESTO
+        button.setXpButtons();
+    },
+    /**
      * Realiza las modificaciones necesarias a las estadísticas del personaje a partir del nombre del clan.
      * @param clanName Nombre del clan del personaje.
      */
@@ -84,14 +98,8 @@ var charFunctions = {
      * @returns {Array}
      */
     getDiscs: function(n) {
-        var ret = [], clanName = util.clean(n);
-        var self = this, clans = this.clans;
-        for(var clan in clans)
-            if(clanName === clan && (util.type(util.arr, clans[clan]) && clans[clan].length == 3))
-                clans[clan].forEach(
-                    function(disc) {ret.push(self.createDisc(util.clean(disc)))}
-                );
-
+        var ret = [], self = this, list = charFunctions.clans[util.clean(n)];
+        list.forEach(function(disc) {ret.push(self.createDisc(util.clean(disc)))});
         return ret;
     },
     /**
@@ -108,43 +116,90 @@ var charFunctions = {
         //if(discs.length <= 0) char.stats[2].stats[0].stats = list;
     },
     /**
+     * Determina si un personaje tiene al menos nivel 1 en una estadística
+     * @param stat Estadística a validar (objeto o string)
+     * @returns {boolean}
+     */
+    hasStat: function(stat) {
+        var s;
+        return !util.isUndefined(s = charFunctions.findStat(char, stat)) && s.level > 0;
+    },
+    /**
      * Crea un objeto de disciplina a partir del nombre
      * @param n Nombre de la disciplina
      * @returns {object}
      */
     createDisc: function(n) {
-        return {name: n, level: 0, limit: 10, mod: 0, cost: 7};
+        return {name: n, level: 0, limit: 10, mod: 0, cost: 5};
     },
     /**
-     * Retorna el padre de la estadística especificada en string
-     * @param obj Objeto en el que buscar
-     * @param name Estadistica de la que se requiere el padre
+     * Retorna el padre de la estadística especificada
+     * @param obj Objeto global en el que buscar
+     * @param stat Estadistica de la que se requiere el padre (o string nombre de la estadistica)
+     * @param parent Objeto padre del que se está iterando en la recursividad
      */
-    findParent: function(obj, name, parent) {
+    findParent: function(obj, stat, parent) {
         if(!util.isUndefined(parent)) {
-            if(obj.name === name) return parent;
+            if(charFunctions.found(obj, stat))
+                return parent;
         } if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var ret, self = this;
             obj.stats.forEach(function(o) {
-                if(util.isUndefined(ret)) ret = self.findParent(o, name, obj)
+                if(util.isUndefined(ret)) ret = self.findParent(o, stat, obj)
             });
             return ret;
         }
     },
     /**
+     * Quita puntos de experiencia o gratuitos al personaje (según si ha aplicado ya los gratuitos o aún no)
+     * @param qty Cantidad de puntos a retirar
+     */
+    withdrawXp: function(qty) {
+        var source;
+        if(char.fp > 0) source = 'fp';
+        else if(char.xp > 0) source = 'xp';
+        char[source] -= qty;
+    },
+    /**
+     * Calcula el coste de la estadística especificada por parámetro
+     * @param stat Estadística (objeto o nombre)
+     * @returns {number}
+     */
+    xpCost: function(stat) {
+        var subParent = charFunctions.findParent(char, stat),
+            supParent = charFunctions.findParent(char, subParent),
+            clan = charFunctions.findData(char, 'clan'),
+            regularCost = function(a) {return stat.level * (stat.cost+a)},
+            initialCost = function() {return stat.cost};
+        if(char.fp > 0) {
+            return initialCost();
+        } else {
+            if (subParent.name === 'disciplinas') {
+                var discs = charFunctions.getDiscs(clan.value);
+                if (discs.indexOf(clan.value)>0) return regularCost(0);
+                else if (charFunctions.hasStat(stat)) return regularCost(2);
+                else return 10;
+            } else if (supParent.name === 'habilidades') {
+                if (charFunctions.hasStat(stat)) return regularCost(0);
+                else return stat.cost + 1;
+            } else return regularCost(0);
+        }
+    },
+    /**
      * Obtiene mediante recursividad la estadística requerida de un personaje especificado por parámetro.
      * @param obj Objeto en el que buscar la estadística
-     * @param name Nombre de la estadística a encontrar
+     * @param stat Nombre de la estadística a encontrar
      * @returns {*}
      */
-    findStat: function(obj, name) {
+    findStat: function(obj, stat) {
+        var found = charFunctions.found(obj, stat);
         if(util.is(util.stat, obj)) {
-            if(obj.name === name) return obj;
+            if(found) return obj;
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var self = this, ret;
-            if(obj.name === name) ret = obj;
+            if(found) ret = obj;
             obj.stats.forEach(function(o) {
-                if(util.isUndefined(ret)) ret = self.findStat(o, name);
+                if(util.isUndefined(ret)) ret = self.findStat(o, stat);
                 //if(!util.isUndefined(tmpRet)) ret = tmpRet;
             });
             return ret;
@@ -153,21 +208,30 @@ var charFunctions = {
     /**
      * Obtiene mediante recursividad el campo de datos requerido de un personaje especificado por parámetro.
      * @param obj Objeto en el que buscar el campo de datos
-     * @param name Nombre del campo de datos a encontrar
+     * @param data Nombre del campo de datos a encontrar
      * @returns {*}
      */
-    findData: function(obj, name) {
+    findData: function(obj, data) {
         if(util.is(util.field, obj)) {
-            if(obj.name === name) {return obj}
+            if(charFunctions.found(obj, data)) {return obj}
         } else {
             var prop, ret, self = this;
             if(util.is(util.data, obj)) prop = 'fields';
             else if(util.is(util.char, obj)) prop = 'data';
             obj[prop].forEach(function(o) {
-                if(util.isUndefined(ret)) ret = self.findData(o, name);
+                if(util.isUndefined(ret)) ret = self.findData(o, data);
             });
             return ret;
         }
+    },
+    /**
+     * Determina si dos objetos de estadísticas corresponden al mismo (es decir, tienen el mismo nombre)
+     * @param obj Objeto A a comparar
+     * @param stat Objeto B a comparar
+     * @returns {boolean}
+     */
+    found: function(obj, stat) {
+        return !util.isUndefined(obj.name) && (obj.name === stat || (!util.isUndefined(stat.name) && obj.name == stat.name));
     },
     /**
      * Define mediante recursividad el nivel de una estadística del personaje especificados por parámetro.
@@ -177,7 +241,7 @@ var charFunctions = {
      */
     setStat: function(obj, stat, value) {
         if(util.is(util.stat, obj)) {
-            if(obj.name === stat || obj.name === stat.name) {
+            if(charFunctions.found(obj, stat)) {
                 if(util.isBoolean(value)) {
                     if (value) obj.level++;
                     else obj.level--;
@@ -198,7 +262,7 @@ var charFunctions = {
      * @param value Nuevo valor del campo de datos.
      */
     setData: function(obj, field, value) {
-        if(util.is(util.field, obj) && (obj.name === field || obj.name === field.name)) {
+        if(util.is(util.field, obj) && charFunctions.found(obj, field)) {
             if(util.isString(value) || util.isNumber(value)) obj.value = value;
             else if (util.is(util.field, value)) obj = value;
         } else {

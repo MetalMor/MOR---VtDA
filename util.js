@@ -36,9 +36,16 @@ module.exports = {
     isUndefined: function (o) {
         return typeof o === 'undefined'
     },
-
     /**
-     * Valida si un objeto es booleano
+     * Valida si un objeto es nulo
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isNull: function(o) {
+        return o === null;
+    },
+    /**
+     * Valida si un objeto es un valor booleano
      * @param o Objeto a validar
      * @returns {boolean}
      */

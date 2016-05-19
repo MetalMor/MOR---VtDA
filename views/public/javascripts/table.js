@@ -73,13 +73,13 @@ var table = {
      */
     showStats: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) {
-            var name = util.fancy(statsObj.name), level = statsObj.level;
-            if(statsObj.level > 0) {
-                name = "<b>"+name+"</b>";
-                level = "<b>"+level+"</b>";
+            var name = util.fancy(statsObj.name), level = statsObj.level, classAttr = "";
+            if(level > 0) {
+                classAttr += " class='bold'";
             }
-            return "<tr><td><span class='glyphicon glyphicon-arrow-up'></span></td>" +
-                "<td>"+name+"</td><td id='"+statsObj.name+"'>"+level+"</td></tr>"
+            level = statsObj.hasOwnProperty('max') ? level+' / '+statsObj.max : level;
+            return "<tr"+classAttr+"><td><span></span></td>" +
+                "<td class='name'>"+name+"</td><td id='"+statsObj.name+"'>"+level+"</td></tr>"
         } else if(util.is(util.stats, statsObj)) {
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a};
@@ -94,6 +94,7 @@ var table = {
             var contentAdd = function(a) {content+=a};
             stats.forEach(function(s) {contentAdd("<tr>"+self.showStats(s, tableId)+"</tr>")});
             mainTable.append(content);
+            table.updateXp(char);
         }
     },
     /**
@@ -101,8 +102,14 @@ var table = {
      * @param char Personaje del que obtener los puntos de experiencia.
      */
     updateXp: function(char) {
-        var panel = $('div#char-stats');
-        panel.children('.panel-heading>span#char-xp').text('XP: '+char.xp);
+        var panel = $('div#char-stats'),
+            xpDisplay = panel.find('.panel-heading>span#char-xp');
+        if(char.fp > 0)
+            xpDisplay.text('FP: '+char.fp);
+        else if(char.xp > 0)
+            xpDisplay.text('XP: '+char.xp);
+        else
+            xpDisplay.empty();
     },
     /**
      * Actualiza el display de los puntos iniciales de una estadística
@@ -126,10 +133,11 @@ var table = {
      * @param name Nombre (id) de la estadística
      */
     update: function(name) {
-        var statElement = $('td#'+name), stat = charFunctions.findStat(char, name);
+        var statElement = $('td#'+name), stat = charFunctions.findStat(char, name), ap;
         if (!util.isUndefined(stat)) {
             statElement.empty();
-            statElement.append(this.level(stat));
+            ap = !char.ready ? table.level(stat) : stat.level;
+            statElement.append(ap);
             button.setTableButtons(name);
         }
     },

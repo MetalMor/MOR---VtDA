@@ -92,7 +92,7 @@ module.exports = {
                 client.collection(col).findOne({name: game.name}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if(doc !== null) console.log("[mongo] found game: "+doc.name);
+                    if(doc !== null) console.log("[mongo] ound game: "+doc.name);
                     else console.log("[mong] game not found: "+game.name);
                     if(callback !== null)
                         callback(doc);

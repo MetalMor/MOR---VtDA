@@ -93,6 +93,8 @@ var overlay = {
         panel.fadeIn('slow');
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
+        overlay.hide()
+        button.setXpButtons();
         socket.emit('loginChar', sheet);
     }
 };

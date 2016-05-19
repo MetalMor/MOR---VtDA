@@ -35,7 +35,7 @@ module.exports = function() {
      */
     this.initDisc = function() {
         var ret = new StatsSet("Disciplinas");
-        ret.initPoints = 4;
+        ret.initPoints = 3;
         return ret;
     };
     /**

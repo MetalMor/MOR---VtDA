@@ -34,6 +34,10 @@ td>img:not([class='max']) {
     cursor: pointer;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .white {
     color: gainsboro;
 }
