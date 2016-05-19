@@ -70,7 +70,7 @@ var button = {
      */
     getInputs: function(crit) {
         var temp = [], ret = [];
-        //<editor-fold desc="Coge los inputs del formulario en la variable temp..." default="collapsed">
+        //<editor-fold desc="Coge los inputs del formulario" default="collapsed">
         if(crit === 0) {
             temp.push($("input#name").val());
             temp.push($("input#nature").val());
@@ -112,7 +112,7 @@ var button = {
         levelButtons.each(function() {
             var attrName = $(this).closest('td[id]').attr('id');
             if(restrict.lookRestriction(attrName) && util.isUndefined($(this).attr('onclick')))
-                $(this).click(function() {
+                $(this).on('click', function() {
                     button.statButtonClick(attrName, $(this).attr('class'))
                 });
         });
@@ -123,16 +123,16 @@ var button = {
      */
     setPrefsButtons: function(id) {
         var rowList = $('table#'+id+'-prefs tr'),
-            row, spanList, spanBtn, spanClass, btn;
+            row, spanList, spanBtn, btn, spanClass;
         rowList.each(function() {
             row = $(this);
             spanList = row.find('span');
             spanList.each(function() {
                 spanBtn = $(this);
-                spanBtn.click(function() {
+                spanBtn.on('click', function() {
                     btn = $(this);
                     row = btn.parent().parent();
-                    var spanClassList = btn.attr('class').split(/\s+/);
+                    var spanClassList = util.getClassList(btn);
                     spanClassList.forEach(function(c) {
                         if(c === 'prev' || c === 'next')
                             spanClass = c;
@@ -140,6 +140,32 @@ var button = {
                     prefs.modPrefs(row, spanClass);
                 })
             });
+        });
+    },
+    setXpButtons: function() {
+        var rows = $('table#show-stats tr:not(:has(table))'), // selecciona todas las filas que NO contengan una tabla
+            row, btn, stat, statId, s, r;
+        var arrowUpClass = 'glyphicon glyphicon-arrow-up';
+        rows.each(function() {
+            row = $(this);
+            statId = util.clean(row.find('td[class]').text());
+            if(statId !== "") {
+                stat = charFunctions.findStat(char, util.clean(row.find('td[class]').text()));
+                var cost = charFunctions.xpCost(stat);
+            }
+            btn = row.find('td>span');
+            if(!util.isUndefined(stat) && !util.isUndefined(cost) && (cost <= char.fp || cost <= char.xp)) {
+                btn.addClass(arrowUpClass);
+                btn.off('click');
+                btn.on('click', function () {
+                    r = $(this).parent().parent();
+                    s = charFunctions.findStat(char, util.clean(r.find('td[class]').text()));
+                    charFunctions.growStat(s);
+                });
+            } else {
+                btn.removeClass(arrowUpClass);
+                btn.off('click');
+            }
         });
     },
     /**
