@@ -38,6 +38,10 @@ td>img:not([class='max']) {
     color: gainsboro;
 }
 
+.bg-white {
+    background-color: white;
+}
+
 .right-align {
     float: right;
 }

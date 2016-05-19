@@ -42,6 +42,14 @@ var button = {
             overlay.showAlert('emptyFields');
         }
     },
+    /**
+     * Guarda los datos de la ficha y envía por websockets al servidor el objeto del cliente, que contiene datos del
+     * usuario, personaje y partida
+     * @param socket Conector WS del cliente
+     * @param char Personaje del cliente
+     * @param user Usuario del cliente
+     * @param game Partida del cliente
+     */
     submitSheet: function(socket, char, user, game) {
         if(restrict.fullSheet(char)) {
             charFunctions.setReady(char, true);

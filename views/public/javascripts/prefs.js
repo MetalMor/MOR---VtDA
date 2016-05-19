@@ -15,6 +15,11 @@ var prefs = {
         });
         return prefs;
     },
+    /**
+     * Define las preferencias de estadísticas para un personaje
+     * @param which Nombre del grupo de estadísticas
+     * @param prefs Array de preferencias de estadísticas.
+     */
     setPrefs: function(which, prefs) {
         var stats = char.stats, group, prefsSet = false,
             superCounter = 0, subCounter = 0;
@@ -30,6 +35,11 @@ var prefs = {
             superCounter++
         }
     },
+    /**
+     * Controla los botones para establecer las preferencias de estadísticas.
+     * @param row Fila del botón que ha sido pulsado
+     * @param mode Modo subir o bajar
+     */
     modPrefs: function(row, mode) {
         var labelSelector = 'label.number';
         var newRow = row[mode]().find(labelSelector),

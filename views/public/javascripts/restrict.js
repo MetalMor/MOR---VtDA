@@ -11,11 +11,22 @@ var restrict = {
     lookRestriction: function(stat) {
         return !(util.clean(charFunctions.findData(char, 'clan').value) === 'nosferatu' && stat.name === 'apariencia');
     },
+    /**
+     * Filtro para estadísticas que no pueden bajar de nivel 1.
+     * @param stat Estadística a validar
+     * @returns {boolean}
+     */
     levelZeroRestriction: function(stat) {
         var parent = charFunctions.findParent(char, stat.name),
             supParent = charFunctions.findParent(char, parent.name);
         return !(stat.level === 1 && (parent.name === 'virtudes' || supParent.name === 'atributos'));
     },
+    /**
+     * Filtro para controlar el nivel máximo que se puede alcanzar durante la etapa de inicialización del personaje
+     * según los grupos de estadísticas.
+     * @param stat Estadística a validar
+     * @returns {boolean}
+     */
     maxLevelRestriction: function(stat) {
         var parent = charFunctions.findParent(char, stat.name),
             supParent = charFunctions.findParent(char, parent.name);
@@ -27,11 +38,21 @@ var restrict = {
             maxLvl = 50; // unreachable level!! ^^
         return !(stat.level >= maxLvl && parent.initPoints > 0);
     },
+    /**
+     * Filtro para estadísticas que no pueden aumentarse durante la etapa de inicialización del personaje
+     * @param stat
+     * @returns {boolean}
+     */
     notUpdatable: function(stat) {
         if(stat.name === 'sangre') return false;
         var parent = charFunctions.findParent(char, stat.name);
         return !(parent.initPoints === 0 && parent.name === 'otros');
     },
+    /**
+     * Filtro para comprobar que se han gastado todos los puntos de inicialización del personaje.
+     * @param statsObj Objeto de estadísticas
+     * @returns {boolean}
+     */
     fullSheet: function(statsObj) {
         if(statsObj.hasOwnProperty('initPoints'))
             if(statsObj.initPoints > 0) return false;

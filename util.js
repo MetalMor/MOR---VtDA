@@ -129,7 +129,7 @@ module.exports = {
     findChar: function(user, game) {
         var userName = user.name, charList = game.charList, ret = 0;
         charList.forEach(function(c) {
-            if(c.owner === userName) ret = c;
+            if(ret === 0 && c.owner === userName) ret = c;
         });
         return ret;
     },
@@ -148,7 +148,7 @@ module.exports = {
         }
     },
     /**
-     * Convierte un númro entero a números romanos
+     * Convierte un número entero a números romanos
      * @param num Número a convertir
      * @returns {string}
      */

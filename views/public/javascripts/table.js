@@ -78,7 +78,7 @@ var table = {
                 name = "<b>"+name+"</b>";
                 level = "<b>"+level+"</b>";
             }
-            return "<tr><td><span class='glyphicon glyphicon-arrow-up'></span><span class='glyphicon glyphicon-arrow-down'></span></td>" +
+            return "<tr><td><span class='glyphicon glyphicon-arrow-up'></span></td>" +
                 "<td>"+name+"</td><td id='"+statsObj.name+"'>"+level+"</td></tr>"
         } else if(util.is(util.stats, statsObj)) {
             var subTable = "", stats = statsObj.stats, self = this;
@@ -95,6 +95,14 @@ var table = {
             stats.forEach(function(s) {contentAdd("<tr>"+self.showStats(s, tableId)+"</tr>")});
             mainTable.append(content);
         }
+    },
+    /**
+     * Función para actualizar el display de los puntos de experiencia del personaje
+     * @param char Personaje del que obtener los puntos de experiencia.
+     */
+    updateXp: function(char) {
+        var panel = $('div#char-stats');
+        panel.children('.panel-heading>span#char-xp').text('XP: '+char.xp);
     },
     /**
      * Actualiza el display de los puntos iniciales de una estadística
