@@ -12,10 +12,14 @@ var charFunctions = {
     setReady: function(char, ready) {char.ready = ready},
     /**
      * Da a un personaje un valor de experiencia
-     * @param char Personaje
-     * @param xp Experiencia a definir
+     * @param mode Tipo de puntos que otorgar
+     * @param points Experiencia a definir
      */
-    setXP: function(char, xp) {char.xp = xp},
+    setCharPoints: function(mode, points) {
+        if (mode === 'xp' || mode === 'fp') {
+            char[mode] = points;
+        }
+    },
     /**
      * Define el nombre del usuario propietario del personaje
      * @param char Personaje
@@ -155,8 +159,11 @@ var charFunctions = {
      * @param qty Cantidad de puntos a retirar
      */
     withdrawXp: function(qty) {
-        var source;
-        if(char.fp > 0) source = 'fp';
+        var source, freePts = false;
+        if(char.fp > 0) {
+            freePts = true;
+            source = 'fp';
+        }
         else if(char.xp > 0) source = 'xp';
         char[source] -= qty;
     },

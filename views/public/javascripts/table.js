@@ -79,7 +79,7 @@ var table = {
             }
             level = statsObj.hasOwnProperty('max') ? level+' / '+statsObj.max : level;
             return "<tr"+classAttr+"><td><span></span></td>" +
-                "<td class='name'>"+name+"</td><td id='"+statsObj.name+"'>"+level+"</td></tr>"
+                "<td class='name'>"+name+"</td><td id='"+statsObj.name+"'>"+table.level(statsObj)+"</td></tr>"
         } else if(util.is(util.stats, statsObj)) {
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a};
@@ -104,7 +104,7 @@ var table = {
     updateXp: function(char) {
         var panel = $('div#char-stats'),
             xpDisplay = panel.find('.panel-heading>span#char-xp');
-        if(char.fp > 0)
+        if(char.fp > char.xp)
             xpDisplay.text('FP: '+char.fp);
         else if(char.xp > 0)
             xpDisplay.text('XP: '+char.xp);
@@ -136,7 +136,8 @@ var table = {
         var statElement = $('td#'+name), stat = charFunctions.findStat(char, name), ap;
         if (!util.isUndefined(stat)) {
             statElement.empty();
-            ap = !char.ready ? table.level(stat) : stat.level;
+            //ap = !char.ready ? table.level(stat) : stat.level;
+            ap = table.level(stat);
             statElement.append(ap);
             button.setTableButtons(name);
         }
@@ -181,7 +182,7 @@ var table = {
             else if(i>level) icon = icons.unset;
             //else icon = icons.set;
             if(i<=level) icon = icons.set;
-            ret += "<img class='"+icon.class+"' src='" +iconsDir+icon.file + "'>";
+            ret += "<img class='"+icon.class+' levelbutton'+"' src='" +iconsDir+icon.file + "'>";
         }
         return ret;
     },

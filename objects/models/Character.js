@@ -9,7 +9,7 @@ module.exports = function(d, s) {
     this.stats = s;
     this.inv = [];
     this.xp = 0;
-    this.fp = 15;
+    this.fp = 0;
     this.hp = 7;
     this.story;
     this.diceSet = [];

@@ -30,12 +30,17 @@ table.prefs td:last-child {
     width: 5%;
 }
 
-td>img:not([class='max']) {
+table#stats td>img:not([class='max']) {
     cursor: pointer;
 }
 
 .bold {
     font-weight: bold;
+}
+
+.levelbutton {
+    width: 15px;
+    height: auto;
 }
 
 .white {

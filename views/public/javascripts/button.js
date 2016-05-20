@@ -53,7 +53,7 @@ var button = {
     submitSheet: function(socket, char, user, game) {
         if(restrict.fullSheet(char)) {
             charFunctions.setReady(char, true);
-            charFunctions.setXP(char, 15);
+            charFunctions.setCharPoints('fp', 15);
             charFunctions.initBlood(char);
             charFunctions.setOwner(char, user);
             charFunctions.addCharacter(char, 'char', game);
@@ -113,7 +113,8 @@ var button = {
             var attrName = $(this).closest('td[id]').attr('id');
             if(restrict.lookRestriction(attrName) && util.isUndefined($(this).attr('onclick')))
                 $(this).on('click', function() {
-                    button.statButtonClick(attrName, $(this).attr('class'))
+                    var firstClass = $(this).attr('class').split(' ')[0]; // set, unset o max
+                    button.statButtonClick(attrName, firstClass)
                 });
         });
     },

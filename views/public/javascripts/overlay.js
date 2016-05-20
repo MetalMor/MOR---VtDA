@@ -6,6 +6,8 @@ var overlay = {
     /**
      * Cierra una ventana desplegable
      * @param id ID del elemento (string)
+     * @param sp Velocidad de la animación
+     * @param callback Función que se llamará al terminar
      */
     close: function(id, sp, callback) {
         var element = $("#"+id), speed = sp ? sp : 'fast';
@@ -17,6 +19,8 @@ var overlay = {
     /**
      * Abre una ventana desplegable
      * @param id ID del elemento (string)
+     * @param sp Velocidad de la animación
+     * @param callback Función que se llamará al terminar
      */
     open: function(id, sp, callback) {
         var element = $("#"+id), speed = sp ? sp : 'fast';
@@ -93,6 +97,7 @@ var overlay = {
         panel.fadeIn('slow');
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
+        $('p#story').text(char.story);
         button.setXpButtons();
         socket.emit('loginChar', sheet);
     }

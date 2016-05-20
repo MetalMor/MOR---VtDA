@@ -24,14 +24,14 @@ module.exports = function (io) {
             char = sheet.char;
             game = sheet.game;
             mongoGames.updateGame(game, function() {
-                console.log("[socket] NEW character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game : " + game.name); // recibe el personaje :D
+                console.log("[socket] NEW character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game: " + game.name); // recibe el personaje :D
             });
         });
         socket.on('loginChar', function(sheet) {
             user = sheet.user;
             char = sheet.char;
             game = sheet.game;
-            console.log("[socket] character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game : " + game.name);
+            console.log("[socket] character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game: " + game.name);
         });
         socket.on('disconnect', function() {
             if(!util.isUndefined(char)) {

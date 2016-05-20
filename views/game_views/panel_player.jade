@@ -11,7 +11,7 @@ block content
     include panel_sheet
     include panel_action
     #wrapper
-        .container
+        .container.col-sm-10
             #panel.panel.panel-primary.overlay(hidden)
                 .panel-heading=user.name+' - '+game.name
                 .panel-body.overlay-content
@@ -24,7 +24,7 @@ block content
                                     tbody
                             .container.col-sm-6.bg-white
                                 b="Historia"
-                                p#story=char.story
+                                p#story
                     #char-stats.panel.panel-primary
                         .panel-heading="Ficha del personaje"
                             span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
