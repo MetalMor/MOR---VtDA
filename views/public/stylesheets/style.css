@@ -10,10 +10,6 @@ th {
     text-align: center;
 }
 
-.fancy-write {
-    font-family: 'Papyrus'/*'Kaushan Script'*/, cursive;
-}
-
 table.prefs {
     background-color: #d59392;
 }
@@ -34,8 +30,21 @@ table#stats td>img:not([class='max']) {
     cursor: pointer;
 }
 
-.bold {
+table#show-stats td > span {
+    cursor: pointer;
+}
+
+div#output {
+    margin: 15px;
+}
+
+.fancy-write {
+    font-family: 'Papyrus' /*'Kaushan Script'*/, cursive;
+}
+
+.learned {
     font-weight: bold;
+    color: firebrick;
 }
 
 .levelbutton {

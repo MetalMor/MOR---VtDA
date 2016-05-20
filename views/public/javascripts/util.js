@@ -93,6 +93,7 @@ var util = {
             /[\307]/g, /[\347]/g // C, c
         ];
 
+        s = s.replace("ñ", "ny");
         for (var i = 0; i < diacritics.length; i++)
             s = s.replace(diacritics[i], chars[i]);
         while (s.indexOf(' ') > 0) {
@@ -107,6 +108,7 @@ var util = {
      * @returns {string}
      */
     fancy: function (s) {
+        s = s.replace("ny", "ñ");
         while (s.indexOf('_') > 0) {
             s = s.replace("_", " ")
         } // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno

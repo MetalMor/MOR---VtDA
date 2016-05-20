@@ -11,9 +11,9 @@ block content
     include panel_sheet
     include panel_action
     #wrapper
-        .container.col-sm-10
+        .container
             #panel.panel.panel-primary.overlay(hidden)
-                .panel-heading=user.name+' - '+game.name
+                .panel-heading.text-center=user.name + ' - ' + game.name
                 .panel-body.overlay-content
                     #char-data.panel.panel-primary
                         .panel-heading="Datos del personaje"

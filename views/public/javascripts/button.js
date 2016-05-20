@@ -143,10 +143,14 @@ var button = {
             });
         });
     },
+    /**
+     * Define las funciones que se lanzan al hacer clic sobre los iconos de subida de nivel de una estadística.
+     * Restaura el display
+     */
     setXpButtons: function() {
         var rows = $('table#show-stats tr:not(:has(table))'), // selecciona todas las filas que NO contengan una tabla
             row, btn, stat, statId, s, r;
-        var arrowUpClass = 'glyphicon glyphicon-arrow-up';
+        var arrowUpClass = 'glyphicon glyphicon-arrow-up', learnedClass = 'learned';
         rows.each(function() {
             row = $(this);
             statId = util.clean(row.find('td[class]').text());
@@ -155,7 +159,10 @@ var button = {
                 var cost = charFunctions.xpCost(stat);
             }
             btn = row.find('td>span');
-            if(!util.isUndefined(stat) && !util.isUndefined(cost) && (cost <= char.fp || cost <= char.xp)) {
+            if (!util.isUndefined(stat) && !util.isUndefined(cost) &&
+                restrict.lookRestriction(stat) &&
+                (cost <= char.fp || cost <= char.xp)) {
+                if (stat.level > 0) row.addClass(learnedClass);
                 btn.addClass(arrowUpClass);
                 btn.off('click');
                 btn.on('click', function () {
@@ -216,11 +223,11 @@ var button = {
      * @param cls Clase del icono: set, unset o max
      */
     statButtonClick: function(id, cls) {
-        if(cls === table.icons.unset.class) {
+        if (cls === table.icons.unset.class)
             mode = true
-        } else if(cls === table.icons.set.class) {
+        else if (cls === table.icons.set.class)
             mode = false;
-        }
+
         var stat = charFunctions.findStat(char, id),
             parent = charFunctions.findParent(char, id);
 

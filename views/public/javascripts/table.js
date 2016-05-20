@@ -75,7 +75,7 @@ var table = {
         if(util.is(util.stat, statsObj)) {
             var name = util.fancy(statsObj.name), level = statsObj.level, classAttr = "";
             if(level > 0) {
-                classAttr += " class='bold'";
+                classAttr += " class='learned'";
             }
             level = statsObj.hasOwnProperty('max') ? level+' / '+statsObj.max : level;
             return "<tr"+classAttr+"><td><span></span></td>" +
