@@ -13,7 +13,7 @@ block content
                     when 1
                         #bad-credentials.alert.alert-danger
                             p.text-center="Credenciales incorrectas."
-                h1.fancy-write.text-center="SPAGHETTI AND PUZZLES!"
+                h2#welcome.text-center
                 br
                 form(role="form", method="POST")
                     .form-group.col-sm-4
@@ -25,3 +25,4 @@ block content
                     .form-group.col-sm-4
                         span.icon-input-btn
                             input.btn.btn-danger.btn-lg(type="submit", value="Entrar")
+    script(src='/js/welcome.js', type='text/javascript')

@@ -12,9 +12,9 @@ var table = {
         maxable: {class: "max", file: "max_level_icon.png"}
     },
     /**
-     * Mediante recursividad, construye una tabla a partir de un objeto de estadísticas. Si el objeto es un array, dibujará
-     * una tabla de una fila para cada posición. Si es un objeto de estadísticas
-     * @param statsObj
+     * Mediante recursividad, construye una tabla a partir de un objeto de estadísticas. La tabla está pensada para la
+     * inicialización de personajes con puntos iniciales.
+     * @param statsObj Objeto de estadísticas (personaje)
      * @returns {string}
      */
     build: function(statsObj, tableId) {
@@ -37,15 +37,12 @@ var table = {
             var trPre = util.is(util.char, statsObj) ? "<tr>" : "", trPost = util.is(util.char, statsObj) ? "</tr>" : "";
             var contentAdd = function(a) {content += a};
             mainTable.empty();
-            stats.forEach(function (s) {
-                contentAdd(trPre + self.build(s, tableId) + trPost)
-            }); // <-- RECURSIVIDAD HERE
-            //stats.forEach(function(s){contentAdd('<tr>'+self.build(s, tableId)+'</tr>')}); // <-- RECURSIVIDAD HERE
+            stats.forEach(function (s) {contentAdd(trPre+self.build(s, tableId)+trPost)}); // <-- RECURSIVIDAD HERE
             mainTable.append(content);
         }
     },
     /**
-     * Genera una tabla que muestra el contenido de los campos de datos del personaje
+     * Genera una tabla que muestra el contenido de los campos de datos del personaje.
      * @param dataObj Objeto personaje/conjunto de campos/campo de datos
      * @param tableId Identificador de la tabla.
      * @returns {*}
@@ -53,7 +50,7 @@ var table = {
     showData: function(dataObj, tableId) {
         if(util.is(util.field, dataObj)) {
             var value = dataObj.name === 'generacion' ? util.romanize(dataObj.value) : dataObj.value;
-            return "<tr><td>"+util.fancy(dataObj.name)+"</td><td id='"+dataObj.name+"'>"+value+"</td></tr>"; // <-- ACABA RECURSIVIDAD
+            return "<tr><td>"+util.fancy(dataObj.name)+"</td><td id='"+dataObj.name+"'>"+util.fancy(value)+"</td></tr>"; // <-- ACABA RECURSIVIDAD
         } else if(util.is(util.data, dataObj)) {
             var subTable = "", fields = dataObj.fields, self = this;
             var tableAdd = function(a) {subTable += a};
@@ -72,18 +69,16 @@ var table = {
         }
     },
     /**
-     * Genera una tabla que muestra las estadsíticas que posee un personaje
-     * @param statsObj Obj
-     * @param tableId
+     * Genera una tabla que muestra las estadsíticas que posee un personaje y que permite modificarlas gastando
+     * puntos de experiencia o puntos gratuitos (XP o FP)
+     * @param statsObj Objeto personaje/conjunto de estadísticas/estadística
+     * @param tableId Identificador de la tabla
      * @returns {*}
      */
     showStats: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) {
             var name = util.fancy(statsObj.name), level = statsObj.level, classAttr = "";
-            if(level > 0) {
-                classAttr += " class='learned'";
-            }
-            level = statsObj.hasOwnProperty('max') ? level+' / '+statsObj.max : level;
+            if(level > 0) classAttr += " class='learned'";
             return "<tr"+classAttr+"><td><span></span></td>" +
                 "<td class='name'>"+name+"</td><td id='"+statsObj.name+"'>"+table.level(statsObj)+"</td></tr>"
         } else if(util.is(util.stats, statsObj)) {
@@ -103,6 +98,15 @@ var table = {
             mainTable.append(content);
             table.updateXp(char);
         }
+    },
+    /**
+     * Elimina el texto de un elemento, pero no sus elementos descendientes
+     * @param element Elemento a limpiar
+     */
+    removeText: function(element) {
+        element.contents().filter(function(){
+            return (this.nodeType == 3);
+        }).remove();
     },
     /**
      * Función para actualizar el display de los puntos de experiencia del personaje
@@ -126,7 +130,7 @@ var table = {
         $("table#"+stat.name+" th:nth-child(2)").text(stat.initPoints);
     },
     /**
-     * Actualiza el display de todas las estadísticas de la tabla del personaje (aún hay que probarlo).
+     * Actualiza el display de todas las estadísticas de la tabla del personaje (me parece que caerá en el olvido...).
      */
     updateAll: function() {
         var elements = $('td[id]'), self = this, id;
@@ -140,7 +144,7 @@ var table = {
      * @param name Nombre (id) de la estadística
      */
     update: function(name) {
-        var statElement = $('td#'+name), stat = charFunctions.findStat(char, name), ap;
+        var statElement = $('table[id*=stats] td#'+name), stat = charFunctions.findStat(char, name), ap;
         if (!util.isUndefined(stat)) {
             statElement.empty();
             //ap = !char.ready ? table.level(stat) : stat.level;

@@ -5,11 +5,11 @@
  */
 var util = require('./../../util');
 
-module.exports = function(n) {
+module.exports = function(n, c) {
     this.name = util.clean(n);
     this.level = 0;
     this.limit = n === "Sangre" ? 20 : 10;
-    this.max = 0
+    this.max = 0;
     if(typeof c !== 'undefined')
         this.cost = c;
     this.setMod = function(m) {this.max = m};

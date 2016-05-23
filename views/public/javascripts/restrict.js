@@ -55,6 +55,7 @@ var restrict = {
      * @returns {boolean}
      */
     notEnoughPoints: function (points, cost) {
+        if(isNaN(cost)) return false;
         return !(points - cost < 0);
     },
     /**

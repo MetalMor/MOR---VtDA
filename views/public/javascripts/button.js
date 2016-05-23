@@ -119,11 +119,14 @@ var button = {
                 stat = charFunctions.findStat(char, util.clean(row.find('td[class]').text()));
                 var cost = charFunctions.xpCost(stat);
             }
+            col = row.find('td:has(span)');
             btn = row.find('td>span');
+            table.removeText(col);
             if (!util.isUndefined(stat) && !util.isUndefined(cost) &&
                 restrict.lookRestriction(stat) &&
-                (restrict.notEnoughPoints(charFunctions.getCharPoints(), cost))) {
+                restrict.notEnoughPoints(charFunctions.getCharPoints(), cost)) {
                 if (stat.level > 0) row.addClass(learnedClass);
+                col.append(' '+cost);
                 btn.addClass(arrowUpClass);
                 btn.off('click');
                 btn.on('click', function () {

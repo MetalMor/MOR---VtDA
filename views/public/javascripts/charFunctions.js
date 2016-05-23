@@ -88,6 +88,7 @@ var charFunctions = {
         console.log('[client] clicked on ' + stat.name + '(' + stat.level + ')');
         var cost = charFunctions.xpCost(stat);
         stat.level++;
+        if(util.is(util.maxStat, stat)) stat.max++;
         charFunctions.setStat(char, stat, stat);
         charFunctions.withdrawXp(cost);
         table.updateXp(char);

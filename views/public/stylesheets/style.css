@@ -39,7 +39,10 @@ div#output {
 }
 
 .fancy-write {
-    font-family: 'Papyrus' /*'Kaushan Script'*/, cursive;
+    /*font-family: 'Kaushan Script', cursive;*/ /* Caine */
+    /*font-family: 'Papyrus', cursive;*/ /* PAPYRUS */
+    /*font-family: 'Comic Sans MS', cursive;*/ /* sans */
+    /*font-family: 'Wingdings', cursive;*/ /* W.D. Gaster */
 }
 
 .opener, .closer {
@@ -79,4 +82,9 @@ div#output {
 @font-face {
     font-family: Papyrus;
     src: url('/css/fonts/Papyrus.ttf');
+}
+
+@font-face {
+    font-family: MTT;
+    src: url('/css/fonts/MTT.ttf');
 }

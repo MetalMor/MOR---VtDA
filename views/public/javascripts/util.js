@@ -10,6 +10,7 @@ var util = {
     stats: "initPoints",
     data: "fields",
     stat: "level",
+    maxStat: 'max',
     field: "value",
     char: "xp",
     /**
