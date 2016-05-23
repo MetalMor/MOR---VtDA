@@ -7,14 +7,14 @@ var welcome = {
     messages: [
         {font: 'Kaushan Script', message: 'It is the blood of Caine which makes our fate.'},
         {font: 'Papyrus', message: 'SPAGHETTI AND PUZZLES!'},
-        {font: 'Comic Sans MS', message: "do you wanna have a bad time?"},
-        {font: 'Wingdings', message: 'DARKER YET DARKER ENTRY NUMBER SEVENTEEN'},
-        {font: 'MTT', message: 'MORE ACTION! MORE DRAMA! MORE BLOODSHED'},
-        {font: 'Brain Flower', message: 'Bradley!'}
+        {font: 'sans', message: "* do you wanna have a bad time?"},
+        {font: 'MTT', message: 'REAL DRAMA! REAL ACTION! REAL BLOODSHED!'},
+        {font: 'Droid Sans', message: 'Feel the Joy down in your heart...'}
     ],
     setMessage: function(element) {
-        var max = welcome.messages.length, index = Math.floor(Math.random()*max),
-            chosen = this.messages[index];
+        var list = welcome.messages, max = list.length,
+            index = Math.floor(Math.random() * max),
+            chosen = list[index];
         element.text(chosen.message).css('font-family', chosen.font);
     }
 };
