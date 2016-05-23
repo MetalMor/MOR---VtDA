@@ -21,6 +21,13 @@ var charFunctions = {
         }
     },
     /**
+     * Retorna los puntos de aprendizaje del personaje.
+     * @returns {number}
+     */
+    getCharPoints: function () {
+        return char.fp > 0 ? char.fp : char.xp;
+    },
+    /**
      * Define el nombre del usuario propietario del personaje
      * @param char Personaje
      * @param user Usuario propietario
@@ -166,6 +173,7 @@ var charFunctions = {
         }
         else if(char.xp > 0) source = 'xp';
         char[source] -= qty;
+        if (char.fp <= 0 && freePts) char.xp += 15;
     },
     /**
      * Calcula el coste de la estadística especificada por parámetro

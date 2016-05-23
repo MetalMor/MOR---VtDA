@@ -31,11 +31,16 @@ var table = {
             stats.forEach(function(s) {tableAdd(self.build(s, tableId))}); // <-- RECURSIVIDAD HERE
             tableAdd("</tr></tbody></table></div></td>");
             return subTable;
-        } else if(util.type(util.arr, statsObj)) { // es un array
+        } else if (util.is(util.char, statsObj) || util.type(util.arr, statsObj)) { // es un array
             var mainTable = $("table#"+tableId+">tbody");
-            var content = "", self = this;
+            var content = "", self = this, stats = statsObj.stats || statsObj;
+            var trPre = util.is(util.char, statsObj) ? "<tr>" : "", trPost = util.is(util.char, statsObj) ? "</tr>" : "";
             var contentAdd = function(a) {content += a};
-            statsObj.forEach(function(s){contentAdd("<tr>"+self.build(s, tableId)+"</tr>")}); // <-- RECURSIVIDAD HERE
+            mainTable.empty();
+            stats.forEach(function (s) {
+                contentAdd(trPre + self.build(s, tableId) + trPost)
+            }); // <-- RECURSIVIDAD HERE
+            //stats.forEach(function(s){contentAdd('<tr>'+self.build(s, tableId)+'</tr>')}); // <-- RECURSIVIDAD HERE
             mainTable.append(content);
         }
     },
@@ -61,6 +66,7 @@ var table = {
             var mainTable = $("table#"+tableId+">tbody");
             var content = "", self = this, data = dataObj.data;
             var contentAdd = function(a) {content+=a};
+            mainTable.empty();
             data.forEach(function(d) {contentAdd("<tr class='col-sm-4'>"+self.showData(d, tableId)+"</tr>")});
             mainTable.append(content);
         }
@@ -92,6 +98,7 @@ var table = {
             var mainTable = $("table#"+tableId+">tbody");
             var content = "", self = this, stats = statsObj.stats;
             var contentAdd = function(a) {content+=a};
+            mainTable.empty();
             stats.forEach(function(s) {contentAdd("<tr>"+self.showStats(s, tableId)+"</tr>")});
             mainTable.append(content);
             table.updateXp(char);
@@ -104,7 +111,7 @@ var table = {
     updateXp: function(char) {
         var panel = $('div#char-stats'),
             xpDisplay = panel.find('.panel-heading>span#char-xp');
-        if(char.fp > char.xp)
+        if (char.fp > 0)
             xpDisplay.text('FP: '+char.fp);
         else if(char.xp > 0)
             xpDisplay.text('XP: '+char.xp);

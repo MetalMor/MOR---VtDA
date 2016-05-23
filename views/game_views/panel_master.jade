@@ -4,18 +4,37 @@
 extends ../layout
 
 block content
-    #wrapper
-        #panel.panel.panel-primary
-            .panel-heading=user.name+' - '+game.name
-            .panel-body
-                #player-panel
-                    .stats
-                    .data
-                #npc-panel
-                    .stats
-                    .data
-                #map
-                #btns
-        include panel_output
-        include panel_sheet
-        include panel_action
+    #user(hidden)=userJSON
+    #char(hidden)=charJSON
+    #game(hidden)=gameJSON
+    include panel_data
+    include panel_sheet
+    include panel_action
+    #wrapper-master
+        .container
+            #panel.panel.panel-primary.overlay(hidden)
+                .panel-heading.text-center=user.name + ' - ' + game.name
+                #char-list.dropdown
+                button#char-list-button.btn.btn-default.dropdown-toggle(data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")="Personaje"
+                span.caret
+                ul.dropdown-menu(aria-labelledby="char-list-button")
+                .panel-body.overlay-content
+                    #char-data.panel.panel-primary
+                        .panel-heading="Datos del personaje"
+                        span#char-data-button.glyphicon.glyphicon-minus.right-align.closer
+                        .panel-body
+                            .table-responsive
+                                table#show-data.table
+                                    tbody
+                            .container.col-sm-6.bg-white
+                                b="Historia"
+                                p#story
+                    #char-stats.panel.panel-primary
+                        .panel-heading="Ficha del personaje"
+                        span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
+                        span#char-xp.left-align
+                        .panel-body
+                            .table-responsive
+                                table#show-stats.table
+                                    tbody
+                include panel_output

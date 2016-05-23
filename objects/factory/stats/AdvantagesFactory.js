@@ -23,7 +23,7 @@ module.exports = function() {
         new RegularStat("Aliados"),
         new RegularStat("Arsenal"),
         new RegularStat("Contactos"),
-        new RegularStat("Ganado"),
+        new RegularStat("Rebaño"),
         new RegularStat("Influencia"),
         new RegularStat("Mentor"),
         new RegularStat("Recursos"),

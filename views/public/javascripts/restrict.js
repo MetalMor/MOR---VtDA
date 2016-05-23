@@ -49,6 +49,15 @@ var restrict = {
         return !(parent.initPoints === 0 && parent.name === 'otros');
     },
     /**
+     * Filtro para evitar subidas de nivel sin suficientes puntos;
+     * @param points Valor entero de la reserva de puntos
+     * @param cost Valor entero del coste de puntos
+     * @returns {boolean}
+     */
+    notEnoughPoints: function (points, cost) {
+        return !(points - cost < 0);
+    },
+    /**
      * Filtro para comprobar que se han gastado todos los puntos de inicialización del personaje.
      * @param statsObj Objeto de estadísticas
      * @returns {boolean}

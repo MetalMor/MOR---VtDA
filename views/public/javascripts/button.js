@@ -9,19 +9,16 @@ var button = {
      * campos sin rellenar.
      */
     submitCharData: function() {
-        if(util.allInputsSet('data')) {
-            overlay.close('data');
-            var charData = char.data;
-            var clanName = $("select#clan").val();
-            clanName = typeof clanName === 'undefined' ? 'Assamita guerrero' : clanName;
-            charFunctions.modStats(clanName); // realiza las modificaciones pertinentes a la ficha según el clan
-            // Guarda los valores de los inputs en un array para ser insertados
-            //var len = charData.length;
-            var inputs = [];
-            inputs.push(button.getInputs(0));
-            inputs.push(button.getInputs(1));
-            inputs.push(button.getInputs(2));
-            var inputsGroup, counter = 0;
+        var alertId = 'emptyFields', panelName = 'data';
+        if (util.allInputsSet(panelName)) {
+            overlay.close(panelName);
+            var charData = char.data, overlayId = 'sheet', inputs = [], inputsGroup, counter = 0,
+                clanName = $("select#clan").val(), attrName = 'atributos', skillsName = 'habilidades',
+                attrId = 'attr', skillsId = 'skills', statsTableId = 'stats', discsTableId = 'disciplinas',
+                defClanName = 'Assamita guerrero';
+            clanName = util.isUndefined(clanName) ? defClanName : clanName;
+            charFunctions.modStats(clanName);
+            inputs = form.getDataInputs();
             while(inputs.length > 0) {
                 inputsGroup = inputs.shift();
                 charData[counter].fields.forEach(function(f) {
@@ -30,16 +27,16 @@ var button = {
                 counter++;
             }
             var discs = charFunctions.getDiscs(clanName);
-            prefs.setPrefs('atributos', prefs.getPrefs('attr'));
-            prefs.setPrefs('habilidades', prefs.getPrefs('skills'));
-            table.build(char.stats, "stats");
-            table.build(discs, 'disciplinas');
+            prefs.setPrefs(attrName, prefs.getPrefs(attrId));
+            prefs.setPrefs(skillsName, prefs.getPrefs(skillsId));
+            table.build(char, statsTableId);
+            table.build(discs, discsTableId);
             charFunctions.setDiscs(discs);
-            button.setTableButtons('stats');
+            button.setTableButtons(statsTableId);
             table.updateOther();
-            overlay.open('sheet');
+            overlay.open(overlayId);
         } else {
-            overlay.showAlert('emptyFields');
+            overlay.showAlert(alertId);
         }
     },
     /**
@@ -52,57 +49,21 @@ var button = {
      */
     submitSheet: function(socket, char, user, game) {
         if(restrict.fullSheet(char)) {
+            var sheet, mes = 'setChar', listId = 'char',
+                sheetPanel = 'sheet', charPoints = 'fp';
             charFunctions.setReady(char, true);
-            charFunctions.setCharPoints('fp', 15);
+            charFunctions.setCharPoints(charPoints, 15);
+            char.xp = 15; // testing
             charFunctions.initBlood(char);
             charFunctions.setOwner(char, user);
-            charFunctions.addCharacter(char, 'char', game);
-            sockets.initChar(socket, char, user, game);
-            overlay.close('sheet');
+            charFunctions.addCharacter(char, listId, game);
+            sheet = {user: user, char: char, game: game};
+            sockets.server(socket, mes, sheet);
+            overlay.close(sheetPanel);
             overlay.playerPanel(socket);
         }
     },
-    /**
-     * Guarda los datos de los inputs del formulario en un array bidimensional. Lo he hecho un poco con el ojete, pero bueno,
-     * no tenía ganas de más recursividades por el momento.
-     * @param crit
-     * @returns {Array}
-     */
-    getInputs: function(crit) {
-        var temp = [], ret = [];
-        //<editor-fold desc="Coge los inputs del formulario" default="collapsed">
-        if(crit === 0) {
-            temp.push($("input#name").val());
-            temp.push($("input#nature").val());
-            temp.push($("input#demeanor").val());
-            temp.push($("select#clan").val());
-            temp.push(util.deromanize($("select#generation").val()).toString());
-            temp.push($("input#haven").val());
-            temp.push($("input#concept").val());
-        } else if(crit === 1) {
-            temp.push($("input#real-age").val());
-            temp.push($("input#supposed-age").val());
-            temp.push($("input#hair").val());
-            temp.push($("input#eyes").val());
-            temp.push($("input#nationality").val());
-            temp.push($("select#sex").val());
-            temp.push($("input#height").val());
-            temp.push($("input#weight").val());
-        } else if(crit === 2) {
-            temp.push($("textarea#domain").val());
-            temp.push($("textarea#contacts").val());
-            temp.push($("textarea#herd").val());
-            temp.push($("textarea#influence").val());
-            temp.push($("textarea#mentor").val());
-            temp.push($("textarea#allies").val());
-            temp.push($("textarea#resources").val());
-            temp.push($("textarea#servants").val());
-            char.story = $("textarea#story").val();
-        }
-        //</editor-fold>
-        temp.forEach(function(s) {ret.push(util.fancy(s))});
-        return ret;
-    },
+
     /**
      * Establece los eventos de botones de la tabla del personaje.
      * @param id Tabla o fila de la que establecer el evento.
@@ -161,7 +122,7 @@ var button = {
             btn = row.find('td>span');
             if (!util.isUndefined(stat) && !util.isUndefined(cost) &&
                 restrict.lookRestriction(stat) &&
-                (cost <= char.fp || cost <= char.xp)) {
+                (restrict.notEnoughPoints(charFunctions.getCharPoints(), cost))) {
                 if (stat.level > 0) row.addClass(learnedClass);
                 btn.addClass(arrowUpClass);
                 btn.off('click');

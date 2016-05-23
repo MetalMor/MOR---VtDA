@@ -76,9 +76,9 @@ module.exports = {
      * @param s String a transformar
      * @returns {string}
      */
-    clean: function(s) {
-        var chars = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
-        var diacritics =[
+    clean: function (s) {
+        var chars = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u', 'N', 'n', 'C', 'c'];
+        var diacritics = [
             /[\300-\306]/g, /[\340-\346]/g,  // A, a
             /[\310-\313]/g, /[\350-\353]/g,  // E, e
             /[\314-\317]/g, /[\354-\357]/g,  // I, i
@@ -88,9 +88,12 @@ module.exports = {
             /[\307]/g, /[\347]/g // C, c
         ];
 
+        s = s.replace("ñ", "ny");
         for (var i = 0; i < diacritics.length; i++)
-            s = s.replace(diacritics[i],chars[i]);
-        while(s.indexOf(' ')>0) {s = s.replace(" ", "_")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
+            s = s.replace(diacritics[i], chars[i]);
+        while (s.indexOf(' ') > 0) {
+            s = s.replace(" ", "_")
+        } // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         return s.toLowerCase();
     },
     /**
@@ -99,10 +102,13 @@ module.exports = {
      * @param s String a transformar.
      * @returns {string}
      */
-    fancy: function(s) {
-        while(s.indexOf('_')>0) {s = s.replace("_", " ")} // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
+    fancy: function (s) {
+        s = s.replace("ny", "ñ");
+        while (s.indexOf('_') > 0) {
+            s = s.replace("_", " ")
+        } // mientras haya espacios en el string, sigue llamando a replace para sustituirlos uno a uno
         var first = s.substring(0, 1).toUpperCase(), other = s.substring(1, s.length);
-        return first+other;
+        return first + other;
     },
     /**
      * Retorna un objeto apto para ser enviado a una query de la base de datos como parámetro de inclusión en el resultado.

@@ -8,8 +8,8 @@
 var char, user, game;
 
 if (window["WebSocket"]) {
-    $('#wrapper').ready(function() {
-        var socket = io.connect(/*document.location.href*/);
+    $('#wrapper-player').ready(function () {
+        var socket = io.connect();
         function connect() {
             var charElement;
             if((charElement = $("div#char")).length) {
@@ -25,5 +25,7 @@ if (window["WebSocket"]) {
             }
         }
         connect();
+    });
+    $('#wrapper-master').ready(function () {
     });
 }

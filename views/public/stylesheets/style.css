@@ -42,6 +42,10 @@ div#output {
     font-family: 'Papyrus' /*'Kaushan Script'*/, cursive;
 }
 
+.opener, .closer {
+    cursor: pointer;
+}
+
 .learned {
     font-weight: bold;
     color: firebrick;

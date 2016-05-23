@@ -19,7 +19,7 @@ module.exports = function (io) {
         var user, char, game;
         var charFunctions = require('./charServer');
         console.log('[socket] user connected');
-        socket.on('initChar', function(sheet) {
+        socket.on('setChar', function (sheet) {
             user = sheet.user;
             char = sheet.char;
             game = sheet.game;
@@ -34,9 +34,8 @@ module.exports = function (io) {
             console.log("[socket] character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game: " + game.name);
         });
         socket.on('disconnect', function() {
-            if(!util.isUndefined(char)) {
+            if (!util.isUndefined(char))
                 console.log('[socket] goodbye '+charFunctions.findData(char, 'nombre').value + "(" + user.name + ")");
-            }
         });
     });
 };

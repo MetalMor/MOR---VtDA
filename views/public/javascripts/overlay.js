@@ -99,6 +99,6 @@ var overlay = {
         table.showStats(char, 'show-stats');
         $('p#story').text(char.story);
         button.setXpButtons();
-        socket.emit('loginChar', sheet);
+        socket.send(socket, 'loginChar', sheet);
     }
 };

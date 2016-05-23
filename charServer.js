@@ -5,7 +5,7 @@
 
 var util = require('./util');
 
-module.exports = {
+var charFunctions = {
     /**
      * Define un personaje como inicializado y preparado para jugar
      * @param char Personaje a preparar
@@ -21,6 +21,13 @@ module.exports = {
         if (mode === 'xp' || mode === 'fp') {
             char[mode] = points;
         }
+    },
+    /**
+     * Retorna los puntos de aprendizaje del personaje.
+     * @returns {number}
+     */
+    getCharPoints: function () {
+        return char.fp > 0 ? char.fp : char.xp;
     },
     /**
      * Define el nombre del usuario propietario del personaje
@@ -290,3 +297,5 @@ module.exports = {
         }
     }
 };
+
+module.exports = charFunctions;
