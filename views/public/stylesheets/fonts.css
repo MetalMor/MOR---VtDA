@@ -22,3 +22,8 @@
     font-family: "Joy";
     src: url('/css/fonts/joy.ttf');
 }
+
+@font-face {
+    font-family: "TerribleFate";
+    src: url('/css/fonts/terrible-fate.ttf');
+}

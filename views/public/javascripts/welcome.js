@@ -5,11 +5,12 @@
 
 var welcome = {
     messages: [
-        {font: 'Kaushan Script', message: 'It is the blood of Caine which makes our fate.'},
-        {font: 'Papyrus', message: 'SPAGHETTI AND PUZZLES!'},
+        {font: 'Kaushan Script', message: "It is the blood of Caine which makes our fate."},
+        {font: 'Papyrus', message: "SPAGHETTI AND PUZZLES!"},
         {font: 'sans', message: "* do you wanna have a bad time?"},
-        {font: 'MTT', message: 'REAL DRAMA! REAL ACTION! REAL BLOODSHED!'},
-        {font: 'Joy', message: 'Feel the Joy down in your heart...'}/*,
+        {font: 'MTT', message: "REAL DRAMA! REAL ACTION! REAL BLOODSHED!"},
+        {font: 'Joy', message: "Feel the Joy down in your heart..."},
+        {font: 'TerribleFate', message: "You've met with a terrible fate, haven't you?"}/*,
         {font: 'Wingdings', message: 'ENTRY NUMBER SEVENTEEN DARK DARKER YET DARKER'}*/
     ],
     setMessage: function(element) {

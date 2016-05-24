@@ -11,13 +11,6 @@
     overflow-x: hidden;
     transition: 0.5s;
 }
-/*.overlay-h-content {
-    position: relative;
-    top: 25%;
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-}*/
 
 .overlay-content {
     position: relative;
