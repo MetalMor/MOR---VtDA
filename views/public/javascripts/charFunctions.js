@@ -60,6 +60,13 @@ var charFunctions = {
         var bloodEqv = [0, 300, 200, 100, 50, 40, 30, 20, 15, 14, 13, 12, 11, 10];
         return bloodEqv[gen];
     },
+    updateChar: function (char) {
+        var charList = game.charList, charName = charFunctions.findData(char, 'nombre').value;
+        charList.forEach(function (ch) {
+            if (charName === charFunctions.findData(char, 'nombre').value)
+                ch = char;
+        });
+    },
     /**
      * Lista de disciplinas de cada clan
      */

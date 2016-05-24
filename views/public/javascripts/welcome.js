@@ -8,10 +8,10 @@ var welcome = {
         {font: 'Kaushan Script', message: "It is the blood of Caine which makes our fate."},
         {font: 'Papyrus', message: "SPAGHETTI AND PUZZLES!"},
         {font: 'sans', message: "* do you wanna have a bad time?"},
-        {font: 'MTT', message: "REAL DRAMA! REAL ACTION! REAL BLOODSHED!"},
+        {font: 'Determination', message: "REAL DRAMA! REAL ACTION! REAL BLOODSHED!"},
         {font: 'Joy', message: "Feel the Joy down in your heart..."},
         {font: 'TerribleFate', message: "You've met with a terrible fate, haven't you?"},
-        {font: 'NobodyCame', message: "...but nobody came."}/*,
+        {font: 'Determination', message: "...but nobody came."}/*,
         {font: 'Wingdings', message: 'ENTRY NUMBER SEVENTEEN DARK DARKER YET DARKER'}*/
     ],
     setMessage: function(element) {
@@ -22,7 +22,6 @@ var welcome = {
     }
 };
 
-var wcm;
-(wcm = $('#welcome')).ready(function() {
-    welcome.setMessage(wcm);
+($('#welcome')).ready(function () {
+    welcome.setMessage($('#welcome'));
 });

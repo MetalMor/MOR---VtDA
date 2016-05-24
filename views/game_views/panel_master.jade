@@ -13,10 +13,12 @@ block content
         .container
             #panel.panel.panel-primary.overlay(hidden)
                 .panel-heading.text-center=user.name + ' - ' + game.name
-                #char-list.dropdown
-                    button#char-list-button.btn.btn-default.dropdown-toggle(data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")="Personaje"
+                //#char-list.dropdown.left-align
+                    button#char-list-button.btn.btn-xs.btn-danger.dropdown-toggle(data-toggle="dropdown", aria-haspopup="true", aria-expanded="true")="Personaje"
                         span.caret
                     ul.dropdown-menu(aria-labelledby="char-list-button")
+                .frorm-group.col-sm-2
+                    select#char-list
                 .panel-body.overlay-content
                     #char-data.panel.panel-primary
                         .panel-heading="Datos del personaje"
@@ -32,6 +34,7 @@ block content
                         .panel-heading="Ficha del personaje"
                             span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
                             span#char-xp.left-align
+                        span#xp-giver.left-align.glyphicon.glyphicon-plus
                         .panel-body
                             .table-responsive
                                 table#show-stats.table

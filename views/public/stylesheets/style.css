@@ -38,6 +38,15 @@ div#output {
     margin: 15px;
 }
 
+select#char-list {
+    color: black;
+}
+
+span#xp-giver {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
 .fancy-write {
     /*font-family: 'Kaushan Script', cursive;*/ /* Caine */
     /*font-family: 'Papyrus', cursive;*/ /* PAPYRUS */

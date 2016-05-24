@@ -79,6 +79,16 @@ var button = {
                 });
         });
     },
+    setXpGiver: function (socket) {
+        var element = $('span#xp-giver');
+        element.on('click', function () {
+            var sheet = {user: user, game: game, char: char},
+                mes = 'update' + charFunctions.findData(char, 'nombre').value;
+            char.xp++;
+            overlay.gameWindow(char);
+            sockets.server(socket, mes, sheet);
+        });
+    },
     /**
      * Define las funciones que se disparan al clicar sobre los botones de la tabla de preferencias
      * @param id Identificador de la tabla de preferencias
@@ -140,6 +150,25 @@ var button = {
             }
         });
     },
+    charSelectOptionClick: function (option) {
+        var o = option, charName = o.text(), tmpChar, charList = game.charList, npcList = game.npcList;
+        charList.forEach(function (ch) {
+            if (util.isUndefined(tmpChar) &&
+                charName === charFunctions.findData(ch, 'nombre').value)
+                tmpChar = ch;
+        });
+        if (!util.isUndefined(tmpChar)) {
+            char = tmpChar;
+        } else {
+            npcList.forEach(function (ch) {
+                if (util.isUndefined(tmpChar) &&
+                    charName === charFunctions.findData(ch, 'nombre').value)
+                    tmpChar = ch;
+            });
+            if (!util.isUndefined(tmpChar)) char = tmpChar;
+        }
+        overlay.gameWindow(char);
+    },
     /**
      * Función que abre un panel desplegable.
      * @param id Identificador del panel
@@ -188,7 +217,7 @@ var button = {
      */
     statButtonClick: function(id, cls) {
         if (cls === table.icons.unset.class)
-            mode = true
+            mode = true;
         else if (cls === table.icons.set.class)
             mode = false;
 
@@ -208,6 +237,7 @@ var button = {
                 }
             }
             table.updateOther();
+            sockets.update(socket, char);
         }
     }
 };

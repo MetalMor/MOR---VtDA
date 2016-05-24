@@ -66,6 +66,7 @@ var table = {
             mainTable.empty();
             data.forEach(function(d) {contentAdd("<tr class='col-sm-4'>"+self.showData(d, tableId)+"</tr>")});
             mainTable.append(content);
+            $('p#story').text(char.story);
         }
     },
     /**
@@ -96,7 +97,8 @@ var table = {
             mainTable.empty();
             stats.forEach(function(s) {contentAdd("<tr>"+self.showStats(s, tableId)+"</tr>")});
             mainTable.append(content);
-            table.updateXp(char);
+            table.updateXp(statsObj);
+            button.setXpButtons();
         }
     },
     /**

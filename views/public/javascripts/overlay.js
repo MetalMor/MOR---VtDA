@@ -75,13 +75,24 @@ var overlay = {
     initCharPanel: function(socket) {
         overlay.showAlert('advice');
         overlay.open('data');
-        button.setPrefsButtons('attr');
-        button.setPrefsButtons('skills');
+        overlay.setPrefsButtons();
         util.disable('#generation');
         $("input#next").click(button.submitCharData);
         $("button#submit").click(function () {
             button.submitSheet(socket, char, user, game)
         });
+    },
+    setPanelButtons: function () {
+        button.setPanelButton('char-data');
+        button.setPanelButton('char-stats');
+    },
+    setPrefsButtons: function () {
+        button.setPrefsButtons('attr');
+        button.setPrefsButtons('skills');
+    },
+    gameWindow: function (char) {
+        table.showData(char, 'show-data');
+        table.showStats(char, 'show-stats');
     },
     /**
      * Muestra la ventana de información del personaje
@@ -90,16 +101,20 @@ var overlay = {
     playerPanel: function(socket) {
         var panel = $('#panel'),
             sheet = {user: user, game: game, char: char};
-        panel.attr('hidden', 'false');
         overlay.open('panel');
-        button.setPanelButton('char-data');
-        button.setPanelButton('char-stats');
-        panel.fadeIn('slow');
-        table.showData(char, 'show-data');
-        table.showStats(char, 'show-stats');
-        $('p#story').text(char.story);
-        button.setXpButtons();
-        sockets.server(socket, 'loginChar', sheet);
+        overlay.setPanelButtons();
+        overlay.gameWindow(char);
+        sockets.server(socket, 'login', sheet);
         //socket.emit('loginChar', sheet);
+    },
+    masterPanel: function (socket) {
+        var panel = $('#panel'),
+            sheet = {user: user, game: game, char: false};
+        overlay.open('panel');
+        overlay.setPanelButtons();
+        char = game.charList[0];
+        overlay.gameWindow(char);
+        list.load();
+        button.setXpGiver(socket);
     }
 };
