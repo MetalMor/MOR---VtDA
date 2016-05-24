@@ -9,7 +9,8 @@ var welcome = {
         {font: 'Papyrus', message: 'SPAGHETTI AND PUZZLES!'},
         {font: 'sans', message: "* do you wanna have a bad time?"},
         {font: 'MTT', message: 'REAL DRAMA! REAL ACTION! REAL BLOODSHED!'},
-        {font: 'Droid Sans', message: 'Feel the Joy down in your heart...'}
+        {font: 'Joy', message: 'Feel the Joy down in your heart...'}/*,
+        {font: 'Wingdings', message: 'ENTRY NUMBER SEVENTEEN DARK DARKER YET DARKER'}*/
     ],
     setMessage: function(element) {
         var list = welcome.messages, max = list.length,
@@ -23,8 +24,3 @@ var wcm;
 (wcm = $('#welcome')).ready(function() {
     welcome.setMessage(wcm);
 });
-
-/*font-family: 'Kaushan Script', cursive;*/ /* Caine */
-/*font-family: 'Papyrus', cursive;*/ /* PAPYRUS */
-/*font-family: 'Comic Sans MS', cursive;*/ /* sans */
-/*font-family: 'Wingdings', cursive;*/ /* W.D. Gaster */

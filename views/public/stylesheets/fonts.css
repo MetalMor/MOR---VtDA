@@ -1,0 +1,24 @@
+@font-face {
+    font-family: "Papyrus";
+    src: url('/css/fonts/Papyrus.ttf');
+}
+
+@font-face {
+    font-family: "MTT";
+    src: url('/css/fonts/MTT.ttf');
+}
+
+@font-face {
+    font-family: "Gaster";
+    src: url('/css/fonts/wingdings.ttf');
+}
+
+@font-face {
+    font-family: "sans";
+    src: url('/css/fonts/sans.ttf');
+}
+
+@font-face {
+    font-family: "Joy";
+    src: url('/css/fonts/joy.ttf');
+}
