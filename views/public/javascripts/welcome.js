@@ -10,7 +10,8 @@ var welcome = {
         {font: 'sans', message: "* do you wanna have a bad time?"},
         {font: 'MTT', message: "REAL DRAMA! REAL ACTION! REAL BLOODSHED!"},
         {font: 'Joy', message: "Feel the Joy down in your heart..."},
-        {font: 'TerribleFate', message: "You've met with a terrible fate, haven't you?"}/*,
+        {font: 'TerribleFate', message: "You've met with a terrible fate, haven't you?"},
+        {font: 'NobodyCame', message: "...but nobody came."}/*,
         {font: 'Wingdings', message: 'ENTRY NUMBER SEVENTEEN DARK DARKER YET DARKER'}*/
     ],
     setMessage: function(element) {

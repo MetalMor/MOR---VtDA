@@ -27,3 +27,8 @@
     font-family: "TerribleFate";
     src: url('/css/fonts/terrible-fate.ttf');
 }
+
+@font-face {
+    font-family: "NobodyCame";
+    src: url('/css/fonts/nbdcm.ttf');
+}
