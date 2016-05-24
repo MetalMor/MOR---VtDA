@@ -242,6 +242,7 @@ app.get('/game/:user/:game', function(req, res) {
                     view.data.game = game;
                     view.data.clans = clans;
                     view.data.gens = generations;
+                    view.data.playerFlag = true;
                     var index = util.getIndex(user.gameList, 'name', gameName);
                     if (index < 0) { // no existe: entra como jugador
                         console.log("[server] logging player in: " + game.name);
@@ -255,7 +256,8 @@ app.get('/game/:user/:game', function(req, res) {
                         view.data.char = char;
                         res.render(view.file, view.data);
                     } else { // existe: es el master
-                        console.log("[server] logging master in: " + game.name);
+                        view.data.playerFlag = false;
+                        console.log("[server] logging master "+user.name+" in: " + game.name);
                         res.render(view.file, view.data);
                     }
                 } else {

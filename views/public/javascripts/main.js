@@ -9,10 +9,10 @@ var char, user, game;
 
 if (window["WebSocket"]) {
     $('#wrapper-player').ready(function () {
-        var socket = io.connect();
-        function connect() {
+        function connectPlayer() {
             var charElement;
             if((charElement = $("div#char")).length) {
+                var socket = io.connect();
                 char = JSON.parse(charElement.text());
                 user = JSON.parse($("div#user").text());
                 game = JSON.parse($("div#game").text());
@@ -24,8 +24,14 @@ if (window["WebSocket"]) {
                 }
             }
         }
-        connect();
+        connectPlayer();
     });
     $('#wrapper-master').ready(function () {
+        function connectMaster() {
+            user = JSON.parse($("div#user").text());
+            game = JSON.parse($("div#game").text());
+            overlay.open('panel');
+        }
+        connectMaster();
     });
 }

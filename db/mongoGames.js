@@ -92,8 +92,8 @@ module.exports = {
                 client.collection(col).findOne({name: game.name}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if(doc !== null) console.log("[mongo] ound game: "+doc.name);
-                    else console.log("[mong] game not found: "+game.name);
+                    if(doc !== null) console.log("[mongo] found game: "+doc.name);
+                    else console.log("[mongo] game not found: "+game.name);
                     if(callback !== null)
                         callback(doc);
                 });
@@ -117,7 +117,7 @@ module.exports = {
                     db.close();
                     assert.equal(null, err);
                     if(list !== null) console.log("[mongo] found game: "+list.name);
-                    else console.log("[mong] game not found: "+game.name);
+                    else console.log("[mongo] game not found: "+game.name);
                     if(callback !== null)
                         callback(list);
                 });
