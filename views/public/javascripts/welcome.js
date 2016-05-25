@@ -15,10 +15,13 @@ var welcome = {
         {font: 'Wingdings', message: 'ENTRY NUMBER SEVENTEEN DARK DARKER YET DARKER'}*/
     ],
     setMessage: function(element) {
-        var list = welcome.messages, max = list.length,
-            index = Math.floor(Math.random() * max),
-            chosen = list[index];
+        var chosen = welcome.getMessage();
         element.text(chosen.message).css('font-family', chosen.font);
+    },
+    getMessage: function() {
+        var list = welcome.messages, max = list.length,
+            index = Math.floor(Math.random() * max);
+        return list[index];
     }
 };
 

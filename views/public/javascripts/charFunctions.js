@@ -181,7 +181,10 @@ var charFunctions = {
         }
         else if(char.xp > 0) source = 'xp';
         char[source] -= qty;
-        if (char.fp <= 0 && freePts) char.xp += 15;
+        if (char.fp <= 0 && freePts) {
+            char.xp += 15;
+            sockets.update();
+        }
     },
     /**
      * Calcula el coste de la estadística especificada por parámetro

@@ -79,18 +79,17 @@ var button = {
                 });
         });
     },
-    setXpGiver: function (socket) {
+    setXpGiver: function () {
         var element = $('span#xp-giver');
         element.on('click', function () {
-            var sheet = {user: user, game: game, char: char},
-                mes = 'update' + charFunctions.findData(char, 'nombre').value;
+            var sheet = {user: user, game: game, char: char};
             char.xp++;
             overlay.gameWindow(char);
-            sockets.server(socket, mes, sheet);
+            sockets.update();
         });
     },
     /**
-     * Define las funciones que se disparan al clicar sobre los botones de la tabla de preferencias
+     * Define las funciones que se llaman al clicar sobre los botones de la tabla de preferencias
      * @param id Identificador de la tabla de preferencias
      */
     setPrefsButtons: function(id) {
@@ -143,6 +142,7 @@ var button = {
                     r = $(this).parent().parent();
                     s = charFunctions.findStat(char, util.clean(r.find('td[class]').text()));
                     charFunctions.growStat(s);
+                    sockets.update();
                 });
             } else {
                 btn.removeClass(arrowUpClass);
@@ -237,7 +237,7 @@ var button = {
                 }
             }
             table.updateOther();
-            sockets.update(socket, char);
+            sockets.update();
         }
     }
 };

@@ -72,14 +72,14 @@ var overlay = {
      * Muestra la ventana de creación del personaje
      * @param socket Conector WS del cliente
      */
-    initCharPanel: function(socket) {
+    initCharPanel: function() {
         overlay.showAlert('advice');
         overlay.open('data');
         overlay.setPrefsButtons();
         util.disable('#generation');
         $("input#next").click(button.submitCharData);
         $("button#submit").click(function () {
-            button.submitSheet(socket, char, user, game)
+            button.submitSheet(char, user, game)
         });
     },
     setPanelButtons: function () {
@@ -98,16 +98,17 @@ var overlay = {
      * Muestra la ventana de información del personaje
      * @param socket Conector WS del cliente
      */
-    playerPanel: function(socket) {
+    playerPanel: function() {
         var panel = $('#panel'),
             sheet = {user: user, game: game, char: char};
         overlay.open('panel');
         overlay.setPanelButtons();
         overlay.gameWindow(char);
-        sockets.server(socket, 'login', sheet);
+        sockets.player();
+        sockets.server('login', sheet);
         //socket.emit('loginChar', sheet);
     },
-    masterPanel: function (socket) {
+    masterPanel: function () {
         var panel = $('#panel'),
             sheet = {user: user, game: game, char: false};
         overlay.open('panel');
@@ -115,6 +116,7 @@ var overlay = {
         char = game.charList[0];
         overlay.gameWindow(char);
         list.load();
-        button.setXpGiver(socket);
+        button.setXpGiver();
+        sockets.player();
     }
 };
