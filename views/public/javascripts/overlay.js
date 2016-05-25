@@ -112,8 +112,8 @@ var overlay = {
         overlay.open('panel');
         overlay.setPanelButtons();
         char = game.charList[0];
-        overlay.gameWindow(char);
         list.load();
+        overlay.gameWindow(char);
         button.setXpGiver();
         sockets.player();
     }

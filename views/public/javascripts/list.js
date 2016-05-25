@@ -6,11 +6,14 @@
 var list = {
     load: function () {
         var element = $('select#char-list'), charList = game.charList, npcList = game.npcList;
-        list.appendList(element, charList);
-        list.appendList(element, npcList);
-        element.change(function () {
-            button.charSelectOptionClick($(this).children(':selected'));
-        });
+        //if(list.exists()) {
+            element.empty();
+            list.appendList(element, charList);
+            list.appendList(element, npcList);
+            element.change(function () {
+                button.charSelectOptionClick($(this).children(':selected'));
+            });
+        //}
     },
     appendList: function (element, list) {
         var childs = "";
@@ -25,5 +28,8 @@ var list = {
             addChild(newChild(charName));
         });
         element.append(childs);
+    },
+    exists: function() {
+        return $('select#char-list').length > 0;
     }
 };

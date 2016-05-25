@@ -20,12 +20,13 @@ var sockets = {
             var curCharName, newCharName;
             curCharName = charFunctions.findData(char, 'nombre').value;
             newCharName = charFunctions.findData(sheet.char, 'nombre').value;
-            if (curCharName === newCharName) {
+            /*if (curCharName === newCharName) {
                 char = sheet.char;
                 game = sheet.game;
                 charFunctions.updateChar(char);
                 overlay.gameWindow(char);
-            }
+            }*/
+            overlay.gameWindow(char);
         });
     },
     setLink: function(link) {
