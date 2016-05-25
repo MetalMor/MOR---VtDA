@@ -28,13 +28,6 @@ module.exports = function (io) {
             hasChar = !(util.isBoolean(char) || util.isUndefined(char));
             if (!util.isBoolean(char))
                 console.log("[socket] character " + charFunctions.findData(char, 'nombre').value + "(" + user.name + ") at game: " + game.name);
-            if(hasChar) {
-                charName = charFunctions.findData(char, 'nombre').value;
-                socket.on('update'+charName, function(sheet) {
-                    updateChar(sheet);
-                    io.broadcast.emit('update'+charName, sheet);
-                });
-            }
         });
         socket.on('update', function(sheet) {
             updateChar(sheet);

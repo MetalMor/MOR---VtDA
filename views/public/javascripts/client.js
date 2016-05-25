@@ -1,5 +1,6 @@
 /**
  * Objeto controlador de conexiones websocket
+ * - TODO fix si el admin no está mirando un personaje y este personaje es actualizado, hay que pulsar F5 para ver el cambio
  * Created by mor on 16/05/16.
  */
 var sockets = {
@@ -20,12 +21,13 @@ var sockets = {
             var curCharName, newCharName;
             curCharName = charFunctions.findData(char, 'nombre').value;
             newCharName = charFunctions.findData(sheet.char, 'nombre').value;
-            /*if (curCharName === newCharName) {
-                char = sheet.char;
+            if (!util.isUndefined(sheet.game))
                 game = sheet.game;
+            if (curCharName === newCharName) {
+                char = sheet.char;
                 charFunctions.updateChar(char);
                 overlay.gameWindow(char);
-            }*/
+            }
             overlay.gameWindow(char);
         });
     },

@@ -69,11 +69,12 @@ module.exports = {
                 if(!util.isUndefined(game._id))
                     delete game._id;
                 client.collection(col).updateOne({name: game.name}, {$set: game}, function(err, result) {
-                        assert.equal(null, err);
-                        console.log("[mongo] updated game: "+game.name);
-                        if(callback !== null)
-                            callback();
-                    });
+                    db.close();
+                    assert.equal(null, err);
+                    console.log("[mongo] updated game: " + game.name);
+                    if (callback !== null)
+                        callback();
+                });
             });
         });
     },
