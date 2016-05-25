@@ -47,7 +47,7 @@ var button = {
      * @param user Usuario del cliente
      * @param game Partida del cliente
      */
-    submitSheet: function(socket, char, user, game) {
+    submitSheet: function(char, user, game) {
         if(restrict.fullSheet(char)) {
             var sheet, mes = 'setChar', listId = 'char',
                 sheetPanel = 'sheet', charPoints = 'fp';
@@ -58,9 +58,9 @@ var button = {
             charFunctions.setOwner(char, user);
             charFunctions.addCharacter(char, listId, game);
             sheet = {user: user, char: char, game: game};
-            sockets.server(socket, mes, sheet);
+            sockets.server(mes, sheet);
             overlay.close(sheetPanel);
-            overlay.playerPanel(socket);
+            overlay.playerPanel();
         }
     },
 

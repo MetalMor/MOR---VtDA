@@ -70,7 +70,6 @@ var overlay = {
     },
     /**
      * Muestra la ventana de creación del personaje
-     * @param socket Conector WS del cliente
      */
     initCharPanel: function() {
         overlay.showAlert('advice');
@@ -96,7 +95,6 @@ var overlay = {
     },
     /**
      * Muestra la ventana de información del personaje
-     * @param socket Conector WS del cliente
      */
     playerPanel: function() {
         var panel = $('#panel'),
