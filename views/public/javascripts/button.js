@@ -42,7 +42,6 @@ var button = {
     /**
      * Guarda los datos de la ficha y envía por websockets al servidor el objeto del cliente, que contiene datos del
      * usuario, personaje y partida
-     * @param socket Conector WS del cliente
      * @param char Personaje del cliente
      * @param user Usuario del cliente
      * @param game Partida del cliente
@@ -79,6 +78,9 @@ var button = {
                 });
         });
     },
+    /**
+     * Define el comportamiento del botón de otorgar experiencia.
+     */
     setXpGiver: function () {
         var element = $('span#xp-giver');
         element.on('click', function () {
@@ -150,6 +152,10 @@ var button = {
             }
         });
     },
+    /**
+     * Función que carga un personaje seleccionado en el elemento especificado por parametro.
+     * @param option Elemento que contiene el identificador del personaje seleccionado.
+     */
     charSelectOptionClick: function (option) {
         var o = option, charName = o.text(), tmpChar, charList = game.charList, npcList = game.npcList;
         charList.forEach(function (ch) {

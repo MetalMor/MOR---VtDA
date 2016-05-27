@@ -60,6 +60,10 @@ var charFunctions = {
         var bloodEqv = [0, 300, 200, 100, 50, 40, 30, 20, 15, 14, 13, 12, 11, 10];
         return bloodEqv[gen];
     },
+    /**
+     * Actualiza un objeto personaje en la lista de personajes del objeto partida.
+     * @param char
+     */
     updateChar: function (char) {
         var charList = game.charList, charName = charFunctions.findData(char, 'nombre').value, newList = [];
         charList.forEach(function (ch) {

@@ -4,17 +4,23 @@
  */
 
 var list = {
+    /**
+     * Carga la lista de personajes de la partida en un elemento select.
+     */
     load: function () {
         var element = $('select#char-list'), charList = game.charList, npcList = game.npcList;
-        //if(list.exists()) {
-            element.empty();
-            list.appendList(element, charList);
-            list.appendList(element, npcList);
-            element.change(function () {
-                button.charSelectOptionClick($(this).children(':selected'));
-            });
-        //}
+        element.empty();
+        list.appendList(element, charList);
+        list.appendList(element, npcList);
+        element.change(function () {
+            button.charSelectOptionClick($(this).children(':selected'));
+        });
     },
+    /**
+     * Añade elementos option a un elemento select especificado por parámetro.
+     * @param element Elemento select.
+     * @param list Lista de objetos personaje que añadir como elementos option.
+     */
     appendList: function (element, list) {
         var childs = "";
         var addChild = function (c) {
