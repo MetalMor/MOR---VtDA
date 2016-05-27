@@ -35,6 +35,10 @@ var list = {
         });
         element.append(childs);
     },
+    /**
+     * Comprueba si el elemento lista de personajes existe.
+     * @returns {boolean}
+     */
     exists: function() {
         return $('select#char-list').length > 0;
     }

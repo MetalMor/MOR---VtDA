@@ -81,14 +81,24 @@ var overlay = {
             button.submitSheet(char, user, game)
         });
     },
+    /**
+     * Llama a las funciones que definen los botones del panel de creación del personaje
+     */
     setPanelButtons: function () {
         button.setPanelButton('char-data');
         button.setPanelButton('char-stats');
     },
+    /**
+     * Llama a las funciones que definen los botones de preferencias de estadísticas.
+     */
     setPrefsButtons: function () {
         button.setPrefsButtons('attr');
         button.setPrefsButtons('skills');
     },
+    /**
+     * Muestra un personaje especificado en la interfaz.
+     * @param char Objeto personaje a mostrar.
+     */
     gameWindow: function (char) {
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
@@ -106,6 +116,9 @@ var overlay = {
         sockets.server('login', sheet);
         //socket.emit('loginChar', sheet);
     },
+    /**
+     * Muestra la ventana de información del director.
+     */
     masterPanel: function () {
         var panel = $('#panel'),
             sheet = {user: user, game: game, char: false};

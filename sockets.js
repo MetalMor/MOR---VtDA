@@ -17,7 +17,7 @@ module.exports = function (io) {
         var charFunctions = require('./charServer');
         var charName, hasChar;
         if(hasChar)
-        console.log('[socket] user connected');
+            console.log('[socket] user connected');
         socket.on('setChar', function (sheet) {
             updateChar(sheet);
         });

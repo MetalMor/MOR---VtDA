@@ -13,21 +13,18 @@ module.exports = {
     stat: "level",
     field: "value",
     char: "xp",
-
     /**
      * Valida si un objeto es un numero
      * @param o Objet a validar
      * @returns {boolean}
      */
     isNumber: function(o) {return !isNaN(parseFloat(o)) },
-
     /**
      * Valida si un objeto es un string
      * @param o Objeto a validar
      * @returns {boolean}
      */
     isString: function(o) {return typeof o === 'string' || o instanceof String},
-
     /**
      * Valida si un objeto es indefinido
      * @param o Objeto a validar

@@ -62,7 +62,6 @@ var button = {
             overlay.playerPanel();
         }
     },
-
     /**
      * Establece los eventos de botones de la tabla del personaje.
      * @param id Tabla o fila de la que establecer el evento.
