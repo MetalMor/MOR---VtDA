@@ -1,6 +1,5 @@
 /**
  * Objeto controlador de conexiones websocket
- * - TODO fix si el admin no está mirando un personaje y este personaje es actualizado, hay que pulsar F5 para ver el cambio
  * Created by mor on 16/05/16.
  */
 var sockets = {
@@ -17,7 +16,7 @@ var sockets = {
      * Envía al servidor los datos del cliente para actualizar la base de datos.
      */
     update: function () {
-        var sheet, mes = 'update'/* + charFunctions.findData(char, 'nombre').value*/;
+        var sheet, mes = 'update';
         charFunctions.updateChar(char);
         sheet = {user: user, game: game, char: char};
         sockets.server(mes, sheet);

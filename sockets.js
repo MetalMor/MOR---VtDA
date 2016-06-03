@@ -39,6 +39,7 @@ module.exports = function (io) {
         socket.on('update', function(sheet) {
             updateChar(sheet);
             socket.broadcast.emit('update', sheet);
+            socket.emit('update', sheet);
         });
         socket.on('disconnect', function() {
             if (hasChar/*!(util.isUndefined(char) || util.isBoolean(char))*/)

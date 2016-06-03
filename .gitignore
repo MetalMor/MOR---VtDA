@@ -1,3 +1,4 @@
 /node_modules
 /.idea
 c.js
+npm-debug.log

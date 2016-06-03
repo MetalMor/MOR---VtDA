@@ -114,7 +114,7 @@ var table = {
      * Función para actualizar el display de los puntos de experiencia del personaje
      * @param char Personaje del que obtener los puntos de experiencia.
      */
-    updateXp: function(char) {
+    updateXp: function (char) {
         var panel = $('div#char-stats'),
             xpDisplay = panel.find('.panel-heading>span#char-xp');
         if (char.fp > 0)

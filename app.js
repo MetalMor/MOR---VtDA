@@ -25,8 +25,7 @@ var util = require('./util'), // utils
     generations = require('./objects/models/Generations');
 console.log('[server] init models');
 
-var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000,
-    IP = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 console.log('[server] init env vars');
 
 var cf = new CharFactory();
@@ -53,7 +52,6 @@ console.log('[server] view engine set');
 
 // ***** ENV VARS *****
 app.set('port', PORT);
-app.set('ipaddr', IP);
 console.log('[server] env vars set');
 
 // ***** ROUTING & SERVER *****
@@ -203,7 +201,7 @@ app.post('/login/:user/new/', function(req, res) {
             res.render(view.file, view.data);
         } else {
             game = new Game(req.body.name);
-            mongoGames.insertGame(game, function(){
+            mongoGames.insertGame(game, function () {
                 mongoGames.listAllGames(function(list) {
                     if(!util.isNull(list)) {
                         games = list;
@@ -269,7 +267,8 @@ app.get('/game/:user/:game', function(req, res) {
 });
 console.log('[server] game panel route set');
 
-server.listen(PORT, IP, function() {console.log('[server] started at port ' + PORT)});
+server.listen(PORT);
+console.log('[server] started at port ' + PORT);
 
 // ***** EJECUTA LOS SOCKETS! *****
 require('./sockets.js')(io);
