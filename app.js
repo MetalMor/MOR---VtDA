@@ -8,6 +8,8 @@ var express = require('express'), // express dependencies models
     server = require('http').Server(app), // server models
     io = require('socket.io')(server), // asyncronous client-server communication
     bodyParser = require('body-parser'), // POST parameters
+    cookieParser = require('cookie-parser'),
+    cookieSession = require('cookie-session'),
     sha1 = require('sha1'); // pwd encoder
 console.log('[server] init dependencies');
 
@@ -34,7 +36,12 @@ var view, user, game, char = cf.initChar(),
 var setGames = function(list) {games = list},
     setUsers = function(list) {users = list},
     setGame = function(g) {game = g},
-    setUser = function(u) {user = u};
+    setUser = function (u) {
+        user = u
+    },
+    goToLogin = function (res) {
+        res.redirect('/')
+    };
 console.log('[server] init server vars');
 
 /**
@@ -64,7 +71,8 @@ console.log('[server] static files\' routes set');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-console.log('[server] body-parser set');
+app.use(cookieParser('m0R'));
+console.log('[server] parsers set');
 
 // ROOT redirecciona al login
 app.get('/', function(req, res) {
@@ -86,6 +94,7 @@ app.post('/login/', function(req, res) {
     user = new User(req.body.name, sha1(req.body.passwd));
     mongoUsers.findUserByCreds(user, function(u) {
         if (!util.isNull(u) && !util.isUndefined(u)) {
+            res.cookie('key', user.name);
             res.redirect('/login/'+u.name+'/');
         } else { // ERROR usuario no encontrado
             view = new ViewData(views.user, 'MOR - VtDA', 'Login', 1);
@@ -125,6 +134,7 @@ app.post('/login/new', function(req, res) {
                 console.log("[server] new user: "+user.name);
                 view.data.games = games;
                 view.data.user = user;
+                res.cookie('key', user.name);
                 res.redirect('/login/'+user.name+'/');
             });
         }
@@ -134,17 +144,19 @@ console.log('[server] new user validation set');
 
 // ESCOGER PARTIDA
 app.get('/login/:user/', function(req, res) {
-    var userName = req.params.user;
+    var userName = req.params.user, key = req.cookies.key;
+    util.printJson(req.cookies);
     mongoGames.listAllGames(setGames);
     if(typeof userName != 'undefined') {
-        console.log("[server] game choice view");
-        if (user.name !== userName) {
+        if (key !== userName) {
             view.data.error = 1;
-            res.redirect('/');
+            goToLogin(res);
         } else {
+            console.log("[server] game choice view");
             view = new ViewData(views.game, userName+' - VtDA', 'Selección de partida: '+userName, 0);
             view.data.user = user;
             view.data.games = games;
+            res.cookie('key', key);
             res.render(view.file, view.data);
         }
     }
@@ -155,115 +167,138 @@ console.log('[server] game choice route set');
 app.post('/login/:user/', function(req, res) {
     // TODO validacion partida escogida
     console.log("[server] validate chosen game");
+    var key = req.cookies.key;
     game = {name: req.body.name};
     view = new ViewData(views.game, req.params.user+' - VtDA', 'Selección de partida: '+req.params.user, 0);
     if(game.name === '') {
         view.data.error = 2;
         res.render(view.file, view.data);
     }
-    mongoGames.findGameByName(game, function(g) {
-        if(util.isNull(g)) {
-            view.data.error = 1;
-            res.render(view.file, view.data);
-        } else {
-            res.redirect('/game/'+req.params.user+'/'+game.name);
-        }
-    });
+    if (key === req.params.user) {
+        mongoGames.findGameByName(game, function (g) {
+            if (util.isNull(g)) {
+                view.data.error = 1;
+                res.render(view.file, view.data);
+            } else {
+                res.cookie('key', key);
+                res.cookie('game', g.name);
+                res.redirect('/game/' + req.params.user + '/' + game.name);
+            }
+        });
+    } else {
+        goToLogin(res);
+    }
 });
 console.log('[server] game choice validation set');
 
 // NUEVA PARTIDA
 app.get('/login/:user/new/', function(req, res) {
-    var user = {name: req.params.user};
-    mongoUsers.findUserByName(user, function(u) {
-        if(util.isNull(u)) {
-            res.redirect('/');
-        } else {
-            user = u;
-            console.log("[server] new game creation view");
-            view = new ViewData(views.newGame, user.name + ' - VtDA', 'Nueva partida: '+req.params.user, 0);
-            view.data.user = user;
-            res.render(view.file, view.data);
-        }
-    });
+    var user = {name: req.params.user}, key = req.cookies.key;
+    if (key === user.name) {
+        mongoUsers.findUserByName(user, function (u) {
+            if (util.isNull(u)) {
+                goToLogin(res);
+            } else {
+                user = u;
+                console.log("[server] new game creation view");
+                view = new ViewData(views.newGame, user.name + ' - VtDA', 'Nueva partida: ' + req.params.user, 0);
+                view.data.user = user;
+                res.render(view.file, view.data);
+            }
+        });
+    } else {
+        goToLogin(res);
+    }
 });
 console.log('[server] new game route set');
 
 // VALIDACION NUEVA PARTIDA
 app.post('/login/:user/new/', function(req, res) {
     console.log("[server] validate new game");
+    var key = req.cookies.key;
     game = {name: req.body.name};
-    mongoGames.findGameByName(game, function(g) {
-        if(!util.isNull(g)) {
-            console.log("[server] game already exists: "+g.name);
-            view = new ViewData(views.newGame, req.params.user+' - VtDA', 'Nueva Partida: '+req.params.user, 2);
-            view.data.user = {name: req.params.user};
-            res.render(view.file, view.data);
-        } else {
-            game = new Game(req.body.name);
-            mongoGames.insertGame(game, function () {
-                mongoGames.listAllGames(function(list) {
-                    if(!util.isNull(list)) {
-                        games = list;
-                        mongoUsers.findUserByName({name: req.params.user}, function (u) {
-                            if(!util.isNull(u)) {
-                                user = u;
-                                user.gameList.push(game);
-                                mongoUsers.updateUser(user, function () {
-                                    mongoUsers.listAllUsers(setUsers);
-                                    res.redirect('/game/' + user.name + '/' + game.name); // DAFUQIN CALLBACK HELL D:
-                                });
-                            }
-                        });
-                    }
+    if (req.params.user === key) {
+        mongoGames.findGameByName(game, function (g) {
+            if (!util.isNull(g)) {
+                console.log("[server] game already exists: " + g.name);
+                view = new ViewData(views.newGame, req.params.user + ' - VtDA', 'Nueva Partida: ' + req.params.user, 2);
+                view.data.user = {name: req.params.user};
+                res.render(view.file, view.data);
+            } else {
+                game = new Game(req.body.name);
+                mongoGames.insertGame(game, function () {
+                    mongoGames.listAllGames(function (list) {
+                        if (!util.isNull(list)) {
+                            games = list;
+                            mongoUsers.findUserByName({name: req.params.user}, function (u) {
+                                if (!util.isNull(u)) {
+                                    user = u;
+                                    user.gameList.push(game);
+                                    mongoUsers.updateUser(user, function () {
+                                        mongoUsers.listAllUsers(setUsers);
+                                        res.cookie('key', key);
+                                        res.cookie('game', game.name);
+                                        res.redirect('/game/' + user.name + '/' + game.name); // DAFUQIN CALLBACK HELL D:
+                                    });
+                                }
+                            });
+                        }
+                    });
                 });
-            });
-        }
-    });
+            }
+        });
+    } else {
+        goToLogin(res);
+    }
 });
 console.log('[server] new game validation set');
 
 // PANTALLA DE JUEGO
 app.get('/game/:user/:game', function(req, res) {
     var userName = req.params.user, gameName = req.params.game;
-    var tmpUser = {name: userName}, tmpGame = {name: gameName};
-    mongoUsers.findUserByName(tmpUser, function(u) {
-        if(!util.isNull(u)) {
-            user = u;
-            mongoGames.findGameByName(tmpGame, function (g) {
-                if (!util.isNull(g)) {
-                    game = g;
-                    view = new ViewData(views.master, userName + ' - ' + gameName, gameName + ': ' + userName, 0);
-                    view.data.userJSON = JSON.stringify(user);
-                    view.data.gameJSON = JSON.stringify(game);
-                    view.data.user = user;
-                    view.data.game = game;
-                    view.data.clans = clans;
-                    view.data.gens = generations;
-                    view.data.playerFlag = true;
-                    var index = util.getIndex(user.gameList, 'name', gameName);
-                    if (index < 0) { // no existe: entra como jugador
-                        console.log("[server] logging player in: " + game.name);
-                        view.file = views.player;
-                        char = util.findChar(user, game);
-                        if (char === 0) {
-                            var cf = new CharFactory();
-                            char = cf.initChar();
+    var tmpUser = {name: userName}, tmpGame = {name: gameName},
+        key = req.cookies.key, gameCookie = req.cookies.game;
+    if (userName === key && gameName === gameCookie) {
+        mongoUsers.findUserByName(tmpUser, function (u) {
+            if (!util.isNull(u)) {
+                user = u;
+                mongoGames.findGameByName(tmpGame, function (g) {
+                    if (!util.isNull(g)) {
+                        game = g;
+                        view = new ViewData(views.master, userName + ' - ' + gameName, gameName + ': ' + userName, 0);
+                        view.data.userJSON = JSON.stringify(user);
+                        view.data.gameJSON = JSON.stringify(game);
+                        view.data.user = user;
+                        view.data.game = game;
+                        view.data.clans = clans;
+                        view.data.gens = generations;
+                        view.data.playerFlag = true;
+                        var index = util.getIndex(user.gameList, 'name', gameName);
+                        if (index < 0) { // no existe: entra como jugador
+                            console.log("[server] logging player in: " + game.name);
+                            view.file = views.player;
+                            char = util.findChar(user, game);
+                            if (char === 0) {
+                                var cf = new CharFactory();
+                                char = cf.initChar();
+                            }
+                            view.data.charJSON = JSON.stringify(char);
+                            view.data.char = char;
+                            res.render(view.file, view.data);
+                        } else { // existe: es el master
+                            view.data.playerFlag = false;
+                            console.log("[server] logging master " + user.name + " in: " + game.name);
+                            res.render(view.file, view.data);
                         }
-                        view.data.charJSON = JSON.stringify(char);
-                        view.data.char = char;
-                        res.render(view.file, view.data);
-                    } else { // existe: es el master
-                        view.data.playerFlag = false;
-                        console.log("[server] logging master "+user.name+" in: " + game.name);
-                        res.render(view.file, view.data);
+                    } else {
+                        goToLogin(res);
                     }
-                } else {
-                    res.redirect('/');
-                }
-            });
-        }
-    });
+                });
+            }
+        });
+    } else {
+        goToLogin(res);
+    }
 });
 console.log('[server] game panel route set');
 

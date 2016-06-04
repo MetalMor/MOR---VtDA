@@ -1,6 +1,5 @@
 /**
  * Script para manejar la tabla de la ficha de personaje
- * - TODO Cálculo de sangre máxima, sangre inicial, camino, fuerza de voluntad
  * - TODO Puntos XP
  * - TODO Cálculo de la media de los colores de la pantalla para definir el color de los panels y el texto de los títulos(?)(?)(?)
  * Created by mor on 9/05/16.

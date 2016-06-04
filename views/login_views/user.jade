@@ -13,6 +13,9 @@ block content
                     when 1
                         #bad-credentials.alert.alert-danger
                             p.text-center="Credenciales incorrectas."
+                    when 2
+                        #wrong-session.alert.alert-danger
+                            p.text-center="Error de sesión."
                 //h2#welcome.text-center
                 br
                 form(role="form", method="POST")

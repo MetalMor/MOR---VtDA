@@ -128,7 +128,7 @@ module.exports = {
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
      */
     printJson: function (obj) {
-        console.log("[client] char: " + JSON.stringify(obj, null, 4))
+        console.log("[server] obj: " + JSON.stringify(obj, null, 4))
     },
     /**
      * Busca, en un objeto partida, el personaje perteneciente a un usuario
