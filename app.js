@@ -18,6 +18,7 @@ var mongoUsers = require('./db/mongoUsers'), // db users controller
 console.log('[server] init db objects');
 
 var util = require('./util'), // utils
+    cookies = require('./cookies'), // cookies
     ViewData = require('./objects/system/ViewData'), // view data model
     views = require('./objects/system/views'),
     User = require('./objects/models/User'), // user model
@@ -30,7 +31,8 @@ console.log('[server] init models');
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 console.log('[server] init env vars');
 
-var cf = new CharFactory();
+var cf = new CharFactory(),
+    sessionDuration = 5 * Math.pow(60, 2) * 1000; // session duration: 5h
 var view, user, game, char = cf.initChar(),
     games, users; // users & games list
 var setGames = function(list) {games = list},
@@ -77,6 +79,7 @@ console.log('[server] parsers set');
 // ROOT redirecciona al login
 app.get('/', function(req, res) {
     console.log('[server] redirect to login');
+    cookies.clear(res, req.cookies);
     res.redirect('/login/');
 });
 console.log('[server] root route set');
@@ -94,7 +97,8 @@ app.post('/login/', function(req, res) {
     user = new User(req.body.name, sha1(req.body.passwd));
     mongoUsers.findUserByCreds(user, function(u) {
         if (!util.isNull(u) && !util.isUndefined(u)) {
-            res.cookie('key', user.name);
+            // cookies.clear(res, req.cookies);
+            cookies.new(res, 'key', user.name, sessionDuration);
             res.redirect('/login/'+u.name+'/');
         } else { // ERROR usuario no encontrado
             view = new ViewData(views.user, 'MOR - VtDA', 'Login', 1);
@@ -134,7 +138,8 @@ app.post('/login/new', function(req, res) {
                 console.log("[server] new user: "+user.name);
                 view.data.games = games;
                 view.data.user = user;
-                res.cookie('key', user.name);
+                // cookies.clear(res, req.cookies);
+                cookies.new(res, 'key', user.name, sessionDuration);
                 res.redirect('/login/'+user.name+'/');
             });
         }
@@ -145,10 +150,9 @@ console.log('[server] new user validation set');
 // ESCOGER PARTIDA
 app.get('/login/:user/', function(req, res) {
     var userName = req.params.user, key = req.cookies.key;
-    util.printJson(req.cookies);
     mongoGames.listAllGames(setGames);
     if(typeof userName != 'undefined') {
-        if (key !== userName) {
+        if (key !== sha1(userName)) {
             view.data.error = 1;
             goToLogin(res);
         } else {
@@ -156,7 +160,8 @@ app.get('/login/:user/', function(req, res) {
             view = new ViewData(views.game, userName+' - VtDA', 'Selección de partida: '+userName, 0);
             view.data.user = user;
             view.data.games = games;
-            res.cookie('key', key);
+            // cookies.clear(res, req.cookies);
+            cookies.new(res, 'key', user.name, sessionDuration);
             res.render(view.file, view.data);
         }
     }
@@ -174,14 +179,15 @@ app.post('/login/:user/', function(req, res) {
         view.data.error = 2;
         res.render(view.file, view.data);
     }
-    if (key === req.params.user) {
+    if (key === sha1(req.params.user)) {
         mongoGames.findGameByName(game, function (g) {
             if (util.isNull(g)) {
                 view.data.error = 1;
                 res.render(view.file, view.data);
             } else {
-                res.cookie('key', key);
-                res.cookie('game', g.name);
+                // cookies.clear(res, req.cookies);
+                cookies.new(res, 'key', user.name, sessionDuration);
+                cookies.new(res, 'game', g.name, sessionDuration);
                 res.redirect('/game/' + req.params.user + '/' + game.name);
             }
         });
@@ -217,7 +223,7 @@ app.post('/login/:user/new/', function(req, res) {
     console.log("[server] validate new game");
     var key = req.cookies.key;
     game = {name: req.body.name};
-    if (req.params.user === key) {
+    if (sha1(req.params.user) === key) {
         mongoGames.findGameByName(game, function (g) {
             if (!util.isNull(g)) {
                 console.log("[server] game already exists: " + g.name);
@@ -236,8 +242,9 @@ app.post('/login/:user/new/', function(req, res) {
                                     user.gameList.push(game);
                                     mongoUsers.updateUser(user, function () {
                                         mongoUsers.listAllUsers(setUsers);
-                                        res.cookie('key', key);
-                                        res.cookie('game', game.name);
+                                        // cookies.clear(res, req.cookies);
+                                        cookies.new(res, 'key', user.name, sessionDuration);
+                                        cookies.new(res, 'game', game.name, sessionDuration);
                                         res.redirect('/game/' + user.name + '/' + game.name); // DAFUQIN CALLBACK HELL D:
                                     });
                                 }
@@ -258,7 +265,7 @@ app.get('/game/:user/:game', function(req, res) {
     var userName = req.params.user, gameName = req.params.game;
     var tmpUser = {name: userName}, tmpGame = {name: gameName},
         key = req.cookies.key, gameCookie = req.cookies.game;
-    if (userName === key && gameName === gameCookie) {
+    if (sha1(userName) === key && sha1(gameName) === gameCookie) {
         mongoUsers.findUserByName(tmpUser, function (u) {
             if (!util.isNull(u)) {
                 user = u;
@@ -273,8 +280,7 @@ app.get('/game/:user/:game', function(req, res) {
                         view.data.clans = clans;
                         view.data.gens = generations;
                         view.data.playerFlag = true;
-                        var index = util.getIndex(user.gameList, 'name', gameName);
-                        if (index < 0) { // no existe: entra como jugador
+                        if (!util.isMaster(user, game)) { // player
                             console.log("[server] logging player in: " + game.name);
                             view.file = views.player;
                             char = util.findChar(user, game);
@@ -285,7 +291,7 @@ app.get('/game/:user/:game', function(req, res) {
                             view.data.charJSON = JSON.stringify(char);
                             view.data.char = char;
                             res.render(view.file, view.data);
-                        } else { // existe: es el master
+                        } else { // paster
                             view.data.playerFlag = false;
                             console.log("[server] logging master " + user.name + " in: " + game.name);
                             res.render(view.file, view.data);
@@ -301,6 +307,14 @@ app.get('/game/:user/:game', function(req, res) {
     }
 });
 console.log('[server] game panel route set');
+
+app.get('/game/initChar', function (req, res) {
+    var ret = cf.initChar();
+    ret.npc = true;
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(ret));
+});
+console.log('[server] init char request route set');
 
 server.listen(PORT);
 console.log('[server] started at port ' + PORT);

@@ -4,7 +4,7 @@
  * Created by mor on 6/05/16.
  */
 
-module.exports = {
+var util = {
     obj: 'Object',
     arr: 'Array',
     func: 'Function',
@@ -131,6 +131,26 @@ module.exports = {
         console.log("[server] obj: " + JSON.stringify(obj, null, 4))
     },
     /**
+     * Valida si un usuario es el propietario de una partida.
+     * @param user Objeto usuario.
+     * @param game Objeto partida.
+     * @returns {boolean}
+     */
+    isMaster: function (user, game) {
+        return util.getIndex(user.gameList, 'name', game.name) >= 0;
+    },
+    /**
+     * Elimina un elemento especificado en un array.
+     * @param obj Objeto a eliminar
+     * @param array Array del que eliminar el objeto.
+     * @returns {array}
+     */
+    deleteFromArray: function (obj, array) {
+        var index = array.indexOf(obj);
+        if (index > -1) array.splice(index, 1);
+        return array;
+    },
+    /**
      * Busca, en un objeto partida, el personaje perteneciente a un usuario
      * @param user Usuario a validar
      * @param game Partida en la que buscar
@@ -193,3 +213,5 @@ module.exports = {
         return num;
     }
 };
+
+module.exports = util;

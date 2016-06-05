@@ -71,7 +71,8 @@ var overlay = {
     /**
      * Muestra la ventana de creación del personaje
      */
-    initCharPanel: function() {
+    initCharPanel: function (doFirst) {
+        if (doFirst) doFirst();
         overlay.showAlert('advice');
         overlay.open('data');
         overlay.setPrefsButtons();
@@ -128,6 +129,7 @@ var overlay = {
         list.load();
         overlay.gameWindow(char);
         button.setXpGiver();
+        button.setCharCreationButton();
         sockets.player();
-    }
+    },
 };

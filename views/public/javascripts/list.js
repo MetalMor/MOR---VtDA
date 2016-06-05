@@ -11,6 +11,7 @@ var list = {
         var element = $('select#char-list'), charList = game.charList, npcList = game.npcList;
         element.empty();
         list.appendList(element, charList);
+        element.append('----------');
         list.appendList(element, npcList);
         element.change(function () {
             button.charSelectOptionClick($(this).children(':selected'));

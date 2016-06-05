@@ -11,6 +11,7 @@ module.exports = function(d, s) {
     this.xp = 0;
     this.fp = 0;
     this.hp = 7;
+    this.npc = false;
     this.story;
     this.diceSet = [];
     this.ready = false;

@@ -61,17 +61,18 @@ var charFunctions = {
         return bloodEqv[gen];
     },
     /**
-     * Actualiza un objeto personaje en la lista de personajes del objeto partida.
+     * Actualiza un objeto personaje en la lista de personajes que le corresponde del objeto partida.
      * @param char
      */
     updateChar: function (char) {
-        var charList = game.charList, charName = charFunctions.findData(char, 'nombre').value, newList = [];
-        charList.forEach(function (ch) {
+        var listName = char.npc ? 'npcList' : 'charList', list = game[listName],
+            charName = charFunctions.findData(char, 'nombre').value, newList = [];
+        list.forEach(function (ch) {
             if (charName === charFunctions.findData(ch, 'nombre').value)
                 ch = char;
             newList.push(ch);
         });
-        game.charList = newList;
+        game[listName] = newList;
     },
     /**
      * Lista de disciplinas de cada clan

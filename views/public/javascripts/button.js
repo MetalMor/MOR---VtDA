@@ -48,7 +48,8 @@ var button = {
      */
     submitSheet: function(char, user, game) {
         if(restrict.fullSheet(char)) {
-            var sheet, mes = 'setChar', listId = 'char',
+            var sheet, npc, mes = 'setChar',
+                listId = (npc = char.npc) ? 'npc' : 'char',
                 sheetPanel = 'sheet', charPoints = 'fp';
             charFunctions.setReady(char, true);
             charFunctions.setCharPoints(charPoints, 15);
@@ -59,7 +60,7 @@ var button = {
             sheet = {user: user, char: char, game: game};
             sockets.server(mes, sheet);
             overlay.close(sheetPanel);
-            overlay.playerPanel();
+            overlay[npc ? 'masterPanel' : 'playerPanel']();
         }
     },
     /**
@@ -87,6 +88,21 @@ var button = {
             char.xp++;
             overlay.gameWindow(char);
             sockets.update();
+        });
+    },
+    setCharCreationButton: function () {
+        var element = $('span#char-creation-button');
+        element.on('click', function () {
+            $.ajax({
+                url: '/game/initChar/',
+                cache: false,
+                success: function (ch) {
+                    char = ch;
+                    overlay.initCharPanel(function () {
+                        overlay.close('panel');
+                    });
+                }
+            });
         });
     },
     /**

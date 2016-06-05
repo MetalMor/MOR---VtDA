@@ -77,6 +77,26 @@ var util = {
         return Object.prototype.toString.call(obj) === '[object ' + crit + ']'
     },
     /**
+     * Valida si un usuario es el propietario de una partida.
+     * @param user Objeto usuario.
+     * @param game Objeto partida.
+     * @returns {boolean}
+     */
+    isMaster: function (user, game) {
+        return util.getIndex(user.gameList, 'name', game.name) >= 0;
+    },
+    /**
+     * Elimina un elemento especificado en un array.
+     * @param obj Objeto a eliminar
+     * @param array Array del que eliminar el objeto.
+     * @returns {array}
+     */
+    deleteFromArray: function (obj, array) {
+        var index = array.indexOf(obj);
+        if (index > -1) array.splice(index, 1);
+        return array;
+    },
+    /**
      * En una cadena de caracteres enviada por parámetro: elimina todas las tildes, convierte los espacios en guiones
      * bajos y cambia las mayúsculas por minúsculas.
      * @param s String a transformar
