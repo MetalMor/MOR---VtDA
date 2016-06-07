@@ -13,7 +13,8 @@ var list = {
         list.appendList(element, charList);
         element.append('<option>----------</option>');
         list.appendList(element, npcList);
-        element.change(function () {
+        element.off('change');
+        element.on('change', function () {
             button.charSelectOptionClick($(this).children(':selected'));
         });
     },

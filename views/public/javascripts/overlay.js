@@ -131,5 +131,5 @@ var overlay = {
         button.setXpGiver();
         button.setCharCreationButton();
         sockets.player();
-    },
+    }
 };

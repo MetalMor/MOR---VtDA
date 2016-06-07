@@ -12,7 +12,10 @@ var form = {
     getDataInputs: function () {
         var temp = [], ret = [],
             save = function () {
-                ret.push(util.fancy(temp));
+                temp.forEach(function(s) {
+                    s = util.fancy(s);
+                });
+                ret.push(temp);
                 temp = [];
             };
         //<editor-fold desc="Coge los inputs del formulario" default="collapsed">
