@@ -9,7 +9,6 @@ var express = require('express'), // express dependencies models
     io = require('socket.io')(server), // asyncronous client-server communication
     bodyParser = require('body-parser'), // POST parameters
     cookieParser = require('cookie-parser'),
-    cookieSession = require('cookie-session'),
     sha1 = require('sha1'); // pwd encoder
 console.log('[server] init dependencies');
 
@@ -97,7 +96,6 @@ app.post('/login/', function(req, res) {
     user = new User(req.body.name, sha1(req.body.passwd));
     mongoUsers.findUserByCreds(user, function(u) {
         if (!util.isNull(u) && !util.isUndefined(u)) {
-            // cookies.clear(res, req.cookies);
             cookies.new(res, 'key', user.name, sessionDuration);
             res.redirect('/login/'+u.name+'/');
         } else { // ERROR usuario no encontrado
@@ -138,7 +136,6 @@ app.post('/login/new', function(req, res) {
                 console.log("[server] new user: "+user.name);
                 view.data.games = games;
                 view.data.user = user;
-                // cookies.clear(res, req.cookies);
                 cookies.new(res, 'key', user.name, sessionDuration);
                 res.redirect('/login/'+user.name+'/');
             });
@@ -160,7 +157,6 @@ app.get('/login/:user/', function(req, res) {
             view = new ViewData(views.game, userName+' - VtDA', 'Selección de partida: '+userName, 0);
             view.data.user = user;
             view.data.games = games;
-            // cookies.clear(res, req.cookies);
             cookies.new(res, 'key', user.name, sessionDuration);
             res.render(view.file, view.data);
         }
@@ -185,9 +181,7 @@ app.post('/login/:user/', function(req, res) {
                 view.data.error = 1;
                 res.render(view.file, view.data);
             } else {
-                // cookies.clear(res, req.cookies);
                 cookies.new(res, 'key', user.name, sessionDuration);
-                cookies.new(res, 'game', g.name, sessionDuration);
                 res.redirect('/game/' + req.params.user + '/' + game.name);
             }
         });
@@ -242,9 +236,7 @@ app.post('/login/:user/new/', function(req, res) {
                                     user.gameList.push(game);
                                     mongoUsers.updateUser(user, function () {
                                         mongoUsers.listAllUsers(setUsers);
-                                        // cookies.clear(res, req.cookies);
                                         cookies.new(res, 'key', user.name, sessionDuration);
-                                        cookies.new(res, 'game', game.name, sessionDuration);
                                         res.redirect('/game/' + user.name + '/' + game.name); // DAFUQIN CALLBACK HELL D:
                                     });
                                 }
@@ -264,8 +256,8 @@ console.log('[server] new game validation set');
 app.get('/game/:user/:game', function(req, res) {
     var userName = req.params.user, gameName = req.params.game;
     var tmpUser = {name: userName}, tmpGame = {name: gameName},
-        key = req.cookies.key, gameCookie = req.cookies.game;
-    if (sha1(userName) === key && sha1(gameName) === gameCookie) {
+        key = req.cookies.key;
+    if (sha1(userName) === key) {
         mongoUsers.findUserByName(tmpUser, function (u) {
             if (!util.isNull(u)) {
                 user = u;
@@ -291,7 +283,7 @@ app.get('/game/:user/:game', function(req, res) {
                             view.data.charJSON = JSON.stringify(char);
                             view.data.char = char;
                             res.render(view.file, view.data);
-                        } else { // paster
+                        } else { // master
                             view.data.playerFlag = false;
                             console.log("[server] logging master " + user.name + " in: " + game.name);
                             res.render(view.file, view.data);

@@ -15,8 +15,7 @@ var cookies = {
      * @param expires Tiempo de expiración de la cookie (opcional). En su defecto, no habrá tiempo de expiración.
      */
     new: function (res, name, value, expires) {
-        var params = [];
-        var value = sha1(value);
+        var params = [], value = sha1(value);
         params.push(name);
         params.push(value);
         if (!util.isUndefined(expires)) params.push(expires);
