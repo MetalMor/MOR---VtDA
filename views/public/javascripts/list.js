@@ -11,7 +11,7 @@ var list = {
         var element = $('select#char-list'), charList = game.charList, npcList = game.npcList;
         element.empty();
         list.appendList(element, charList);
-        element.append('----------');
+        element.append('<option>----------</option>');
         list.appendList(element, npcList);
         element.change(function () {
             button.charSelectOptionClick($(this).children(':selected'));
@@ -27,12 +27,12 @@ var list = {
         var addChild = function (c) {
                 childs += c
             },
-            newChild = function (n) {
-                return "<option>" + n + "</option>"
+            newChild = function (c) {
+                return "<option class='"+((util.isUndefined(c.npc) || !c.npc) ? 'char' : 'npc')+"'>" +
+                charFunctions.findData(c, 'nombre').value + "</option>"
             };
         list.forEach(function (ch) {
-            var charName = charFunctions.findData(ch, 'nombre').value;
-            addChild(newChild(charName));
+            addChild(newChild(ch));
         });
         element.append(childs);
     },

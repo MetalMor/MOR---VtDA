@@ -23,6 +23,14 @@ var util = {
         });
     },
     /**
+     * Valida si un objeto es de jQuery.
+     * @param o Objeto a validar
+     * @returns {boolean}
+     */
+    isJQuery: function (o) {
+        return o instanceof jQuery;
+    },
+    /**
      * Valida si un objeto es un numero
      * @param o Objet a validar
      * @returns {boolean}
@@ -84,6 +92,15 @@ var util = {
      */
     isMaster: function (user, game) {
         return util.getIndex(user.gameList, 'name', game.name) >= 0;
+    },
+    /**
+     * Valida, a partir del objeto usuario y el contexto de la partida, si el usuario especificado es un jugador.
+     * @param user Objeto usuario a validar.
+     * @param game Objeto del contexto de la partida.
+     * @returns {boolean}
+     */
+    isPlayer: function (user, game) {
+        return !util.isMaster(user, game);
     },
     /**
      * Elimina un elemento especificado en un array.

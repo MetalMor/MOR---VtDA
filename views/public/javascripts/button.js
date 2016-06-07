@@ -8,11 +8,23 @@ var button = {
      * Si alguno de los campos está vacío, simplemente se muestra un alert encima del formulario que informará de que quedan
      * campos sin rellenar.
      */
+    setButtonClick: function(element, callback) {
+        if(element && callback && util.type(util.func, callback)) {
+            var event = 'click';
+            element.off(event);
+            element.on(event, callback);
+            return element;
+        }
+    },
+    /**
+     * Guarda, correctamente formatados, los datos del personaje que el usuario ha rellenado en el formulario.
+     * Procede a mostrar los datos en la pantalla de crear personajes.
+     */
     submitCharData: function() {
         var alertId = 'emptyFields', panelName = 'data';
         if (util.allInputsSet(panelName)) {
             overlay.close(panelName);
-            var charData = char.data, overlayId = 'sheet', inputs = [], inputsGroup, counter = 0,
+            var charData = char.data, overlayId = 'sheet', inputs, inputsGroup, counter = 0,
                 clanName = $("select#clan").val(), attrName = 'atributos', skillsName = 'habilidades',
                 attrId = 'attr', skillsId = 'skills', statsTableId = 'stats', discsTableId = 'disciplinas',
                 defClanName = 'Assamita guerrero';
@@ -53,7 +65,6 @@ var button = {
                 sheetPanel = 'sheet', charPoints = 'fp';
             charFunctions.setReady(char, true);
             charFunctions.setCharPoints(charPoints, 15);
-            char.xp = 15; // testing
             charFunctions.initBlood(char);
             charFunctions.setOwner(char, user);
             charFunctions.addCharacter(char, listId, game);
@@ -70,10 +81,10 @@ var button = {
     setTableButtons: function(id) {
         var levelButtons = $('#'+id+' img[class]');
         levelButtons.each(function() {
-            var attrName = $(this).closest('td[id]').attr('id');
-            if(restrict.lookRestriction(attrName) && util.isUndefined($(this).attr('onclick')))
-                $(this).on('click', function() {
-                    var firstClass = $(this).attr('class').split(' ')[0]; // set, unset o max
+            var e, attrName = (e = $(this)).closest('td[id]').attr('id');
+            if(restrict.lookRestriction(attrName))
+                button.setButtonClick(e, function() {
+                    var firstClass = e.attr('class').split(' ')[0]; // set, unset o max
                     button.statButtonClick(attrName, firstClass)
                 });
         });
@@ -83,16 +94,19 @@ var button = {
      */
     setXpGiver: function () {
         var element = $('span#xp-giver');
-        element.on('click', function () {
-            var sheet = {user: user, game: game, char: char};
+        button.setButtonClick(element, function () {
+            //var sheet = {user: user, game: game, char: char};
             char.xp++;
             overlay.gameWindow(char);
             sockets.update();
         });
     },
+    /**
+     * Define el funcionamiento del botón de creación de personajes (para la pantalla del máster)
+     */
     setCharCreationButton: function () {
         var element = $('span#char-creation-button');
-        element.on('click', function () {
+        button.setButtonClick(element, function () {
             $.ajax({
                 url: '/game/initChar/',
                 cache: false,
@@ -117,7 +131,7 @@ var button = {
             spanList = row.find('span');
             spanList.each(function() {
                 spanBtn = $(this);
-                spanBtn.on('click', function() {
+                button.setButtonClick(spanBtn, function() {
                     btn = $(this);
                     row = btn.parent().parent();
                     var spanClassList = util.getClassList(btn);
@@ -126,7 +140,7 @@ var button = {
                             spanClass = c;
                     });
                     prefs.modPrefs(row, spanClass);
-                })
+                });
             });
         });
     },
@@ -154,8 +168,7 @@ var button = {
                 if (stat.level > 0) row.addClass(learnedClass);
                 col.append(' '+cost);
                 btn.addClass(arrowUpClass);
-                btn.off('click');
-                btn.on('click', function () {
+                button.setButtonClick(btn, function () {
                     r = $(this).parent().parent();
                     s = charFunctions.findStat(char, util.clean(r.find('td[class]').text()));
                     charFunctions.growStat(s);
@@ -172,23 +185,20 @@ var button = {
      * @param option Elemento que contiene el identificador del personaje seleccionado.
      */
     charSelectOptionClick: function (option) {
-        var o = option, charName = o.text(), tmpChar, charList = game.charList, npcList = game.npcList;
-        charList.forEach(function (ch) {
-            if (util.isUndefined(tmpChar) &&
-                charName === charFunctions.findData(ch, 'nombre').value)
-                tmpChar = ch;
-        });
-        if (!util.isUndefined(tmpChar)) {
-            char = tmpChar;
-        } else {
-            npcList.forEach(function (ch) {
+        var optionClass;
+        if(!util.isUndefined(optionClass = option.attr('class'))) {
+            var o = option, charName = o.text(), tmpChar, charList = game.charList, npcList = game.npcList;
+            var list = game[optionClass + 'List'];
+            list.forEach(function (ch) {
                 if (util.isUndefined(tmpChar) &&
                     charName === charFunctions.findData(ch, 'nombre').value)
                     tmpChar = ch;
             });
-            if (!util.isUndefined(tmpChar)) char = tmpChar;
+            if (!util.isUndefined(tmpChar)) {
+                char = tmpChar;
+            }
+            overlay.gameWindow(char);
         }
-        overlay.gameWindow(char);
     },
     /**
      * Función que abre un panel desplegable.
@@ -219,10 +229,10 @@ var button = {
      * @param panelId Identificador del panel desplegable
      */
     setPanelButton: function(panelId) {
-        $('#'+panelId+'>.panel-heading>span.glyphicon').click(function() {
-            var cls = $(this).attr('class'), mode,
-                panel = $('#'+panelId+' .panel-body'), own = $(this);
-            if(cls.indexOf('opener') > 0) {
+        var element = $('#'+panelId+'>.panel-heading>span.glyphicon'),
+            panel = $('#'+panelId+' .panel-body'), mode, own, cls;
+        button.setButtonClick(element, function() {
+            if((cls = (own = $(this)).attr('class')).indexOf('opener') > 0) {
                 mode = 'openPanel';
             } else if(cls.indexOf('closer') > 0) {
                 mode = 'closePanel';
