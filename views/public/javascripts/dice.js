@@ -1,5 +1,5 @@
 /**
- * Factoria de objetos de control de tiradas
+ * Factoria de objetos de control de tiradas de dados.
  * Created by mor on 6/06/16.
  */
 
