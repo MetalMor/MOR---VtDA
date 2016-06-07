@@ -15,7 +15,7 @@ var list = {
         list.appendList(element, npcList);
         element.off('change');
         element.on('change', function () {
-            button.charSelectOptionClick($(this).children(':selected'));
+            button.charSelectOptionClick(element.children(':selected'));
         });
     },
     /**
