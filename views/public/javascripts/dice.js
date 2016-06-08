@@ -24,7 +24,7 @@ var dice = {
              */
             stats: stats || [],
             /**
-             * Lista de tiradas de la reserva de dados
+             * Lista de tiradas de la reserva de dados.
              */
             rolls: [],
             /**
@@ -35,11 +35,17 @@ var dice = {
              * Contador de victorias.
              */
             wins: wins || 0,
+            /**
+             * Contador de pifias.
+             */
             fails: 0,
             /**
              * Flag de tirada resuelta.
              */
             resolved: false,
+            deleteRoll: function(roll) {
+                // TODO elimina el objeto enviado x parámetro y actualiza el número de éxitos
+            },
             /**
              * Calcula los resultados de las tiradas de la reserva de dados. Se tendrán en cuenta las pifias,
              * siempre y cuando no resten las victorias iniciales.
@@ -55,7 +61,7 @@ var dice = {
                     //rollSet.fails = 0;
                     rolls.forEach(function (r) {
                         if (r.throw().isWin()) wins++;
-                        else if (r.isCriticalLoose() && initWins < wins) fails++;
+                        else if (r.isCriticalLoose()/* && initWins < wins*/) fails++;
                     });
                 } else {
                     console.log('[roll] actually resolved');
@@ -64,26 +70,30 @@ var dice = {
             },
             /**
              * Valida que la tirada entera se ha realizado correctamente.
-             * @returns {RollSet}
+             * @returns {RollSet|boolean}
              */
             validate: function () {
-                var rolls = rollSet.rolls,
-                    wins = rollSet.wins, initWins = rollSet.initWins;
-                rollSet.resolved = !rolls.some(function (r) {
+                var rolls = rollSet.rolls, maxRoll, minRoll,
+                    wins = rollSet.wins, initWins = rollSet.initWins,
+                    resolved = !rolls.some(function (r) {
                     return !r.isResolved();
                 });
                 for (var cnt = rollSet.fails; cnt > 0; cnt--) {
                     if (wins > initWins) {
-                        rolls[rolls.indexOf(rolls.max)]
+                        maxRoll = diceFunctions.getMaxRoll(rollSet);
+                        minRoll = diceFunctions.getMinRoll(rollSet);
+                        rollSet.deleteRoll(maxRoll);
+                        rollSet.deleteRoll(minRoll);
                     }
                 }
+                rollSet.resolved = resolved;
                 return rollSet;
             },
             /**
              * Inicializa la reserva de dados a partir de la lista de estadísticas. Esta función tiene en cuenta
              * los modificadores a las tiradas que corresponden (de la estadistica, y de los conjuntos de estadísticas
              * que la engloban hasta llegar a la raíz, el objeto personaje).
-             * @returns {*}
+             * @returns {RollSet}
              */
             init: function () {
                 var stats = rollSet.stats, diceCnt, parentStat,
@@ -104,7 +114,7 @@ var dice = {
             },
             /**
              * Retorna el objeto de tiradas resuelto (inicialización, tirada y validación)..
-             * @returns {RollSet}
+             * @returns {RollSet|boolean}
              */
             resolve: function () {
                 return rollSet.init().throw().validate();

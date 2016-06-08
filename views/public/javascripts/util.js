@@ -189,6 +189,20 @@ var util = {
         }).length > 0);
     },
     /**
+     * Retorna el índice del elemento con mayor valor.
+     * @param list Lista en la que buscar
+     */
+    getIndexOfMax: function(list) {
+        return list.indexOf(Math.max(list))
+    },
+    /**
+     * Retorna el índice del elemento con menor valor.
+     * @param list Lista en la que buscar.
+     */
+    getIndexOfMin: function(list) {
+        return list.indexOf(Math.min(list))
+    },
+    /**
      * Convierte un númro entero a números romanos
      * @param num Número a convertir
      * @returns {string}

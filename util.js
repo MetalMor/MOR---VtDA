@@ -164,6 +164,20 @@ var util = {
         return ret;
     },
     /**
+     * Retorna el índice del elemento con mayor valor.
+     * @param list Lista en la que buscar.
+     */
+    getIndexOfMax: function(list) {
+        return list.indexOf(Math.max(list))
+    },
+    /**
+     * Retorna el índice del elemento con menor valor.
+     * @param list Lista en la que buscar.
+     */
+    getIndexOfMin: function(list) {
+        return list.indexOf(Math.min(list))
+    },
+    /**
      * Printa por la consola mediante recursividad las propiedades de un objeto (para testing)
      * @param a Objeto a mostrar
      */

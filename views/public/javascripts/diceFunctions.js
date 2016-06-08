@@ -44,11 +44,12 @@ var diceFunctions = {
     isCriticalLoose: function (roll) {
         return !roll.isWin() && roll.isCritical()
     },
-    getIndexOfMax: function (rollSet) {
-        var rolls = rollSet.rolls, maxIndex;
-        rolls.forEach(function (r) {
-            maxIndex = r.res > rolls[maxIndex].res ? rolls.indexOf(r) : maxIndex;
-        });
-        return maxIndex;
+    getMaxRoll: function(rollSet) {
+        var rolls = rollSet.rolls, results = rolls.map(function(r) {return r.res});
+        return rolls[util.getIndexOfMax(results)];
+    },
+    getMinRoll: function(rollSet) {
+        var rolls = rollSet.rolls, results = rolls.map(function(r) {return r.res});
+        return rolls[util.getIndexOfMin(results)];
     }
 };
