@@ -240,7 +240,7 @@ app.post('/login/:user/new/', function(req, res) {
                                         res.redirect('/game/' + user.name + '/' + game.name); // DAFUQIN CALLBACK HELL D:
                                     });
                                 }
-                            });
+                            }); // hijo de puta
                         }
                     });
                 });
