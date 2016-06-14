@@ -8,9 +8,9 @@ block content
     #user(hidden)=userJSON
     #char(hidden)=charJSON
     #game(hidden)=gameJSON
-    include panel_data
-    include panel_sheet
-    include panel_action
+    include panel/panel_data
+    include panel/panel_sheet
+    include panel/panel_action
     #wrapper-player
         .container
             #panel.panel.panel-primary.overlay(hidden)
@@ -34,4 +34,4 @@ block content
                             .table-responsive
                                 table#show-stats.table
                                     tbody
-                include panel_output
+                include panel/panel_output

@@ -76,8 +76,8 @@ var dice = {
                 var rolls = rollSet.rolls, maxRoll, minRoll,
                     wins = rollSet.wins, initWins = rollSet.initWins,
                     resolved = !rolls.some(function (r) {
-                    return !r.isResolved();
-                });
+                        return !r.isResolved(); // retorna solo los objetos 'r' que validan true con isResolved
+                    });
                 for (var cnt = rollSet.fails; cnt > 0; cnt--) {
                     if (wins > initWins) {
                         maxRoll = diceFunctions.getMaxRoll(rollSet);
@@ -91,7 +91,7 @@ var dice = {
             },
             /**
              * Inicializa la reserva de dados a partir de la lista de estadísticas. Esta función tiene en cuenta
-             * los modificadores a las tiradas que corresponden (de la estadistica, y de los conjuntos de estadísticas
+             * los modificadores correspondientes a las tiradas (de la estadistica, y de los conjuntos de estadísticas
              * que la engloban hasta llegar a la raíz, el objeto personaje).
              * @returns {RollSet}
              */
@@ -161,7 +161,7 @@ var dice = {
              * @returns {boolean}
              */
             isCritical: function () {
-                return !(roll.res > 0 || roll.res < 10)
+                return roll.res === 1 || roll.res === 10;
             },
             /**
              * Valida si la tirada es un éxito crítico.
