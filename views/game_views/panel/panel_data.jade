@@ -2,21 +2,21 @@
    Created by mor on 10/05/16.
 
 #data.col-sm-10.overlay-v(hidden)
-    .panel.panel-default
+    .panel.panel-primary
         .panel-heading.text-center="Datos generales"
         #general.panel-body
             #advice.alert.alert-info(hidden)
                 p.text-center="Cuando acabes de rellenar la ficha, pulsa el botón 'Siguiente'."
             include ../form/general_form
-    .panel.panel-default
+    .panel.panel-primary
         .panel-heading.text-center="Preferencias de estadísticas"
         #statprefs.panel-body
             include ../form/statprefs_form
-    .panel.panel-default
+    .panel.panel-primary
         .panel-heading.text-center="Aspecto"
         #look.panel-body
             include ../form/look_form
-    .panel.panel-default
+    .panel.panel-primary
         .panel-heading.text-center="Datos de trasfondo"
         #background.panel-body
             #emptyFields.alert.alert-danger(hidden)

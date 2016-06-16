@@ -13,7 +13,7 @@ var overlay = {
         var element = $("#"+id), speed = sp ? sp : 'fast';
         element.fadeOut(speed, function() {
             element.css('width', '0%');
-            if(callback) callback();
+            if (callback) callback(element);
         });
     },
     /**
@@ -26,7 +26,7 @@ var overlay = {
         var element = $("#"+id), speed = sp ? sp : 'fast';
         element.fadeIn(speed, function() {
             element.css('width', '100%');
-            if(callback) callback();
+            if (callback) callback(element);
         });
     },
     /**
@@ -130,6 +130,7 @@ var overlay = {
         overlay.gameWindow(char);
         button.setXpGiver();
         button.setCharCreationButton();
+        button.setRollPanelButton();
         sockets.player();
     }
 };

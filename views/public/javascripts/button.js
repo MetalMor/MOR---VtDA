@@ -107,15 +107,11 @@ var button = {
     setCharCreationButton: function () {
         var element = $('span#char-creation-button');
         button.setButtonClick(element, function () {
-            $.ajax({
-                url: '/game/initChar/',
-                cache: false,
-                success: function (ch) {
-                    char = ch;
-                    overlay.initCharPanel(function () {
-                        overlay.close('panel');
-                    });
-                }
+            ajax.charRequest(function (ch, textStatus, jqXHR) {
+                char = ch;
+                overlay.initCharPanel(function () {
+                    overlay.close('panel');
+                });
             });
         });
     },
@@ -239,6 +235,14 @@ var button = {
             }
             if(!util.isUndefined(mode))
                 button[mode](panel, own);
+        });
+    },
+    setRollPanelButton: function () {
+        var element = $('span#roll');
+        button.setButtonClick(element, function () {
+            overlay.open('roll', function (panel) {
+                panel.attr('z-index', '2');
+            });
         });
     },
     /**
