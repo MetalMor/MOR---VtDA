@@ -240,9 +240,12 @@ var button = {
     setRollPanelButton: function () {
         var element = $('span#roll');
         button.setButtonClick(element, function () {
-            overlay.open('roll', function (panel) {
-                panel.attr('z-index', '2');
-            });
+            var stats = [], rollSet;
+            stats.push(charFunctions.findStat(char, 'destreza'));
+            stats.push(charFunctions.findStat(char, 'pelea'));
+            rollSet = dice.RollSet(stats, 5, 1);
+            rollSet.resolve();
+            util.printJson(rollSet);
         });
     },
     /**

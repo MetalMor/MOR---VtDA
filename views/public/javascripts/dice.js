@@ -9,7 +9,7 @@ var dice = {
      * @param stats Lista de estadísticas a partir de las que se generarán las tiradas.
      * @param dif Umbral de éxito de las tiradas (dificultad).
      * @param wins Victorias iniciales por fuerza de voluntad.
-     * @returns {object}
+     * @returns {RollSet}
      * @constructor
      */
     RollSet: function (stats, dif, wins) {
@@ -44,7 +44,9 @@ var dice = {
              */
             resolved: false,
             deleteRoll: function(roll) {
-                // TODO elimina el objeto enviado x parámetro y actualiza el número de éxitos
+                // TODO elimina el objeto enviado x parámetro y actualiza el número de éxitos [DONE]
+                util.deleteFromArray(roll, rollSet.rolls);
+                rollSet.wins--;
             },
             /**
              * Calcula los resultados de las tiradas de la reserva de dados. Se tendrán en cuenta las pifias,
@@ -57,11 +59,9 @@ var dice = {
                         initWins = rollSet.initWins, // victorias iniciales (las que vienen dadas antes de tirar y no pueden quitarse)
                         wins = (rollSet.wins = initWins),
                         fails = (rollSet.fails = 0);
-                    //rollSet.wins = initWins;
-                    //rollSet.fails = 0;
                     rolls.forEach(function (r) {
                         if (r.throw().isWin()) wins++;
-                        else if (r.isCriticalLoose()/* && initWins < wins*/) fails++;
+                        else if (r.isCriticalLoose()) fails++;
                     });
                 } else {
                     console.log('[roll] actually resolved');
@@ -96,20 +96,13 @@ var dice = {
              * @returns {RollSet}
              */
             init: function () {
-                var stats = rollSet.stats, diceCnt, parentStat,
-                    dices = 0, dif = rollSet.dif, rolls = rollSet.rolls;
-                stats.forEach(function (s) {
-                    dices += s.level + (s.mod || 0);
-                    //parentStat = charFunctions.findParent(char, s);
-                    while (!util.is(util.char, parentStat)) {
-                        parentStat = charFunctions.findParent(char, s);
-                        dices += (parentStat.mod || 0);
-                    }
-                    for (diceCnt = 0; diceCnt < dices; diceCnt++) {
-                        var newDice = dice.Roll(dif);
-                        rolls.push(newDice);
-                    }
-                });
+                var diceQty = 0,
+                    stats = rollSet.stats, rolls = rollSet.rolls, dif = rollSet.dif;
+                stats.forEach(function(s) {diceQty += charFunctions.getStatForce(s, char)});
+                for (diceCnt = 0; diceCnt < diceQty; diceCnt++) {
+                    var newDice = dice.Roll(dif);
+                    rolls.push(newDice);
+                }
                 return rollSet;
             },
             /**
@@ -124,7 +117,7 @@ var dice = {
     /**
      * Retorna un objeto tirada de dados
      * @param dif Dificultad de la tirada
-     * @returns {object}
+     * @returns {Roll}
      * @constructor
      */
     Roll: function (dif) {
@@ -147,35 +140,35 @@ var dice = {
              * @returns {boolean}
              */
             isResolved: function () {
-                return roll.res > 0
+                return diceFunctions.isResolved(roll)
             },
             /**
              * Valida si la tirada es un éxito, es decir, si iguala o supera a la dificultad.
              * @returns {boolean}
              */
             isWin: function () {
-                return roll.res >= roll.dif
+                return diceFunctions.isWin(roll)
             },
             /**
              * Valida si la tirada es un crítico, ya sea por pifia (1) o por éxito (10).
              * @returns {boolean}
              */
             isCritical: function () {
-                return roll.res === 1 || roll.res === 10;
+                return diceFunctions.isCritical(roll)
             },
             /**
              * Valida si la tirada es un éxito crítico.
              * @returns {boolean}
              */
             isCriticalWin: function () {
-                return roll.isWin() && roll.isCritical()
+                return diceFunctions.isCriticalWin(roll)
             },
             /**
              * Valida si la tirada es una pifia.
              * @returns {boolean}
              */
             isCriticalLoose: function () {
-                return !roll.isWin() && roll.isCritical()
+                return diceFunctions.isCriticalLoose(roll)
             },
             /**
              * Calcula aleatoriamente el resultado de una tirada.

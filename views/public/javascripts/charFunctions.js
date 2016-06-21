@@ -159,6 +159,20 @@ var charFunctions = {
         return {name: n, level: 0, limit: 10, mod: 0, cost: 5};
     },
     /**
+     * Calcula la "fuerza" total de una estadística, es decir, su nivel más su modificador y todos los ascendientes.
+     * @param stat Objeto estadística de la que calcular la fuerza.
+     * @param ch Objeto personaje del que calcular la fuerza de la estadística.
+     * @returns {number}
+     */
+    getStatForce: function(stat, ch) {
+        var force =  stat.level + (stat.mod || 0);
+        while (util.is(util.char, stat)) {
+            stat = charFunctions.findParent(ch, stat);
+            force += (stat.mod || 0);
+        }
+        return force;
+    },
+    /**
      * Retorna el padre de la estadística especificada
      * @param obj Objeto global en el que buscar
      * @param stat Estadistica de la que se requiere el padre (o string nombre de la estadistica)
