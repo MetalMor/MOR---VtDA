@@ -44,10 +44,20 @@ var diceFunctions = {
     isCriticalLoose: function (roll) {
         return !roll.isWin() && roll.isCritical()
     },
+    /**
+     * Retorna el objeto tirada con el resultado más alto de un conjunto de tiradas.
+     * @param rollSet
+     * @returns {*}
+     */
     getMaxRoll: function(rollSet) {
         var rolls = rollSet.rolls, results = rolls.map(function(r) {return r.res});
         return rolls[util.getIndexOfMax(results)];
     },
+    /**
+     * Retorna el objeto tirada con el resultado más bajo de un conjunto de tiradas.
+     * @param rollSet
+     * @returns {*}
+     */
     getMinRoll: function(rollSet) {
         var rolls = rollSet.rolls, results = rolls.map(function(r) {return r.res});
         return rolls[util.getIndexOfMin(results)];

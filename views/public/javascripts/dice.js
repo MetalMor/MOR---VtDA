@@ -5,6 +5,10 @@
 
 var dice = {
     /**
+     * Máxima puntuación posible en una tirada.
+     */
+    max: 10,
+    /**
      * Retorna un conjunto de tiradas de dados a partir de unas estadísticas.
      * @param stats Lista de estadísticas a partir de las que se generarán las tiradas.
      * @param dif Umbral de éxito de las tiradas (dificultad).
@@ -40,6 +44,10 @@ var dice = {
              */
             fails: 0,
             /**
+             * Flag de tirada inicializada.
+             */
+            initialized: false,
+            /**
              * Flag de tirada resuelta.
              */
             resolved: false,
@@ -54,7 +62,7 @@ var dice = {
              * @returns {RollSet}
              */
             throw: function () {
-                if (!rollSet.resolved) {
+                if (!rollSet.resolved && rollSet.initialized) {
                     var rolls = rollSet.rolls,
                         initWins = rollSet.initWins, // victorias iniciales (las que vienen dadas antes de tirar y no pueden quitarse)
                         wins = (rollSet.wins = initWins),
@@ -63,8 +71,6 @@ var dice = {
                         if (r.throw().isWin()) wins++;
                         else if (r.isCriticalLoose()) fails++;
                     });
-                } else {
-                    console.log('[roll] actually resolved');
                 }
                 return rollSet;
             },
@@ -77,7 +83,7 @@ var dice = {
                     wins = rollSet.wins, initWins = rollSet.initWins,
                     resolved = !rolls.some(function (r) {
                         return !r.isResolved(); // retorna solo los objetos 'r' que validan true con isResolved
-                    });
+                        }) && rowSet.initialized;
                 for (var cnt = rollSet.fails; cnt > 0; cnt--) {
                     if (wins > initWins) {
                         maxRoll = diceFunctions.getMaxRoll(rollSet);
@@ -97,12 +103,13 @@ var dice = {
              */
             init: function () {
                 var diceQty = 0,
-                    stats = rollSet.stats, rolls = rollSet.rolls, dif = rollSet.dif;
+                    stats = rollSet.stats, rolls = rollSet.rolls = [], dif = rollSet.dif;
                 stats.forEach(function(s) {diceQty += charFunctions.getStatForce(s, char)});
                 for (diceCnt = 0; diceCnt < diceQty; diceCnt++) {
                     var newDice = dice.Roll(dif);
                     rolls.push(newDice);
                 }
+                rollSet.initialized = true;
                 return rollSet;
             },
             /**
@@ -131,10 +138,6 @@ var dice = {
              * Umbral de éxito de la tirada (dificultad).
              */
             dif: dif || 1,
-            /**
-             * Máxima puntuación posible en una tirada.
-             */
-            max: 10,
             /**
              * Valida si la tirada se ha resuelto. El valor del resultado de la tirada ha de ser mayor que 0.
              * @returns {boolean}

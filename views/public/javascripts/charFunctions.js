@@ -130,7 +130,7 @@ var charFunctions = {
     },
     /**
      * Guarda la lista de disciplinas en el objeto modelo.
-     * @param list
+     * @param list Lista de disciplinas
      */
     setDiscs: function(list) {
         //var discs = char.stats[2].stats[0].stats;
