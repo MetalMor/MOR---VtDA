@@ -5,6 +5,10 @@
 
 var dice = {
     /**
+     * Identificador numérico que se usará para el siguiente objeto tirada.
+     */
+    nextId: 0,
+    /**
      * Máxima puntuación posible en una tirada.
      */
     max: 10,
@@ -17,8 +21,12 @@ var dice = {
      * @constructor
      */
     RollSet: function (stats, dif, wins) {
-        var rollSet;
+        var rollSet, initWins = wins || 0, fails = 0, nextRollId = 0, rollSetId = dice.nextId++;
         return rollSet = {
+            /**
+             * Identificador numérico del conjunto de tiradas.
+             */
+            id: rollSetId,
             /**
              * Umbral de éxito de las tiradas (dificultad).
              */
@@ -32,17 +40,13 @@ var dice = {
              */
             rolls: [],
             /**
-             * Total victorias antes de realizar la tirada.
-             */
-            initWins: wins || 0,
-            /**
              * Contador de victorias.
              */
             wins: wins || 0,
             /**
-             * Contador de pifias.
+             * Flag indicador de pifia total;
              */
-            fails: 0,
+            fail: false,
             /**
              * Flag de tirada inicializada.
              */
@@ -51,10 +55,16 @@ var dice = {
              * Flag de tirada resuelta.
              */
             resolved: false,
+            /**
+             * Elimina una tirada especificada por parámetro del conjunto de tiradas.
+             * @param roll Tirada a eliminar.
+             */
             deleteRoll: function(roll) {
-                // TODO elimina el objeto enviado x parámetro y actualiza el número de éxitos [DONE]
-                util.deleteFromArray(roll, rollSet.rolls);
-                rollSet.wins--;
+                var counter = -1, condition;
+                do
+                    if(condition = roll.id == rollSet.rolls[++counter].id)
+                        rollSet.rolls.splice(counter, 1);
+                while(!condition);
             },
             /**
              * Calcula los resultados de las tiradas de la reserva de dados. Se tendrán en cuenta las pifias,
@@ -63,12 +73,10 @@ var dice = {
              */
             throw: function () {
                 if (!rollSet.resolved && rollSet.initialized) {
-                    var rolls = rollSet.rolls,
-                        initWins = rollSet.initWins, // victorias iniciales (las que vienen dadas antes de tirar y no pueden quitarse)
-                        wins = (rollSet.wins = initWins),
-                        fails = (rollSet.fails = 0);
-                    rolls.forEach(function (r) {
-                        if (r.throw().isWin()) wins++;
+                    fails = 0;
+                    rollSet.wins = initWins;
+                    rollSet.rolls.forEach(function (r) {
+                        if (r.throw().isWin()) rollSet.wins++;
                         else if (r.isCriticalLoose()) fails++;
                     });
                 }
@@ -79,17 +87,20 @@ var dice = {
              * @returns {RollSet|boolean}
              */
             validate: function () {
-                var rolls = rollSet.rolls, maxRoll, minRoll,
-                    wins = rollSet.wins, initWins = rollSet.initWins,
+                var rolls = rollSet.rolls, wins = rollSet.wins,
+                    maxRoll, minRoll,
                     resolved = !rolls.some(function (r) {
                         return !r.isResolved(); // retorna solo los objetos 'r' que validan true con isResolved
-                        }) && rowSet.initialized;
-                for (var cnt = rollSet.fails; cnt > 0; cnt--) {
+                        }) && rollSet.initialized;
+                for (var cnt = fails; cnt > 0; cnt--) {
                     if (wins > initWins) {
                         maxRoll = diceFunctions.getMaxRoll(rollSet);
-                        minRoll = diceFunctions.getMinRoll(rollSet);
-                        rollSet.deleteRoll(maxRoll);
-                        rollSet.deleteRoll(minRoll);
+                        if(maxRoll.isWin()) {
+                            minRoll = diceFunctions.getMinRoll(rollSet);
+                            rollSet.deleteRoll(maxRoll);
+                            rollSet.deleteRoll(minRoll);
+                            rollSet.wins--;
+                        } else rollSet.fail = true; // si el más alto no es una victoria, no borra nada y marca el conjunto como pifia total
                     }
                 }
                 rollSet.resolved = resolved;
@@ -106,7 +117,7 @@ var dice = {
                     stats = rollSet.stats, rolls = rollSet.rolls = [], dif = rollSet.dif;
                 stats.forEach(function(s) {diceQty += charFunctions.getStatForce(s, char)});
                 for (diceCnt = 0; diceCnt < diceQty; diceCnt++) {
-                    var newDice = dice.Roll(dif);
+                    var newDice = dice.Roll(nextRollId++, dif);
                     rolls.push(newDice);
                 }
                 rollSet.initialized = true;
@@ -127,9 +138,13 @@ var dice = {
      * @returns {Roll}
      * @constructor
      */
-    Roll: function (dif) {
+    Roll: function (id, dif) {
         var roll;
         return roll = {
+            /**
+             * Identificador numérico de la tirada.
+             */
+            id: id,
             /**
              * Resultado de la tirada.
              */
@@ -178,7 +193,8 @@ var dice = {
              * @returns {Roll}
              */
             throw: function () {
-                roll.res = Math.floor(Math.random() * roll.max) + 1;
+                roll.res = Math.floor(Math.random() * dice.max) + 1;
+                console.log("Threw dice: "+roll.res);
                 return roll;
             }
         }

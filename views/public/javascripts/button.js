@@ -242,9 +242,8 @@ var button = {
         button.setButtonClick(element, function () {
             var stats = [], rollSet;
             stats.push(charFunctions.findStat(char, 'destreza'));
-            stats.push(charFunctions.findStat(char, 'pelea'));
-            rollSet = dice.RollSet(stats, 5, 1);
-            rollSet.throw().validate();
+            stats.push(charFunctions.findStat(char, 'atletismo'));
+            rollSet = dice.RollSet(stats, 5).resolve();
             util.printJson(rollSet);
         });
     },

@@ -176,7 +176,7 @@ var util = {
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
      */
     printJson: function (obj) {
-        console.log("[client] char: " + JSON.stringify(obj, null, 4))
+        console.log("[client] object: " + JSON.stringify(obj, null, 4))
     },
     /**
      * Valida si ninguno de los inputs dentro de un elemento especificado por parámetro está vacío.
@@ -193,14 +193,14 @@ var util = {
      * @param list Lista en la que buscar
      */
     getIndexOfMax: function(list) {
-        return list.indexOf(Math.max(list))
+        return list.indexOf(Math.max.apply(Math, list))
     },
     /**
      * Retorna el índice del elemento con menor valor.
      * @param list Lista en la que buscar.
      */
     getIndexOfMin: function(list) {
-        return list.indexOf(Math.min(list))
+        return list.indexOf(Math.min.apply(Math, list))
     },
     /**
      * Convierte un númro entero a números romanos
