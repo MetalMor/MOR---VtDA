@@ -238,14 +238,24 @@ var button = {
         });
     },
     setRollPanelButton: function () {
-        var element = $('span#roll');
-        button.setButtonClick(element, function () {
+        var opener = $('span#roll-opener'), closer = $('div#roll span#roll-closer'),
+            options = $('div#roll div#roll-options');
+        button.setButtonClick(opener, function () {
             var stats = [], rollSet;
-            stats.push(charFunctions.findStat(char, 'destreza'));
+            overlay.open('roll', 'fast', function(e) {
+                overlay.show(options);
+            });
+            /*stats.push(charFunctions.findStat(char, 'destreza'));
             stats.push(charFunctions.findStat(char, 'atletismo'));
             rollSet = dice.RollSet(stats, 5).resolve();
-            util.printJson(rollSet);
+            util.printJson(rollSet);*/
         });
+        button.setButtonClick(closer, function() {
+            overlay.close('roll', 'fast', function(e) {
+                overlay.hide(options)
+            });
+        });
+        util.disable("div#dif>input");
     },
     /**
      * Función destinada a llamarse al hacer clic en uno de los iconos de nivel de la ficha del personaje.

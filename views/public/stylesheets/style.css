@@ -39,11 +39,6 @@ div#output {
     margin: 15px;
 }
 
-.formatted-span-button {
-    margin-left: 1%;
-    margin-right: 1%;
-    cursor: pointer;
-}
 
 select#char-list {
     color: black;
@@ -55,6 +50,23 @@ textarea {
 
 div#data textarea {
     resize: none;
+}
+
+div#panel {
+    text-align: center;
+}
+
+div#roll {
+    max-width: 40%;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+}
+
+.formatted-span-button {
+    margin-left: 1%;
+    margin-right: 1%;
+    cursor: pointer;
 }
 
 .fancy-write {

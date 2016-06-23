@@ -32,13 +32,25 @@ var table = {
             tableAdd("</tr></tbody></table></div></td>");
             return subTable;
         } else if (util.is(util.char, statsObj) || util.type(util.arr, statsObj)) { // es un array
-            var mainTable = $("table#"+tableId+">tbody");
+            var mainTable = $("table#"+tableId+">tbody"), isChar = util.is(util.char, statsObj);
             var content = "", self = this, stats = statsObj.stats || statsObj;
-            var trPre = util.is(util.char, statsObj) ? "<tr>" : "", trPost = util.is(util.char, statsObj) ? "</tr>" : "";
+            var trPre = isChar ? "<tr>" : "", trPost = isChar ? "</tr>" : "";
             var contentAdd = function(a) {content += a};
             mainTable.empty();
             stats.forEach(function (s) {contentAdd(trPre+self.build(s, tableId)+trPost)}); // <-- RECURSIVIDAD HERE
             mainTable.append(content);
+        }
+    },
+    /**
+     * Muestra el resultado de un conjunto de dados en la pantalla, formatado correctamente.
+     * @param rollSet
+     */
+    showRollSet: function(rollSet) {
+        if(rollSet.resolved) {
+            var rolls = rollSet.rolls;
+            rolls.forEach(function(r) {
+                // TODO mostrar todos los resultados de la tirada asi como sus caracteristicas (dificultad, victorias, niveles de stats, modificadores, etc)
+            });
         }
     },
     /**
@@ -78,8 +90,8 @@ var table = {
      */
     showStats: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) {
-            var name = util.fancy(statsObj.name), level = statsObj.level, classAttr = "";
-            if(level > 0) classAttr += " class='learned'";
+            var name = util.fancy(statsObj.name), level = statsObj.level,
+                classAttr = level > 0 ? " class='learned'" : "";
             return "<tr"+classAttr+"><td><span></span></td>" +
                 "<td class='name'>"+name+"</td><td id='"+statsObj.name+"'>"+table.level(statsObj)+"</td></tr>"
         } else if(util.is(util.stats, statsObj)) {
@@ -149,7 +161,6 @@ var table = {
         var statElement = $('table[id*=stats] td#'+name), stat = charFunctions.findStat(char, name), ap;
         if (!util.isUndefined(stat)) {
             statElement.empty();
-            //ap = !char.ready ? table.level(stat) : stat.level;
             ap = table.level(stat);
             statElement.append(ap);
             button.setTableButtons(name);

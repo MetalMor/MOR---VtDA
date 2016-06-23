@@ -18,9 +18,11 @@ var util = {
      * @param selector Selector del/los elemento/s
      */
     disable: function (selector) {
-        $(selector).keypress(function (evt) {
+        var element;
+        (element = $(selector)).keypress(function (evt) {
             evt.preventDefault();
         });
+        return element;
     },
     /**
      * Valida si un objeto es de jQuery.

@@ -1,10 +1,29 @@
 //
    Created by mor on 8/05/16.
 
-#roll.col-sm-10.overlay(hidden)
-    .overlay-content
-        .panel.panel-primary
-            .panel-heading="Tirada"
-            // TODO boton de volver para atras
-            .panel.body
-                label="Tirada de dados."
+#roll.col-sm-4(hidden)
+    .panel.panel-primary
+        .panel-heading="Tirada"
+            span#roll-button.glyphicon.glyphicon-check.formatted-span-button.left-align
+            span#roll-closer.glyphicon.glyphicon-remove.formatted-span-button.right-align
+        .panel.body
+            #roll-options(hidden)
+                #attr-select
+                    label="Atributo"
+                    select
+                        option="Bla"
+                        option="Blo"
+                        option="Bli"
+                #skill-select
+                    label="Habilidad"
+                    select
+                        option="Bla"
+                        option="Blo"
+                        option="Bli"
+                #dif
+                    label="Dificultad"
+                    input(type="number", min="1", max="10", value="4")
+            #roll-result(hidden)
+                table
+                    thead: th="Resultados"
+                    tbody

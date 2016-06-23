@@ -39,7 +39,7 @@ var overlay = {
         var speed = sp ? sp : 'fast';
         element.fadeOut(speed, function() {
             element.attr('hidden', 'true');
-            if(callback) callback();
+            if(callback) callback(element);
         });
     },
     /**
@@ -52,7 +52,7 @@ var overlay = {
         var speed = sp ? sp : 'fast';
         element.fadeIn(speed, function() {
             element.attr('hidden', 'false');
-            if(callback) callback();
+            if(callback) callback(element);
         });
     },
     /**
