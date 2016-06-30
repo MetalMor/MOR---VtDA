@@ -8,7 +8,8 @@ var express = require('express'), // express dependencies models
     server = require('http').Server(app), // server models
     io = require('socket.io')(server), // asyncronous client-server communication
     bodyParser = require('body-parser'), // POST parameters
-    cookieParser = require('cookie-parser'),
+    cookieParser = require('cookie-parser'), // cookie parser&controller
+    helmet = require('helmet'), // HTTP security extension
     sha1 = require('sha1'); // pwd encoder
 console.log('[server] init dependencies');
 
@@ -72,7 +73,8 @@ console.log('[server] static files\' routes set');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(cookieParser('m0R'));
+app.use(helmet());
+app.use(cookieParser('m3t4Lm0R'));
 console.log('[server] parsers set');
 
 // ROOT redirecciona al login
