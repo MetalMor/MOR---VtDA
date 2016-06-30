@@ -18,6 +18,7 @@ var mongoUsers = require('./db/mongoUsers'), // db users controller
 console.log('[server] init db objects');
 
 var util = require('./util'), // utils
+    headers = require('./headers'), // additional HTTP headers
     cookies = require('./cookies'), // cookies
     ViewData = require('./objects/system/ViewData'), // view data model
     views = require('./objects/system/views'),
@@ -71,10 +72,12 @@ app.use('/img', express.static(__dirname + '/views/public/images/'));
 app.use('/lib', express.static(__dirname + '/views/public/libraries/'));
 console.log('[server] static files\' routes set');
 
+// ***** MIDDLEWARE *****
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(helmet());
 app.use(cookieParser('m3t4Lm0R'));
+app.use(headers.add);
 console.log('[server] parsers set');
 
 // ROOT redirecciona al login
