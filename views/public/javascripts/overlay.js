@@ -127,7 +127,8 @@ var overlay = {
         overlay.setPanelButtons();
         char = game.charList[0];
         list.load();
-        overlay.gameWindow(char);
+        if (!util.isUndefined(char))
+            overlay.gameWindow(char);
         button.setXpGiver();
         button.setCharCreationButton();
         button.setRollPanelButton();

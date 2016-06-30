@@ -43,7 +43,9 @@ var util = {
      * @param o Objeto a validar
      * @returns {boolean}
      */
-    isString: function(o) {return $type(o) === 'string' || o instanceof String},
+    isString: function (o) {
+        return $.type(o) === 'string' || o instanceof String
+    },
     /**
      * Valida si un objeto es indefinido
      * @param o Objeto a validar

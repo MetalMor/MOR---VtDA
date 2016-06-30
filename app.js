@@ -199,7 +199,7 @@ console.log('[server] game choice validation set');
 // NUEVA PARTIDA
 app.get('/login/:user/new/', function(req, res) {
     var user = {name: req.params.user}, key = req.cookies.key;
-    if (key === user.name) {
+    if (key === sha1(user.name)) {
         mongoUsers.findUserByName(user, function (u) {
             if (util.isNull(u)) {
                 goToLogin(res);
