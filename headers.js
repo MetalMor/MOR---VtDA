@@ -2,6 +2,7 @@
  * Propiedades de las cabeceras HTTP predefinidas.
  * Created by becari on 30/06/2016.
  */
+var util = require('./util');
 
 var headers = {
     list: [
@@ -25,7 +26,7 @@ var headers = {
             cur = list[h];
             res.setHeader(cur.nm, cur.val);
         }
-        next();
+        if (!util.isUndefined(next) && util.is(util.func, next)) next();
     }
 };
 

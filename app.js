@@ -48,9 +48,7 @@ var setGames = function(list) {games = list},
 console.log('[server] init server vars');
 
 /**
- * TODO VERY MUCH IMPORTANT!!! controlar de algún modo que no se pueda entrar a la interfaz de un usuario poniéndolo en la URL
  * TODO validar usuarios sin importar mayusculas o minusculas
- * TODO ficha!!! operaciones CRUD del personaje en la BD
  */
 
 mongoGames.listAllGames(setGames);
@@ -64,21 +62,18 @@ console.log('[server] view engine set');
 app.set('port', PORT);
 console.log('[server] env vars set');
 
-// ***** ROUTING & SERVER *****
+// ***** MIDDLEWARE *****
+app.use(helmet());
+app.use(headers.add);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser('m3t4Lm0R'));
 app.use('/public', express.static(__dirname + '/views/public/'));
 app.use('/css', express.static(__dirname + '/views/public/stylesheets/'));
 app.use('/js', express.static(__dirname + '/views/public/javascripts/'));
 app.use('/img', express.static(__dirname + '/views/public/images/'));
 app.use('/lib', express.static(__dirname + '/views/public/libraries/'));
-console.log('[server] static files\' routes set');
-
-// ***** MIDDLEWARE *****
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(helmet());
-app.use(cookieParser('m3t4Lm0R'));
-app.use(headers.add);
-console.log('[server] parsers set');
+console.log('[server] middleware set');
 
 // ROOT redirecciona al login
 app.get('/', function(req, res) {
