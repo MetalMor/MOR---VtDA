@@ -1,6 +1,5 @@
 /**
  * Controlador mongoDB para operaciones CRUD de usuarios
- * TODO get user games list & chars list
  *
  * Created by mor on 21/04/16.
  */

@@ -162,7 +162,6 @@ console.log('[server] game choice route set');
 
 // VALIDACION PARTIDA ESCOGIDA
 app.post('/login/:user/', function(req, res) {
-    // TODO validacion partida escogida
     console.log("[server] validate chosen game");
     var key = req.cookies.key;
     game = {name: req.body.name};

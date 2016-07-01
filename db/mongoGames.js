@@ -1,6 +1,5 @@
 /**
  * Controlador mongoDB para operaciones CRUD de partidas
- * TODO get game chars list & npcs list & maps list
  *
  * Created by mor on 5/05/16.
  */
