@@ -26,7 +26,7 @@ var headers = {
             cur = list[h];
             res.setHeader(cur.nm, cur.val);
         }
-        if (!util.isUndefined(next) && util.is(util.func, next)) next();
+        next();
     }
 };
 

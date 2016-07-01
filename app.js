@@ -39,12 +39,8 @@ var view, user, game, char = cf.initChar(),
 var setGames = function(list) {games = list},
     setUsers = function(list) {users = list},
     setGame = function(g) {game = g},
-    setUser = function (u) {
-        user = u
-    },
-    goToLogin = function (res) {
-        res.redirect('/')
-    };
+    setUser = function (u) {user = u},
+    goToLogin = function (res) {res.redirect('/')};
 console.log('[server] init server vars');
 
 /**
@@ -155,9 +151,9 @@ app.get('/login/:user/', function(req, res) {
         } else {
             console.log("[server] game choice view");
             view = new ViewData(views.game, userName+' - VtDA', 'Selección de partida: '+userName, 0);
-            view.data.user = user;
+            view.data.user = {name: userName};
             view.data.games = games;
-            cookies.new(res, 'key', user.name, sessionDuration);
+            cookies.new(res, 'key', userName, sessionDuration);
             res.render(view.file, view.data);
         }
     }

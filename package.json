@@ -1,6 +1,6 @@
 {
   "name": "MOR-VtDA",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "Gestor de partidas de rol de Vampiro: la Edad Oscura [ALPHA HAS BEGUN]",
   "author": "mor@ubuntu-MOR",
   "license": "GPL-3.0",
@@ -16,15 +16,15 @@
     "url": "https://github.com/MetalMor/MOR-VtDA/issues"
   },
   "dependencies": {
-    "body-parser": "^1.15.0",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.13.4",
-    "express-session": "^1.13.0",
-    "helmet": "^2.1.1",
-    "jade": "^1.0.0",
-    "mongodb": "^2.0.0",
-    "sha1": "^1.1.1",
-    "socket.io": "^1.4.5"
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "express": "*",
+    "express-session": "*",
+    "helmet": "*",
+    "jade": "*",
+    "mongodb": "*",
+    "sha1": "*",
+    "socket.io": "*"
   },
   "devDependencies": {}
 }
