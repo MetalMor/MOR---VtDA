@@ -103,6 +103,7 @@ var overlay = {
     gameWindow: function (char) {
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
+        util.printJson(char);
     },
     /**
      * Muestra la ventana de información del personaje

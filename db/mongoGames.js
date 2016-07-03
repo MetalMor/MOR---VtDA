@@ -18,16 +18,16 @@ module.exports = {
      * Lista todas las partidas guardadas en la BD.
      * @param callback Función a la que enviar el resultado.
      */
-    listAllGames: function(callback) {
-        MongoClient.connect(dbUrl, function(err, db) {
+    listAllGames: function (callback) {
+        MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
+            db.open(function (err, client) {
                 assert.equal(null, err);
-                client.collection(col).find().toArray(function(err, doc) {
+                client.collection(col).find().toArray(function (err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    console.log("[mongo] listing all games: "+doc.length);
-                    if(callback !== null)
+                    console.log("[mongo] listing all games: " + doc.length);
+                    if (callback !== null)
                         callback(doc);
                 });
             });
@@ -42,13 +42,13 @@ module.exports = {
     insertGame: function (game, callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
+            db.open(function (err, client) {
                 assert.equal(null, err);
-                client.collection(col).insertOne(game, function(err, result) {
+                client.collection(col).insertOne(game, function (err, result) {
                     db.close();
                     assert.equal(null, err);
-                    console.log("[mongo] inserted game: "+game.name);
-                    if(callback !== null)
+                    console.log("[mongo] inserted game: " + game.name);
+                    if (callback !== null)
                         callback();
                 });
             });
@@ -60,14 +60,14 @@ module.exports = {
      * @param game Objeto a actualizar (con sus datos nuevos)
      * @param callback Función a la que enviar el resultado.
      */
-    updateGame: function(game, callback) {
-        MongoClient.connect(dbUrl, function(err, db) {
+    updateGame: function (game, callback) {
+        MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
+            db.open(function (err, client) {
                 assert.equal(null, err);
-                if(!util.isUndefined(game._id))
-                    delete game._id;
-                client.collection(col).updateOne({name: game.name}, {$set: game}, function(err, result) {
+                /*if (!util.isUndefined(game._id))
+                 delete game._id;*/
+                client.collection(col).updateOne({name: game.name}, {$set: game}, function (err, result) {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] updated game: " + game.name);
@@ -83,18 +83,18 @@ module.exports = {
      * @param game Objeto partida a encontrar (requiere propiedad "name").
      * @param callback Función a la que enviar el resultado.
      */
-    findGameByName: function(game, callback) {
-        console.log("[mongo] looking for game: "+game.name);
-        MongoClient.connect(dbUrl, function(err, db) {
+    findGameByName: function (game, callback) {
+        console.log("[mongo] looking for game: " + game.name);
+        MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
+            db.open(function (err, client) {
                 assert.equal(null, err);
-                client.collection(col).findOne({name: game.name}, function(err, doc) {
+                client.collection(col).findOne({name: game.name}, function (err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if(doc !== null) console.log("[mongo] found game: "+doc.name);
-                    else console.log("[mongo] game not found: "+game.name);
-                    if(callback !== null)
+                    if (doc !== null) console.log("[mongo] found game: " + doc.name);
+                    else console.log("[mongo] game not found: " + game.name);
+                    if (callback !== null)
                         callback(doc);
                 });
             });
@@ -107,22 +107,21 @@ module.exports = {
      * @param field Criterio de lista requerida.
      * @param callback Función a la que enviar el resultado.
      */
-    findOwnedList: function(game, field, callback) {
-        console.log("[mongo] looking for list in: "+game.name);
-        MongoClient.connect(dbUrl, function(err, db) {
+    findOwnedList: function (game, field, callback) {
+        console.log("[mongo] looking for list in: " + game.name);
+        MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
+            db.open(function (err, client) {
                 assert.equal(null, err);
-                client.collection(col).findOne({name: game.name}, field, function(err, list) {
+                client.collection(col).findOne({name: game.name}, function (err, list) {
                     db.close();
                     assert.equal(null, err);
-                    if(list !== null) console.log("[mongo] found game: "+list.name);
-                    else console.log("[mongo] game not found: "+game.name);
-                    if(callback !== null)
-                        callback(list);
+                    if (list !== null) console.log("[mongo] found game: " + list.name);
+                    else console.log("[mongo] game not found: " + game.name);
+                    if (callback !== null)
+                        callback(list[field]);
                 });
             });
         });
-    }
-
+    },
 };

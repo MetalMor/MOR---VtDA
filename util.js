@@ -3,6 +3,7 @@
  *
  * Created by mor on 6/05/16.
  */
+var mongoGames = require('./db/mongoGames');
 
 var util = {
     obj: 'Object',
@@ -66,6 +67,14 @@ var util = {
      */
     type: function (crit, obj) {
         return Object.prototype.toString.call(obj) === '[object ' + crit + ']'
+    },
+    /**
+     * Retorna un string sin caracteres mierdosos y maliciosos. Malditos hackers hijos de puta, moriréis.
+     * @param s String a limpiar.
+     * @returns {string}
+     */
+    paramClean: function (s) {
+        return s.replaceAll(/\W/g, "");
     },
     /**
      * En una cadena de caracteres enviada por parámetro: elimina todas las tildes, convierte los espacios en guiones
@@ -225,7 +234,48 @@ var util = {
         while (m = token.exec(str))
             num += key[m[0]];
         return num;
-    }
+    },
+    /*updateNames: function() {
+     var statsGroupList, statsSetList, statList,
+     game = {name: 'Blood Money'},
+     nameEqv = {
+     actuar: 'consciencia',
+     esquivar: 'expresion',
+     armas_mele: 'pelea_con_armas',
+     equitacion: 'conducir',
+     pericias: 'artesania',
+     herbolaria: 'latrocinio',
+     musica: 'interpretacion',
+     linguistica: 'finanzas',
+     sabiduria_popular: 'tecnologia',
+     senescal: 'informatica',
+     tiro_con_arco: 'armas_de_fuego'
+     };
+     mongoGames.findOwnedList(game, 'npcList', function(npcList) {
+     npcList.forEach(function(npc) {
+     statsGroupList = npc.stats;
+     statsGroupList.forEach(function(statsGroup) {
+     console.log("[stats] name: "+statsGroup.name);
+     statsSetList = statsGroup.stats;
+     statsSetList.forEach(function(statsSet) {
+     console.log("[stats] name: "+statsSet.name);
+     statList = statsSet.stats;
+     if(!util.isUndefined(statList))
+     statList.forEach(function(stat) {
+     console.log("[stats] name (bf): "+stat.name);
+     if(nameEqv.hasOwnProperty(stat.name))
+     stat.name = nameEqv[stat.name];
+     console.log("[stats] name (at): "+stat.name);
+     });
+     });
+     });
+     });
+     game.npcList = npcList;
+     mongoGames.updateGame(game, function() {
+     console.log("[stats] update ok");
+     });
+     });
+     }*/
 };
 
 module.exports = util;

@@ -13,11 +13,11 @@ module.exports = function() {
      * @type {array}
      */
     this.tal = [
-        new RegularStat("Actuar"),
+        new RegularStat("Consciencia"),
         new RegularStat("Alerta"),
         new RegularStat("Atletismo"),
         new RegularStat("Callejeo"),
-        new RegularStat("Esquivar"),
+        new RegularStat("Expresión"),
         new RegularStat("Empatía"),
         new RegularStat("Intimidación"),
         new RegularStat("Liderazgo"),
@@ -29,15 +29,15 @@ module.exports = function() {
      * @type {array}
      */
     this.tech = [
-        new RegularStat("Armas melé"),
-        new RegularStat("Equitación"),
+        new RegularStat("Pelea con armas"),
+        new RegularStat("Conducir"),
         new RegularStat("Etiqueta"),
-        new RegularStat("Herbolaria"),
-        new RegularStat("Música"),
-        new RegularStat("Pericias"),
+        new RegularStat("Latrocinio"),
+        new RegularStat("Interpretación"),
+        new RegularStat("Artesanía"),
         new RegularStat("Sigilo"),
         new RegularStat("Supervivencia"),
-        new RegularStat("Tiro con arco"),
+        new RegularStat("Armas de fuego"),
         new RegularStat("Trato con animales")
     ];
     /**
@@ -49,12 +49,12 @@ module.exports = function() {
         new RegularStat("Ciencias"),
         new RegularStat("Investigación"),
         new RegularStat("Leyes"),
-        new RegularStat("Lingüística"),
+        new RegularStat("Finanzas"),
         new RegularStat("Medicina"),
         new RegularStat("Ocultismo"),
         new RegularStat("Política"),
-        new RegularStat("Sabiduría popular"),
-        new RegularStat("Senescal")
+        new RegularStat("Tecnología"),
+        new RegularStat("Informática")
     ];
     /**
      * Retorna un nuevo objeto de conjunto de estadísticas de talentos.

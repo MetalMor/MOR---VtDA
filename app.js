@@ -45,6 +45,8 @@ console.log('[server] init server vars');
 
 /**
  * TODO validar usuarios sin importar mayusculas o minusculas
+ * TODO limpiar las entradas de parametros en la query (evitar caracteres maliciosos)
+ * TODO fichero de constantes
  */
 
 mongoGames.listAllGames(setGames);
@@ -85,6 +87,13 @@ app.get('/login/', function (req, res) {
     view = new ViewData(views.user, 'MOR - VtDA', 'Login', 0);
     res.render(view.file, view.data);
 });
+
+/*app.get('/test/', function(req, res) {
+ console.log("[server] test util.updateNames");
+ util.updateNames();
+ res.send(200);
+ });*/
+
 console.log('[server] login route set');
 // VALIDACION LOGIN
 app.post('/login/', function(req, res) {
@@ -117,7 +126,7 @@ app.post('/login/new', function(req, res) {
     user = new User(req.body.name, sha1(req.body.passwd[0]));
     mongoUsers.findUserByName(user, function(u) {
         view = new ViewData(views.newUser, 'MOR - VtDA', 'Nuevo Usuario', 1);
-        if (!passwdArray.hasOwnProperty('length') || passwdArray[0] !== passwdArray[1]) { // ERROR distintos passwd
+        if (!util.type(util.arr, passwdArray) || passwdArray[0] !== passwdArray[1]) { // ERROR distintos passwd
             view.data.error = 4;
             res.render(view.file, view.data);
         } else if(passwdArray[0] == '' || req.body.user == '') { // ERROR empty fields
