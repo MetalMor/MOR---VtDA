@@ -4,64 +4,33 @@
  * Created by mor on 8/05/16.
  */
 
-var RegularStat = require('./../../models/RegularStat');
-var StatsSet = require('./../../models/StatsSet');
+var RegularStat = require('./../../models/RegularStat'),
+    StatsSet = require('./../../models/StatsSet'),
+    constants = require('./../../constants/Constants').char.stats.skills,
+    statList = require('./../scripts/list');
 
 module.exports = function() {
     /**
      * Lista de objetos de estadísticas de talentos.
      * @type {array}
      */
-    this.tal = [
-        new RegularStat("Consciencia"),
-        new RegularStat("Alerta"),
-        new RegularStat("Atletismo"),
-        new RegularStat("Callejeo"),
-        new RegularStat("Expresión"),
-        new RegularStat("Empatía"),
-        new RegularStat("Intimidación"),
-        new RegularStat("Liderazgo"),
-        new RegularStat("Pelea"),
-        new RegularStat("Subterfugio")
-    ];
+    this.tal = statList(constants.talents.list, RegularStat);
     /**
      * Lista de objetos de estadísticas de técnicas.
      * @type {array}
      */
-    this.tech = [
-        new RegularStat("Pelea con armas"),
-        new RegularStat("Conducir"),
-        new RegularStat("Etiqueta"),
-        new RegularStat("Latrocinio"),
-        new RegularStat("Interpretación"),
-        new RegularStat("Artesanía"),
-        new RegularStat("Sigilo"),
-        new RegularStat("Supervivencia"),
-        new RegularStat("Armas de fuego"),
-        new RegularStat("Trato con animales")
-    ];
+    this.tech = statList(constants.techniques.list, RegularStat);
     /**
      * Lista de objetos de estadísticas de conocimientos.
      * @type {array}
      */
-    this.knl = [
-        new RegularStat("Academicismo"),
-        new RegularStat("Ciencias"),
-        new RegularStat("Investigación"),
-        new RegularStat("Leyes"),
-        new RegularStat("Finanzas"),
-        new RegularStat("Medicina"),
-        new RegularStat("Ocultismo"),
-        new RegularStat("Política"),
-        new RegularStat("Tecnología"),
-        new RegularStat("Informática")
-    ];
+    this.knl = statList(constants.knowledges.list, RegularStat);
     /**
      * Retorna un nuevo objeto de conjunto de estadísticas de talentos.
      * @returns {object}
      */
     this.initTal = function() {
-        var ret = new StatsSet("Talentos");
+        var ret = new StatsSet(constants.talents.name);
         var tal = this.tal;
         tal.forEach(function(s) {ret.stats.push(s)});
         return ret;
@@ -71,7 +40,7 @@ module.exports = function() {
      * @returns {object}
      */
     this.initTech = function() {
-        var ret = new StatsSet("Técnicas");
+        var ret = new StatsSet(constants.techniques.name);
         var tech = this.tech;
         tech.forEach(function(s) {ret.stats.push(s)});
         return ret;
@@ -81,7 +50,7 @@ module.exports = function() {
      * @returns {object}
      */
     this.initKnl = function() {
-        var ret = new StatsSet("Conocimientos");
+        var ret = new StatsSet(constants.knowledges.name);
         var knl = this.knl;
         knl.forEach(function(s) {ret.stats.push(s)});
         return ret;
@@ -100,11 +69,11 @@ module.exports = function() {
      * @returns {object}
      */
     this.initSkills = function() {
-        var ret = new StatsSet("Habilidades");
+        var ret = new StatsSet(constants.name);
         var skills = this.skills, stats;
         skills.forEach(function(stat) {
             stats = stat.stats;
-            stats.forEach(function(s) {s.cost = 2});
+            stats.forEach(function(s) {s.cost = constants.cost});
             ret.stats.push(stat)
         });
         return ret;

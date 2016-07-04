@@ -4,21 +4,14 @@
  * Created by mor on 8/05/16.
  */
 
-var StringField = require('./../../models/StringField');
-var FieldsSet = require('./../../models/FieldsSet');
+var StringField = require('./../../models/StringField'),
+    FieldsSet = require('./../../models/FieldsSet'),
+    constants = require('./../../constants/Constants').char.data.backgrounds,
+    fieldList = require('./../scripts/list');
 
 module.exports = function() {
-    this.name = "Datos del trasfondo";
-    this.fields = [
-        new StringField("Dominio"),
-        new StringField("Contactos"),
-        new StringField("Rebaño"),
-        new StringField("Influencia"),
-        new StringField("Mentor"),
-        new StringField("Aliados"),
-        new StringField("Recursos"),
-        new StringField("Criados")
-    ];
+    this.name = constants.name;
+    this.fields = fieldList(constants.list, StringField);
     /**
      * Retorna un objeto de campos de datos de trasfondo del personaje.
      * @returns {object}

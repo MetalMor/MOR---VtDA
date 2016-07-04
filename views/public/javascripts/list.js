@@ -8,14 +8,16 @@ var list = {
      * Carga la lista de personajes de la partida en un elemento select.
      */
     load: function () {
-        var element = $('select#char-list'), charList = game.charList, npcList = game.npcList;
+        var element = $('select#char-list'), charList = game.charList,
+            npcList = game.npcList, event = 'change', childrenSelector = ':selected',
+            separatorElement = '<option>--------------------</option>';
         element.empty();
         list.appendList(element, charList);
-        element.append('<option>----------</option>');
+        element.append(separatorElement);
         list.appendList(element, npcList);
-        element.off('change');
-        element.on('change', function () {
-            button.charSelectOptionClick(element.children(':selected'));
+        element.off(event);
+        element.on(event, function () {
+            button.charSelectOptionClick(element.children(childrenSelector));
         });
     },
     /**
@@ -29,8 +31,11 @@ var list = {
                 childs += c
             },
             newChild = function (c) {
-                return "<option class='"+((util.isUndefined(c.npc) || !c.npc) ? 'char' : 'npc')+"'>" +
-                charFunctions.findData(c, 'nombre').value + "</option>"
+                var currentCharName = charFunctions.findData(char, 'nombre').value,
+                    otherCharName = charFunctions.findData(c, 'nombre').value,
+                    htmlClass = ((util.isUndefined(c.npc) || !c.npc) ? 'char' : 'npc'),
+                    htmlSelected = (currentCharName === otherCharName ? " selected" : "");
+                return "<option" + htmlSelected + " class='"+htmlClass+"'>" + otherCharName + "</option>"
             };
         list.forEach(function (ch) {
             addChild(newChild(ch));

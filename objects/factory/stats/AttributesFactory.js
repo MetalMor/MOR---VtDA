@@ -4,39 +4,29 @@
  * Created by mor on 8/05/16.
  */
 
-var RegularStat = require('./../../models/RegularStat');
-var StatsSet = require('./../../models/StatsSet');
+var RegularStat = require('./../../models/RegularStat'),
+    StatsSet = require('./../../models/StatsSet'),
+    constants = require('./../../constants/Constants').char.stats.attributes,
+    statList = require('./../scripts/list');
 
 module.exports = function() {
-    this.phy = [
-        new RegularStat("Fuerza"),
-        new RegularStat("Destreza"),
-        new RegularStat("Resistencia")
-    ];
-    this.soc = [
-        new RegularStat("Carisma"),
-        new RegularStat("Manipulación"),
-        new RegularStat("Apariencia")
-    ];
-    this.men = [
-        new RegularStat("Percepción"),
-        new RegularStat("Inteligencia"),
-        new RegularStat("Astucia")
-    ];
+    this.phy = statList(constants.physicals.list, RegularStat);
+    this.soc = statList(constants.socials.list, RegularStat);
+    this.men = statList(constants.mentals.list, RegularStat);
     this.initPhy = function() {
-        var ret = new StatsSet("Físicos");
+        var ret = new StatsSet(constants.physicals.name);
         var phy = this.phy;
         phy.forEach(function(s) {ret.stats.push(s)});
         return ret;
     };
     this.initSoc = function() {
-        var ret = new StatsSet("Sociales");
+        var ret = new StatsSet(constants.socials.name);
         var soc = this.soc;
         soc.forEach(function(s) {ret.stats.push(s)});
         return ret;
     };
     this.initMen = function() {
-        var ret = new StatsSet("Mentales");
+        var ret = new StatsSet(constants.mentals.name);
         var men = this.men;
         men.forEach(function(s) {ret.stats.push(s)});
         return ret;
@@ -47,11 +37,11 @@ module.exports = function() {
         this.initMen()
     ];
     this.initAttr = function() {
-        var ret = new StatsSet("Atributos");
+        var ret = new StatsSet(constants.name);
         var attr = this.attr, stats;
         attr.forEach(function(stat) {
             stats = stat.stats;
-            stats.forEach(function(s) {s.cost = 5});
+            stats.forEach(function(s) {s.cost = constants.cost});
             ret.stats.push(stat)
         });
         ret.upgradeAll();

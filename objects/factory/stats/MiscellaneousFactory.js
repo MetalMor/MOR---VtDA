@@ -4,9 +4,10 @@
  * Created by mor on 8/05/16.
  */
 
-var RegularStat = require('./../../models/RegularStat');
-var MaxableStat = require('./../../models/MaxableStat');
-var StatsSet = require('./../../models/StatsSet');
+var RegularStat = require('./../../models/RegularStat'),
+    MaxableStat = require('./../../models/MaxableStat'),
+    StatsSet = require('./../../models/StatsSet'),
+    constants = require('./../../constants/Constants').char.stats.miscellaneous;
 
 module.exports = function() {
     /**
@@ -14,19 +15,19 @@ module.exports = function() {
      * @type {array}
      */
     this.misc = [
-        new MaxableStat("Fuerza de Voluntad", 1),
-        new RegularStat("Camino", 2),
-        new MaxableStat("Sangre")
+        new MaxableStat(constants.list[0], 1),
+        new RegularStat(constants.list[1], 2),
+        new MaxableStat(constants.list[2])
     ];
     /**
      * Retorna un nuevo objeto de conjunto de estadísticas varias.
      * @returns {object}
      */
     this.initMisc = function() {
-        var ret = new StatsSet("Otros");
+        var ret = new StatsSet(constants.name);
         var misc = this.misc;
         misc.forEach(function(s) {ret.stats.push(s)});
-        ret.initPoints = 0;
+        ret.initPoints = constants.initPoints;
         return ret;
     };
 };

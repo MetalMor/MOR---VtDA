@@ -4,8 +4,10 @@
  * Created by mor on 8/05/16.
  */
 
-var RegularStat = require('./../../models/RegularStat');
-var StatsSet = require('./../../models/StatsSet');
+var RegularStat = require('./../../models/RegularStat'),
+    StatsSet = require('./../../models/StatsSet'),
+    constants = require('./../../constants/Constants').char.stats.advantages,
+    statsList = require('./../scripts/list');
 
 module.exports = function() {
 
@@ -13,29 +15,18 @@ module.exports = function() {
      * Lista de objetos de estadisticas de virtudes.
      * @type {array}
      */
-    this.virt = [
-        new RegularStat("Conciencia"),
-        new RegularStat("Autocontrol"),
-        new RegularStat("Coraje")
-    ];
-    this.bckg = [
-        new RegularStat("Dominio"),
-        new RegularStat("Aliados"),
-        new RegularStat("Arsenal"),
-        new RegularStat("Contactos"),
-        new RegularStat("Rebaño"),
-        new RegularStat("Influencia"),
-        new RegularStat("Mentor"),
-        new RegularStat("Recursos"),
-        new RegularStat("Estatus")
-    ];
+    this.virt = statsList(constants.virtues.list, RegularStat);
+    /**
+     * Lista de objetos de estadísticas de trasfondos.
+     */
+    this.bckg = statsList(constants.backgrounds.list, RegularStat);
     /**
      * Retorna un nuevo objeto de conjunto de estadisticas de disciplinas.
      * @returns {object}
      */
     this.initDisc = function() {
-        var ret = new StatsSet("Disciplinas");
-        ret.initPoints = 3;
+        var ret = new StatsSet(constants.disciplines.name);
+        ret.initPoints = constants.disciplines.initPoints;
         return ret;
     };
     /**
@@ -43,10 +34,10 @@ module.exports = function() {
      * @returns {object}
      */
     this.initBckg = function() {
-        var ret = new StatsSet("Trasfondos");
+        var ret = new StatsSet(constants.backgrounds.name);
         var bckg = this.bckg;
         bckg.forEach(function(b) {ret.stats.push(b)});
-        ret.initPoints = 5;
+        ret.initPoints = constants.backgrounds.initPoints;
         return ret;
     };
     /**
@@ -54,14 +45,14 @@ module.exports = function() {
      * @returns {object}
      */
     this.initVirt = function() {
-        var ret = new StatsSet("Virtudes");
+        var ret = new StatsSet(constants.virtues.name);
         var virt = this.virt;
         virt.forEach(function(v) {
-            v.cost = 2;
+            v.cost = constants.virtues.cost;
             ret.stats.push(v)
         });
         ret.upgradeAll();
-        ret.initPoints = 7;
+        ret.initPoints = constants.virtues.initPoints;
         return ret;
     };
     /**
@@ -78,7 +69,7 @@ module.exports = function() {
      * @returns {object}
      */
     this.initAdvtges = function() {
-        var advtges = new StatsSet("Ventajas");
+        var advtges = new StatsSet(constants.name);
         var stats = this.stats;
         stats.forEach(function(s) {advtges.stats.push(s)});
         return advtges;

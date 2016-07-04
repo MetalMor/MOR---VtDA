@@ -65,8 +65,8 @@ module.exports = {
             assert.equal(null, err);
             db.open(function (err, client) {
                 assert.equal(null, err);
-                /*if (!util.isUndefined(game._id))
-                 delete game._id;*/
+                //if (!util.isUndefined(game._id))
+                delete game._id;
                 client.collection(col).updateOne({name: game.name}, {$set: game}, function (err, result) {
                     db.close();
                     assert.equal(null, err);
@@ -123,5 +123,5 @@ module.exports = {
                 });
             });
         });
-    },
+    }
 };

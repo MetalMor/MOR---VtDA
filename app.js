@@ -46,7 +46,7 @@ console.log('[server] init server vars');
 /**
  * TODO validar usuarios sin importar mayusculas o minusculas
  * TODO limpiar las entradas de parametros en la query (evitar caracteres maliciosos)
- * TODO fichero de constantes
+ * TODO fichero de constantes!!!
  */
 
 mongoGames.listAllGames(setGames);

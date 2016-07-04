@@ -46,9 +46,11 @@ var charFunctions = {
      */
     initBlood: function(char) {
         var blood = charFunctions.findStat(char, 'sangre');
-        blood.level = Math.floor(Math.random()*blood.max+1);
-        charFunctions.setStat(char, 'sangre', blood);
-        table.updateOther();
+        if(!util.isUndefined(blood)) {
+            blood.level = Math.floor(Math.random() * blood.max + 1);
+            charFunctions.setStat(char, 'sangre', blood);
+            table.updateOther();
+        }
     },
     /**
      * Calcula la reserva de sangre máxima de un vampiro en base a su generación

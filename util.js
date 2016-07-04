@@ -196,7 +196,7 @@ var util = {
             var obj = this.obj, arr = this.arr;
             var type = typeof a, self = this;
             if (this.type(arr, a)) a.forEach(function (b) {self.showProps(b)}); // si es un array llama a showProps sobre el objeto en la posición actual
-            else if (this.type(obj, a)) for (var x in a) this.showProps(a[x]); // si es un objeto, lo mismo q antes
+            else if (this.type(obj, a)) for (var x in a) self.showProps(a[x]); // si es un objeto, lo mismo q antes
             else if (type != 'undefined' && type != 'object' && a !== "") console.log('[server] prop: ' + a); // si es un tipo primitivo, muestra su valor
         }
     },
@@ -234,48 +234,48 @@ var util = {
         while (m = token.exec(str))
             num += key[m[0]];
         return num;
-    },
-    /*updateNames: function() {
-     var statsGroupList, statsSetList, statList,
-     game = {name: 'Blood Money'},
-     nameEqv = {
-     actuar: 'consciencia',
-     esquivar: 'expresion',
-     armas_mele: 'pelea_con_armas',
-     equitacion: 'conducir',
-     pericias: 'artesania',
-     herbolaria: 'latrocinio',
-     musica: 'interpretacion',
-     linguistica: 'finanzas',
-     sabiduria_popular: 'tecnologia',
-     senescal: 'informatica',
-     tiro_con_arco: 'armas_de_fuego'
-     };
-     mongoGames.findOwnedList(game, 'npcList', function(npcList) {
-     npcList.forEach(function(npc) {
-     statsGroupList = npc.stats;
-     statsGroupList.forEach(function(statsGroup) {
-     console.log("[stats] name: "+statsGroup.name);
-     statsSetList = statsGroup.stats;
-     statsSetList.forEach(function(statsSet) {
-     console.log("[stats] name: "+statsSet.name);
-     statList = statsSet.stats;
-     if(!util.isUndefined(statList))
-     statList.forEach(function(stat) {
-     console.log("[stats] name (bf): "+stat.name);
-     if(nameEqv.hasOwnProperty(stat.name))
-     stat.name = nameEqv[stat.name];
-     console.log("[stats] name (at): "+stat.name);
-     });
-     });
-     });
-     });
-     game.npcList = npcList;
-     mongoGames.updateGame(game, function() {
-     console.log("[stats] update ok");
-     });
-     });
-     }*/
+    }
+    /*updateNames: function () {
+        var statsGroupList, statsSetList, statList,
+            game = {name: 'Blood Money'},
+            nameEqv = {
+                actuar: 'consciencia',
+                esquivar: 'expresion',
+                armas_mele: 'pelea_con_armas',
+                equitacion: 'conducir',
+                pericias: 'artesania',
+                herbolaria: 'latrocinio',
+                musica: 'interpretacion',
+                linguistica: 'finanzas',
+                sabiduria_popular: 'tecnologia',
+                senescal: 'informatica',
+                tiro_con_arco: 'armas_de_fuego'
+            };
+        mongoGames.findOwnedList(game, 'npcList', function (npcList) {
+            npcList.forEach(function (npc) {
+                statsGroupList = npc.stats;
+                statsGroupList.forEach(function (statsGroup) {
+                    console.log("[stats] name: " + statsGroup.name);
+                    statsSetList = statsGroup.stats;
+                    statsSetList.forEach(function (statsSet) {
+                        console.log("[stats] name: " + statsSet.name);
+                        statList = statsSet.stats;
+                        if (!util.isUndefined(statList))
+                            statList.forEach(function (stat) {
+                                console.log("[stats] name (bf): " + stat.name);
+                                if (nameEqv.hasOwnProperty(stat.name))
+                                    stat.name = nameEqv[stat.name];
+                                console.log("[stats] name (at): " + stat.name);
+                            });
+                    });
+                });
+            });
+            game.npcList = npcList;
+            mongoGames.updateGame(game, function () {
+                console.log("[stats] update ok");
+            });
+        });
+    }*/
 };
 
 module.exports = util;

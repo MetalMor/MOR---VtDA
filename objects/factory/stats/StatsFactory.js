@@ -4,10 +4,10 @@
  * Created by mor on 8/05/16.
  */
 
-var AdvantagesFactory = require('./AdvantagesFactory');
-var AttributesFactory = require('./AttributesFactory');
-var MiscellaneousFactory = require('./MiscellaneousFactory');
-var SkillsFactory = require('./SkillsFactory');
+var AdvantagesFactory = require('./AdvantagesFactory'),
+    AttributesFactory = require('./AttributesFactory'),
+    MiscellaneousFactory = require('./MiscellaneousFactory'),
+    SkillsFactory = require('./SkillsFactory');
 
 module.exports = function() {
     /**
@@ -39,7 +39,7 @@ module.exports = function() {
      * @returns {object}
      */
     this.initSkills = function() {
-        var ret, sf = new SkillsFactory();
+        var sf = new SkillsFactory();
         return sf.initSkills();
     };
     /**
