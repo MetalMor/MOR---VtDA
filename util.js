@@ -166,9 +166,9 @@ var util = {
      * @returns {*}
      */
     findChar: function(user, game) {
-        var userName = user.name, charList = game.charList, ret = 0;
+        var userName = user.name, charList = game.charList, ret = false;
         charList.forEach(function(c) {
-            if(ret === 0 && c.owner === userName) ret = c;
+            if(!ret && c.owner === userName) ret = c;
         });
         return ret;
     },

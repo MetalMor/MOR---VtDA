@@ -20,6 +20,9 @@ var headers = {
             val: 'GNU Terry Pratchet'
         }
     ],
+    contentType: function(res, type) {
+        res.setHeader('Content-Type', type);
+    },
     add: function(req, res, next) {
         var list = headers.list, h, cur;
         for (h in list) {

@@ -26,7 +26,8 @@ var util = require('./util'), // utils
     Game = require('./objects/models/Game'), // game model
     CharFactory = require('./objects/factory/CharFactory'),
     clans = require('./objects/models/Clans'),
-    generations = require('./objects/models/Generations');
+    generations = require('./objects/models/Generations'),
+    constants = require('./objects/constants/Constants');
 console.log('[server] init models');
 
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
@@ -273,6 +274,7 @@ app.get('/game/:user/:game', function(req, res) {
                         view.data.gameJSON = JSON.stringify(game);
                         view.data.user = user;
                         view.data.game = game;
+                        view.data.constants = constants.char;
                         view.data.clans = clans;
                         view.data.gens = generations;
                         view.data.playerFlag = true;
@@ -280,7 +282,7 @@ app.get('/game/:user/:game', function(req, res) {
                             console.log("[server] logging player in: " + game.name);
                             view.file = views.player;
                             char = util.findChar(user, game);
-                            if (char === 0) {
+                            if (!char) {
                                 var cf = new CharFactory();
                                 char = cf.initChar();
                             }
@@ -307,7 +309,7 @@ console.log('[server] game panel route set');
 app.get('/game/initChar', function (req, res) {
     var ret = cf.initChar();
     ret.npc = true;
-    res.setHeader('Content-Type', 'application/json');
+    headers.contentType(res, 'application/json');
     res.send(JSON.stringify(ret));
 });
 console.log('[server] init char request route set');

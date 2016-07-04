@@ -131,7 +131,7 @@ var table = {
             xpDisplay = panel.find('.panel-heading>span#char-xp');
         if (char.fp > 0)
             xpDisplay.text('FP: '+char.fp);
-        else if(char.xp > 0)
+        else if(char.xp >= 0)
             xpDisplay.text('XP: '+char.xp);
         else
             xpDisplay.empty();

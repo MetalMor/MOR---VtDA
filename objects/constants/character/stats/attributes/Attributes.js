@@ -8,6 +8,7 @@ var attributes = {
     physicals: require('./physicals/Physicals'),
     socials: require('./socials/Socials'),
     mentals: require('./mentals/Mentals'),
+    prefs: require('./Prefs'),
     cost: 5
 };
 

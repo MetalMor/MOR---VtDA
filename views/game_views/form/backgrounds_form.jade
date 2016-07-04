@@ -3,31 +3,31 @@
 
 form(role="form")
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Dominio"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[0]
         textarea#domain.form-control.mandatory(placeholder="descripción...")="caja de cartón"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Contactos"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[1]
         textarea#contacts.form-control.mandatory(placeholder="descripción...")="el camello del barrio"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Rebaño"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[2]
         textarea#herd.form-control.mandatory(placeholder="descripción...")="4 gatos"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Influencia"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[3]
         textarea#influence.form-control.mandatory(placeholder="descripción")="poca o nada"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Mentor"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[4]
         textarea#mentor.form-control.mandatory(placeholder="descripción...")="la vida misma"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Aliados"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[5]
         textarea#allies.form-control.mandatory(placeholder="descripción...")="nadie"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Recursos"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[6]
         textarea#resources.form-control.mandatory(placeholder="descripción...")="algo de suelto para tabaco"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Criados"
+        span.input-group-addon.text-center=constants.data.backgrounds.list[7]
         textarea#servants.form-control.mandatory(placeholder="descripción...")="comadrejas"
     .form-group.col-sm-4
-        span.input-group-addon.text-center="Historia"
+        span.input-group-addon.text-center=constants.story
         textarea#story.form-control.mandatory(rows="6", placeholder="descripción...")="flautista en Hamelin"
     .form-group.col-sm-4
         input#next.btn.btn-danger.btn-lg.right-align(type="button", value="Siguiente")

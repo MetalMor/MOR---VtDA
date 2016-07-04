@@ -26,7 +26,7 @@ mixin prefs-table-content(name, list)
 
 .col-sm-6
     table.table#attr-prefs.prefs.text-center
-        +prefs-table-content("Estadísticas", [["Físicos", 7], ["Sociales", 5], ["Mentales", 3]])
+        +prefs-table-content(constants.stats.attributes.prefs.name, constants.stats.attributes.prefs.list)
 .col-sm-6
     table.table#skills-prefs.prefs.text-center
-        +prefs-table-content("Habilidades", [["Talentos", 13], ["Técnicas", 9], ["Conocimientos", 5]])
+        +prefs-table-content(constants.stats.skills.prefs.name, constants.stats.skills.prefs.list)

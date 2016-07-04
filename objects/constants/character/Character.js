@@ -5,7 +5,8 @@
 
 var char = {
     data: require('./data/Data'),
-    stats: require('./stats/Stats')
+    stats: require('./stats/Stats'),
+    story: "Historia"
 };
 
 module.exports = char;

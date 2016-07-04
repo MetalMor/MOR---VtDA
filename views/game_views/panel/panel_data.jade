@@ -3,7 +3,7 @@
 
 #data.col-sm-10.overlay-v(hidden)
     .panel.panel-primary
-        .panel-heading.text-center="Datos generales"
+        .panel-heading.text-center=constants.data.general.name
         #general.panel-body
             #advice.alert.alert-info(hidden)
                 p.text-center="Cuando acabes de rellenar la ficha, pulsa el botón 'Siguiente'."
@@ -13,11 +13,11 @@
         #statprefs.panel-body
             include ../form/statprefs_form
     .panel.panel-primary
-        .panel-heading.text-center="Aspecto"
+        .panel-heading.text-center=constants.data.look.name
         #look.panel-body
             include ../form/look_form
     .panel.panel-primary
-        .panel-heading.text-center="Datos de trasfondo"
+        .panel-heading.text-center=constants.data.backgrounds.name
         #background.panel-body
             #emptyFields.alert.alert-danger(hidden)
                 p.text-center="Debes rellenar todos los campos."
