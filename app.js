@@ -17,9 +17,9 @@ var mongoUsers = require('./db/mongoUsers'), // db users controller
     mongoGames = require('./db/mongoGames'); // db games controller
 console.log('[server] init db objects');
 
-var util = require('./util'), // utils
-    headers = require('./headers'), // additional HTTP headers
-    cookies = require('./cookies'), // cookies
+var util = require('./custom_modules/util'), // utils
+    headers = require('./custom_modules/headers'), // additional HTTP headers
+    cookies = require('./custom_modules/cookies'), // cookies
     ViewData = require('./objects/system/ViewData'), // view data model
     views = require('./objects/system/views'),
     User = require('./objects/models/User'), // user model
@@ -318,4 +318,4 @@ server.listen(PORT);
 console.log('[server] started at port ' + PORT);
 
 // ***** EJECUTA LOS SOCKETS! *****
-require('./sockets.js')(io);
+require('./custom_modules/sockets.js')(io);

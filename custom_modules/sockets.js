@@ -4,8 +4,8 @@
  * Created by mor on 25/04/16.
  */
 
-var mongoUsers = require('./db/mongoUsers');
-var mongoGames = require('./db/mongoGames');
+var mongoUsers = require('./../db/mongoUsers');
+var mongoGames = require('./../db/mongoGames');
 var util = require('./util');
 
 module.exports = function (io) {

@@ -4,7 +4,7 @@
  * Created by mor on 8/05/16.
  */
 
-var util = require('./../../util');
+var util = require('./../../custom_modules/util');
 
 module.exports = function(n) {
     this.name = util.clean(n);

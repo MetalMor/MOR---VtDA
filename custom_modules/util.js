@@ -3,7 +3,7 @@
  *
  * Created by mor on 6/05/16.
  */
-var mongoGames = require('./db/mongoGames');
+var mongoGames = require('./../db/mongoGames');
 
 var util = {
     obj: 'Object',
