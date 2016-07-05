@@ -4,7 +4,7 @@
  */
 var util = require('./util');
 
-var headers = {
+var http = {
     list: [
         {
             nm: 'X-Frame-Options',
@@ -23,8 +23,8 @@ var headers = {
     contentType: function(res, type) {
         res.setHeader('Content-Type', type);
     },
-    add: function(req, res, next) {
-        var list = headers.list, h, cur;
+    addHeaders: function (req, res, next) {
+        var list = http.list, h, cur;
         for (h in list) {
             cur = list[h];
             res.setHeader(cur.nm, cur.val);
@@ -33,4 +33,4 @@ var headers = {
     }
 };
 
-module.exports = headers;
+module.exports = http;

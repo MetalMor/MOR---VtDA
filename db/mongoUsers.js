@@ -7,7 +7,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
-var util = require('./../custom_modules/util');
+var util = require('../server/util');
 
 var dbUrl = 'mongodb://localhost:27017/vtda';
 var col = 'users';

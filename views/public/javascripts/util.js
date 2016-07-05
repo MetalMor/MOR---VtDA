@@ -242,3 +242,6 @@ var util = {
         return num;
     }
 };
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = util;
