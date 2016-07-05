@@ -4,7 +4,7 @@
  */
  var miscellaneous = {
     name: "Otros",
-    list: ["Fuerza de voluntad", "Camino", "Reserva de sangre"],
+    list: ["Fuerza de voluntad", "Camino", "Sangre"],
     initPoints: 0
 };
 

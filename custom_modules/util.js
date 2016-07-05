@@ -234,22 +234,16 @@ var util = {
         while (m = token.exec(str))
             num += key[m[0]];
         return num;
-    }
-    /*updateNames: function () {
+    },
+    /**
+     * Función para "reparar" campos de la base de datos. Busca un campo con el nombre especificado en el objeto
+     * nameEqv y le da el valor que se le da en dicho objeto.
+     */
+    updateNames: function () {
         var statsGroupList, statsSetList, statList,
             game = {name: 'Blood Money'},
             nameEqv = {
-                actuar: 'consciencia',
-                esquivar: 'expresion',
-                armas_mele: 'pelea_con_armas',
-                equitacion: 'conducir',
-                pericias: 'artesania',
-                herbolaria: 'latrocinio',
-                musica: 'interpretacion',
-                linguistica: 'finanzas',
-                sabiduria_popular: 'tecnologia',
-                senescal: 'informatica',
-                tiro_con_arco: 'armas_de_fuego'
+                reserva_de_sangre: 'sangre'
             };
         mongoGames.findOwnedList(game, 'npcList', function (npcList) {
             npcList.forEach(function (npc) {
@@ -275,7 +269,7 @@ var util = {
                 console.log("[stats] update ok");
             });
         });
-    }*/
+    }
 };
 
 module.exports = util;

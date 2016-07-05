@@ -93,11 +93,11 @@ app.get('/login/', function (req, res) {
     res.render(view.file, view.data);
 });
 
-/*app.get('/test/', function(req, res) {
- console.log("[server] test util.updateNames");
- util.updateNames();
- res.send(200);
- });*/
+app.get('/test/', function (req, res) {
+    console.log("[server] test util.updateNames");
+    util.updateNames();
+    res.send(200);
+});
 
 console.log('[server] login route set');
 // VALIDACION LOGIN
