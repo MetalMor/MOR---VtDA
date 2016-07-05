@@ -4,7 +4,8 @@
  */
 
 var pdf = {
-    convert: function (source) {
+    convert: function () {
+        var source = $('table#show-stats')[0];
         var pdf = new jsPDF('p', 'pt', 'letter'),
             margins = {
                 top: 80,

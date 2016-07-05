@@ -97,6 +97,7 @@ var button = {
         button.setButtonClick(element, function () {
             //var sheet = {user: user, game: game, char: char};
             char.xp++;
+            //pdf.convert();
             overlay.gameWindow(char);
             sockets.update();
         });

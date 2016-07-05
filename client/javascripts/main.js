@@ -6,6 +6,7 @@
 var char, user, game;
 
 if (window["WebSocket"]) {
+    icons.init();
     $('#wrapper-player').ready(function () {
         function connectPlayer() {
             var charElement;

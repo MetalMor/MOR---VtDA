@@ -4,14 +4,6 @@
  */
 var table = {
     /**
-     * Contenedor de objetos para insertar adecuadamente los iconos de nivel.
-     */
-    icons: {
-        set: {class:"set", file: "set_level_icon.png"},
-        unset: {class: "unset", file: "unset_level_icon.png"},
-        maxable: {class: "max", file: "max_level_icon.png"}
-    },
-    /**
      * Mediante recursividad, construye una tabla a partir de un objeto de estadísticas. La tabla está pensada para la
      * inicialización de personajes con puntos iniciales.
      * @param statsObj Objeto de estadísticas (personaje)
@@ -197,16 +189,14 @@ var table = {
      * @returns {string}
      */
     level: function(stat) {
-        var ret = "", level = stat.level, icons = this.icons;
+        var ret = "", level = stat.level;
         var icon, max = stat.max, lim = stat.limit;
-        var iconsDir = "/img/icon/";
         // bucle que inserta la imagen de una esfera de nivel. Si el personaje posee ese nivel aprendido, sera roja, y sino, gris
         for(var i = 1; i<=lim; i++) {
-            if (util.is(util.maxStat, stat))  icon = i <= max ? icons.maxable : icons.unset;
-            else if(i>level) icon = icons.unset;
-            //else icon = icons.set;
-            if(i<=level) icon = icons.set;
-            ret += "<img class='"+icon.class+' levelbutton'+"' src='" +iconsDir+icon.file + "'>";
+            if (util.is(util.maxStat, stat))  icon = i <= max ? icons.list.max : icons.list.unset;
+            else if (i > level) icon = icons.list.unset;
+            if (i <= level) icon = icons.list.set;
+            ret += icon.outerHTML;
         }
         return ret;
     },
