@@ -45,11 +45,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser(constants.server.cookieKey));
 app.use(urlCleaner.inspect);
-app.use('/public', express.static(__dirname + '/views/public/'));
-app.use('/css', express.static(__dirname + '/views/public/stylesheets/'));
-app.use('/js', express.static(__dirname + '/views/public/javascripts/'));
-app.use('/img', express.static(__dirname + '/views/public/images/'));
-app.use('/lib', express.static(__dirname + '/views/public/libraries/'));
+app.use('/public', express.static(__dirname + '/client/'));
+app.use('/css', express.static(__dirname + '/client/stylesheets/'));
+app.use('/js', express.static(__dirname + '/client/javascripts/'));
+app.use('/img', express.static(__dirname + '/client/images/'));
+app.use('/lib', express.static(__dirname + '/client/libraries/'));
 console.log('[server] middleware set');
 
 app.use('/login', login);

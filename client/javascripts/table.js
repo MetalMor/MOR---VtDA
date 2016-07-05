@@ -199,10 +199,10 @@ var table = {
     level: function(stat) {
         var ret = "", level = stat.level, icons = this.icons;
         var icon, max = stat.max, lim = stat.limit;
-        var iconsDir = "/public/images/icon/";
+        var iconsDir = "/img/icon/";
         // bucle que inserta la imagen de una esfera de nivel. Si el personaje posee ese nivel aprendido, sera roja, y sino, gris
         for(var i = 1; i<=lim; i++) {
-            if(stat.hasOwnProperty('max'))  icon = i<=max ? icons.maxable : icons.unset;
+            if (util.is(util.maxStat, stat))  icon = i <= max ? icons.maxable : icons.unset;
             else if(i>level) icon = icons.unset;
             //else icon = icons.set;
             if(i<=level) icon = icons.set;
