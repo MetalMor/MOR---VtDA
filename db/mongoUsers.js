@@ -134,6 +134,7 @@ var mongoUsers = {
                     delete user._id;
                 console.log("[mongo] preparing user update");
                 client.collection(col).updateOne({name: user.name}, {$set: user}, function(err, result) {
+                    db.close();
                     assert.equal(null, err);
                     console.log("[mongo] updated user: "+user.name);
                     callback();

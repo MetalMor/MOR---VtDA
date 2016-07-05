@@ -2,6 +2,9 @@
  * It's a raining somewhere else... ^^¡
  */
 
+var constFilePath = './objects/constants/Constants',
+    constants = require(constFilePath);
+
 var express = require('express'), // express dependencies models
     fs = require('fs'), // file parser
     app = require('express')(), // app models
@@ -20,14 +23,14 @@ console.log('[server] init db objects');
 var util = require('./custom_modules/util'), // utils
     headers = require('./custom_modules/headers'), // additional HTTP headers
     cookies = require('./custom_modules/cookies'), // cookies
+    urlCleaner = require('./custom_modules/url_cleaner');
     ViewData = require('./objects/system/ViewData'), // view data model
     views = require('./objects/system/views'),
     User = require('./objects/models/User'), // user model
     Game = require('./objects/models/Game'), // game model
     CharFactory = require('./objects/factory/CharFactory'),
     clans = require('./objects/models/Clans'),
-    generations = require('./objects/models/Generations'),
-    constants = require('./objects/constants/Constants');
+    generations = require('./objects/models/Generations');
 console.log('[server] init models');
 
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
@@ -66,7 +69,8 @@ app.use(helmet());
 app.use(headers.add);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser('m3t4Lm0R'));
+app.use(cookieParser(constants.server.cookieKey));
+app.use(urlCleaner.inspect);
 app.use('/public', express.static(__dirname + '/views/public/'));
 app.use('/css', express.static(__dirname + '/views/public/stylesheets/'));
 app.use('/js', express.static(__dirname + '/views/public/javascripts/'));

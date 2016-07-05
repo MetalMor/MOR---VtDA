@@ -4,7 +4,8 @@
  */
 
 var constants = {
-    char: require('./character/Character')
+    char: require('./character/Character'),
+    server: require('./server/Server')
 };
 
 module.exports = constants;
