@@ -14,8 +14,12 @@ form(role="form")
     .form-group.col-sm-4
         span.input-group-addon.text-center="Clan"
         select#clan.form-control
+            - counter = 0
             each clan in clans
-                option=clan
+                if counter == 0
+                    option(selected)=clan
+                else
+                    option(selected)
     .form-group.col-sm-4
         span.input-group-addon.text-center="Generación"
         select#generation.form-control

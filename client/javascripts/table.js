@@ -209,5 +209,10 @@ var table = {
     modStat: function(stat, mode) {
         charFunctions.setStat(char, stat, mode);
         table.update(stat.name);
+    },
+    exportPdf: function (table) {
+        //toCanvas.convert(table, function(tableImg) {
+        pdf.convert(table);
+        //});
     }
 };

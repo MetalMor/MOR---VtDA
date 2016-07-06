@@ -4,8 +4,10 @@
  */
 
 var pdf = {
-    convert: function () {
-        var source = $('table#show-stats')[0];
+    convert: function (source) {
+        /*var doc = new jsPDF('p', 'mm');
+         doc.addImage(source, 'PNG');
+         doc.save(Date.now()+'.pdf');*/
         var pdf = new jsPDF('p', 'pt', 'letter'),
             margins = {
                 top: 80,

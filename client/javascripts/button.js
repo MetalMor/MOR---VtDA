@@ -28,7 +28,7 @@ var button = {
                 clanName = $("select#clan").val(), attrName = 'atributos', skillsName = 'habilidades',
                 attrId = 'attr', skillsId = 'skills', statsTableId = 'stats', discsTableId = 'disciplinas',
                 defClanName = 'Assamita guerrero';
-            clanName = util.isUndefined(clanName) ? defClanName : clanName;
+            //clanName = util.isUndefined(clanName) ? defClanName : clanName;
             charFunctions.modStats(clanName);
             inputs = form.getDataInputs();
             while(inputs.length > 0) {
@@ -62,7 +62,8 @@ var button = {
         if(restrict.fullSheet(char)) {
             var sheet, npc, mes = 'setChar',
                 listId = (npc = char.npc) ? 'npc' : 'char',
-                sheetPanel = 'sheet', charPoints = 'fp';
+                sheetPanel = 'sheet', charPoints = 'fp',
+                panelName = npc ? 'masterPanel' : 'playerPanel';
             charFunctions.setReady(char, true);
             charFunctions.setCharPoints(charPoints, 15);
             charFunctions.initBlood(char);
@@ -71,7 +72,7 @@ var button = {
             sheet = {user: user, char: char, game: game};
             sockets.server(mes, sheet);
             overlay.close(sheetPanel);
-            overlay[npc ? 'masterPanel' : 'playerPanel']();
+            overlay[panelName]();
         }
     },
     /**
@@ -95,9 +96,8 @@ var button = {
     setXpGiver: function () {
         var element = $('span#xp-giver');
         button.setButtonClick(element, function () {
-            //var sheet = {user: user, game: game, char: char};
             char.xp++;
-            //pdf.convert();
+            table.exportPdf($('table#show-stats')[0]);
             overlay.gameWindow(char);
             sockets.update();
         });
@@ -240,19 +240,20 @@ var button = {
     },
     setRollPanelButton: function () {
         var opener = $('span#roll-opener'), closer = $('div#roll span#roll-closer'),
-            options = $('div#roll div#roll-options');
+            options = $('div#roll div#roll-options'),
+            overlayId = 'roll', animationSpeed = 'fast';
         button.setButtonClick(opener, function () {
             var stats = [], rollSet;
-            overlay.open('roll', 'fast', function(e) {
+            overlay.open(overlayId, animationSpeed, function (e) {
                 overlay.show(options);
             });
-            /*stats.push(charFunctions.findStat(char, 'destreza'));
+            stats.push(charFunctions.findStat(char, 'destreza'));
             stats.push(charFunctions.findStat(char, 'atletismo'));
             rollSet = dice.RollSet(stats, 5).resolve();
-            util.printJson(rollSet);*/
+            util.printJson(rollSet);
         });
         button.setButtonClick(closer, function() {
-            overlay.close('roll', 'fast', function(e) {
+            overlay.close(overlayId, animationSpeed, function (e) {
                 overlay.hide(options)
             });
         });
