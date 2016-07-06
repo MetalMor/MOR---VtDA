@@ -4,7 +4,9 @@
  */
 
 var ajax = {
-    initCharUrl: '/game/initChar',
+    paths: {
+        initChar: '/game/initChar'
+    },
     ajaxCall: function (url, callback) {
         $.ajax({
             url: url,
@@ -17,8 +19,8 @@ var ajax = {
         });
     },
     charRequest: function (callback) {
-        var func =
-            ajax.ajaxCall(ajax.initCharUrl, function (ch, textStatus, jqXHR) {
+        ajax.ajaxCall(ajax.paths.initChar,
+            function (ch, textStatus, jqXHR) {
                 if (util.type(util.func, callback))
                     callback(ch, textStatus, jqXHR);
             });
