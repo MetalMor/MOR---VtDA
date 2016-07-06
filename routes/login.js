@@ -13,10 +13,12 @@ var util = require('../server/util'), // utils
     ViewData = require('../objects/system/ViewData'), // view data model
     views = require('../objects/system/views'),
     User = require('../objects/models/User'), // user model
-    Game = require('../objects/models/Game'); // game model
+    Game = require('../objects/models/Game'), // game model
+    constants = require('../objects/constants/Constants'); // constants object
 
 var sessionDuration = 5 * Math.pow(60, 2) * 1000; // session duration: 5h
 var view, user, game, games, users; // users & games list
+var routes = constants.server.routes;
 var setGames = function (list) {
         games = list
     },
@@ -24,7 +26,7 @@ var setGames = function (list) {
         users = list
     },
     goToLogin = function (res) {
-        res.redirect('/')
+        res.redirect(routes.root)
     };
 
 var express = require('express'),
@@ -32,8 +34,9 @@ var express = require('express'),
 
 mongoGames.listAllGames(setGames);
 
+
 // LOGIN
-router.get('/', function (req, res) {
+router.get(routes.root, function (req, res) {
     console.log("[server] user login view");
     view = new ViewData(views.user, 'MOR - VtDA', 'Login', 0);
     res.render(view.file, view.data);
@@ -41,7 +44,7 @@ router.get('/', function (req, res) {
 
 console.log('[server] login route set');
 // VALIDACION LOGIN
-router.post('/', function (req, res) {
+router.post(routes.root, function (req, res) {
     console.log("[server] validate user login");
     user = new User(req.body.name, sha1(req.body.passwd));
     mongoUsers.findUserByCreds(user, function (u) {
@@ -57,7 +60,7 @@ router.post('/', function (req, res) {
 console.log('[server] login validation set');
 
 // NUEVO USUARIO
-router.get('/new', function (req, res) {
+router.get(routes.login.new.user, function (req, res) {
     console.log("[server] new user creation view");
     view = new ViewData(views.newUser, 'MOR - VtDA', 'Nuevo Usuario', 0);
     res.render(view.file, view.data);
@@ -65,7 +68,7 @@ router.get('/new', function (req, res) {
 console.log('[server] new user route set');
 
 // VALIDACION NUEVO USUARIO
-router.post('/new', function (req, res) {
+router.post(routes.login.new.user, function (req, res) {
     console.log("[server] validate new user");
     var passwdArray = req.body.passwd;
     user = new User(req.body.name, sha1(req.body.passwd[0]));
@@ -95,7 +98,7 @@ router.post('/new', function (req, res) {
 console.log('[server] new user validation set');
 
 // ESCOGER PARTIDA
-router.get('/:user/', function (req, res) {
+router.get(routes.login.access.user, function (req, res) {
     var userName = req.params.user, key = req.cookies.key;
     mongoGames.listAllGames(setGames);
     if (typeof userName != 'undefined') {
@@ -115,7 +118,7 @@ router.get('/:user/', function (req, res) {
 console.log('[server] game choice route set');
 
 // VALIDACION PARTIDA ESCOGIDA
-router.post('/:user/', function (req, res) {
+router.post(routes.login.access.user, function (req, res) {
     console.log("[server] validate chosen game");
     var key = req.cookies.key;
     game = {name: req.body.name};
@@ -141,7 +144,7 @@ router.post('/:user/', function (req, res) {
 console.log('[server] game choice validation set');
 
 // NUEVA PARTIDA
-router.get('/:user/new/', function (req, res) {
+router.get(routes.login.new.game, function (req, res) {
     var user = {name: req.params.user}, key = req.cookies.key;
     if (key === sha1(user.name)) {
         mongoUsers.findUserByName(user, function (u) {
@@ -162,7 +165,7 @@ router.get('/:user/new/', function (req, res) {
 console.log('[server] new game route set');
 
 // VALIDACION NUEVA PARTIDA
-router.post('/:user/new/', function (req, res) {
+router.post(routes.login.new.game, function (req, res) {
     console.log("[server] validate new game");
     var key = req.cookies.key;
     game = {name: req.body.name};

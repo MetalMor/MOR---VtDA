@@ -10,11 +10,12 @@ var mongoUsers = require('../db/mongoUsers'), // db users controller
 
 var util = require('../server/util'), // utils
     cookies = require('../server/cookies'), // cookies
+    http = require('../server/http'),
     ViewData = require('../objects/system/ViewData'), // view data model
     views = require('../objects/system/views'),
     Game = require('../objects/models/Game'), // game model
     CharFactory = require('../objects/factory/CharFactory'),
-    constants = require('../objects/constants/Constants'),
+    constants = require('../objects/constants/Constants'), // constants object
     clans = require('../objects/models/Clans'),
     generations = require('../objects/models/Generations');
 
@@ -29,7 +30,7 @@ var express = require('express'),
     router = express.Router({caseSensitive: true});
 
 // PANTALLA DE JUEGO
-router.get('/:user/:game', function (req, res) {
+router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
     var userName = req.params.user, gameName = req.params.game;
     var tmpUser = {name: userName}, tmpGame = {name: gameName},
         key = req.cookies.key;
@@ -77,10 +78,10 @@ router.get('/:user/:game', function (req, res) {
 });
 console.log('[server] game panel route set');
 
-router.get('/initChar', function (req, res) {
+router.get(constants.server.routes.game.access.initChar, function (req, res) {
     var ret = cf.initChar();
     ret.npc = true;
-    headers.contentType(res, 'application/json');
+    http.contentType(res, 'application/json');
     res.send(JSON.stringify(ret));
 });
 console.log('[server] init char request route set');

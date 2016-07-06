@@ -45,25 +45,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser(constants.server.cookieKey));
 app.use(urlCleaner.inspect);
-app.use('/public', express.static(__dirname + '/client/'));
-app.use('/css', express.static(__dirname + '/client/stylesheets/'));
-app.use('/js', express.static(__dirname + '/client/javascripts/'));
-app.use('/img', express.static(__dirname + '/client/images/'));
-app.use('/lib', express.static(__dirname + '/client/libraries/'));
+var statics = constants.server.routes.statics.list;
+statics.forEach(function(st) {
+    console.log('[statics] loading path '+st.path+' at '+st.source);
+    app.use(st.path, express.static(__dirname + st.source));
+});
 console.log('[server] middleware set');
 
-app.use('/login', login);
-app.use('/game', game);
+app.use(constants.server.routes.login.root, login);
+app.use(constants.server.routes.game.root, game);
 
 // ROOT redirecciona al login
-app.get('/', function(req, res) {
+app.get(constants.server.routes.root, function(req, res) {
     console.log('[server] redirect to login');
     cookies.clear(res, req.cookies);
-    res.redirect('/login/');
+    res.redirect(constants.server.routes.login.root);
 });
 console.log('[server] root route set');
 
-app.get('/test/', function (req, res) {
+app.get(constants.server.routes.test, function (req, res) {
     console.log("[server] test util.updateNames");
     util.updateNames();
     res.send(200);
