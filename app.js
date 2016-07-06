@@ -15,7 +15,8 @@ var express = require('express'), // express dependencies models
     helmet = require('helmet'); // HTTP security extension
 
 var urlCleaner = require('./server/url_cleaner'),
-    http = require('./server/http');
+    http = require('./server/http'),
+    dbFix = require('./db/dbFix');
 
 var login = require('./routes/login'),
     game = require('./routes/game');
@@ -64,8 +65,10 @@ app.get(constants.server.routes.root, function(req, res) {
 console.log('[server] root route set');
 
 app.get(constants.server.routes.test, function (req, res) {
-    console.log("[server] test util.updateNames");
-    util.updateNames();
+    console.log("[server] fix updateNames");
+    var game = {name: 'Blood Money'},
+        equiv = {reserva_de_sangre: 'sangre'};
+    dbFix.updateNames(game, equiv);
     res.send(200);
 });
 

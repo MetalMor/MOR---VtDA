@@ -27,8 +27,7 @@ module.exports = {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] listing all games: " + doc.length);
-                    if (callback !== null)
-                        callback(doc);
+                    if (callback) callback(doc);
                 });
             });
         });
@@ -48,8 +47,7 @@ module.exports = {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] inserted game: " + game.name);
-                    if (callback !== null)
-                        callback();
+                    if (callback) callback();
                 });
             });
         });
@@ -71,8 +69,7 @@ module.exports = {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] updated game: " + game.name);
-                    if (callback !== null)
-                        callback();
+                    if (callback) callback();
                 });
             });
         });
@@ -92,10 +89,9 @@ module.exports = {
                 client.collection(col).findOne({name: game.name}, function (err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if (doc !== null) console.log("[mongo] found game: " + doc.name);
+                    if (doc) console.log("[mongo] found game: " + doc.name);
                     else console.log("[mongo] game not found: " + game.name);
-                    if (callback !== null)
-                        callback(doc);
+                    if (callback) callback(doc);
                 });
             });
         });
@@ -113,13 +109,12 @@ module.exports = {
             assert.equal(null, err);
             db.open(function (err, client) {
                 assert.equal(null, err);
-                client.collection(col).findOne({name: game.name}, function (err, list) {
+                client.collection(col).findOne(game, function (err, list) {
                     db.close();
                     assert.equal(null, err);
-                    if (list !== null) console.log("[mongo] found game: " + list.name);
+                    if (list) console.log("[mongo] found game: " + list.name);
                     else console.log("[mongo] game not found: " + game.name);
-                    if (callback !== null)
-                        callback(list[field]);
+                    if (callback) callback(list[field]);
                 });
             });
         });

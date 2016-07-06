@@ -31,7 +31,7 @@ var mongoUsers = {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] listing all users: "+doc.length);
-                    if(callback !== null) callback(doc);
+                    if(callback) callback(doc);
                 });
             });
         });
@@ -51,7 +51,7 @@ var mongoUsers = {
                     db.close();
                     assert.equal(null, err);
                     console.log("[mongo] inserted user: " + user.name);
-                    if(callback !== null) callback();
+                    if(callback) callback();
                 });
             });
         });
@@ -70,9 +70,9 @@ var mongoUsers = {
                 client.collection(col).findOne({name: user.name}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if(doc !== null) console.log("[mongo] found user: "+doc.name);
+                    if(doc) console.log("[mongo] found user: "+doc.name);
                     else console.log("[mongo] user not found: "+user.name);
-                    if(callback !== null) callback(doc);
+                    if(callback) callback(doc);
                 });
             });
         });
@@ -91,9 +91,9 @@ var mongoUsers = {
                 client.collection(col).findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if(doc !== null) console.log("[mongo] found user: "+doc.name);
+                    if(doc) console.log("[mongo] found user: "+doc.name);
                     else console.log("[mongo] user not found: "+user.name);
-                    if(callback !== null) callback(doc);
+                    if(callback) callback(doc);
                 });
             });
         });
@@ -112,9 +112,9 @@ var mongoUsers = {
                 client.collection(col).findOne({name: user.name}, {gameList: true}).toArray(function(err, list) {
                     db.close();
                     assert.equal(null, err);
-                    if(doc !== null) console.log("[mongo] found "+user.name+"'s games list: "+list.length);
+                    if(list) console.log("[mongo] found "+user.name+"'s games list: "+list.length);
                     else console.log("[mongo] gameList not found: "+user.name);
-                    if(callback !== null) callback(list);
+                    if(callback) callback(list);
                 });
             });
         });

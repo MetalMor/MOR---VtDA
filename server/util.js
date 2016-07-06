@@ -234,41 +234,6 @@ var util = {
         while (m = token.exec(str))
             num += key[m[0]];
         return num;
-    },
-    /**
-     * Función para "reparar" campos de la base de datos. Busca un campo con el nombre especificado en el objeto
-     * nameEqv y le da el valor que se le da en dicho objeto.
-     */
-    updateNames: function () {
-        var statsGroupList, statsSetList, statList,
-            game = {name: 'Blood Money'},
-            nameEqv = {
-                reserva_de_sangre: 'sangre'
-            };
-        mongoGames.findOwnedList(game, 'npcList', function (npcList) {
-            npcList.forEach(function (npc) {
-                statsGroupList = npc.stats;
-                statsGroupList.forEach(function (statsGroup) {
-                    console.log("[stats] name: " + statsGroup.name);
-                    statsSetList = statsGroup.stats;
-                    statsSetList.forEach(function (statsSet) {
-                        console.log("[stats] name: " + statsSet.name);
-                        statList = statsSet.stats;
-                        if (!util.isUndefined(statList))
-                            statList.forEach(function (stat) {
-                                console.log("[stats] name (bf): " + stat.name);
-                                if (nameEqv.hasOwnProperty(stat.name))
-                                    stat.name = nameEqv[stat.name];
-                                console.log("[stats] name (at): " + stat.name);
-                            });
-                    });
-                });
-            });
-            game.npcList = npcList;
-            mongoGames.updateGame(game, function () {
-                console.log("[stats] update ok");
-            });
-        });
     }
 };
 
