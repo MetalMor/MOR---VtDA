@@ -44,7 +44,7 @@ var util = {
      * @returns {boolean}
      */
     isString: function (o) {
-        return $.type(o) === 'string' || o instanceof String
+        return typeof o === 'string' || o instanceof String
     },
     /**
      * Valida si un objeto es indefinido
@@ -52,7 +52,7 @@ var util = {
      * @returns {boolean}
      */
     isUndefined: function (o) {
-        return $.type(o) === 'undefined'
+        return typeof o === 'undefined'
     },
     /**
      * Valida si un objeto es nulo

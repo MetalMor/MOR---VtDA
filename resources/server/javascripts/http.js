@@ -2,7 +2,7 @@
  * Propiedades de las cabeceras HTTP predefinidas.
  * Created by becari on 30/06/2016.
  */
-var util = require('./util');
+var util = require('../../both/javascripts/util');
 
 var http = {
     /**

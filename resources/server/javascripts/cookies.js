@@ -3,7 +3,7 @@
  * Created by mor on 5/06/16.
  */
 
-var util = require('./util'),
+var util = require('../../both/javascripts/util'),
     sha1 = require('sha1');
 
 var cookies = {

@@ -8,9 +8,9 @@ var sha1 = require('sha1');
 var mongoUsers = require('../db/mongoUsers'), // db users controller
     mongoGames = require('../db/mongoGames'); // db games controller
 
-var util = require('../server/util'), // utils
-    cookies = require('../server/cookies'), // cookies
-    http = require('../server/http'),
+var util = require('../resources/both/javascripts/util'), // utils
+    cookies = require('../resources/server/javascripts/cookies'), // cookies
+    http = require('../resources/server/javascripts/http'),
     ViewData = require('../objects/system/ViewData'), // view data model
     views = require('../objects/system/views'),
     Game = require('../objects/models/Game'), // game model

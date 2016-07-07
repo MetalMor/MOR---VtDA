@@ -14,13 +14,13 @@ var express = require('express'), // express dependencies models
     cookieParser = require('cookie-parser'), // cookie parser&controller
     helmet = require('helmet'); // HTTP security extension
 
-var urlCleaner = require('./server/url_cleaner'),
-    http = require('./server/http'),
+var urlCleaner = require('./resources/server/javascripts/url_cleaner'),
+    http = require('./resources/server/javascripts/http'),
     dbFix = require('./db/dbFix');
 
 var login = require('./routes/login'),
     game = require('./routes/game');
-var cookies = require('./server/cookies');
+var cookies = require('./resources/server/javascripts/cookies');
 
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 console.log('[server] init server vars');
@@ -76,4 +76,4 @@ server.listen(PORT);
 console.log('[server] started at port ' + PORT);
 
 // ***** EJECUTA LOS SOCKETS! *****
-require('./server/sockets.js')(io);
+require('./resources/server/javascripts/sockets.js')(io);

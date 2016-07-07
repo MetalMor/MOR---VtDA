@@ -65,7 +65,7 @@ var button = {
                 sheetPanel = 'sheet', charPoints = 'fp',
                 panelName = npc ? 'masterPanel' : 'playerPanel';
             charFunctions.setReady(char, true);
-            charFunctions.setCharPoints(charPoints, 15);
+            charFunctions.setCharPoints(char, charPoints, 15);
             charFunctions.initBlood(char);
             charFunctions.setOwner(char, user);
             charFunctions.addCharacter(char, listId, game);
@@ -161,7 +161,7 @@ var button = {
             table.removeText(col);
             if (!util.isUndefined(stat) && !util.isUndefined(cost) &&
                 restrict.lookRestriction(stat) &&
-                restrict.notEnoughPoints(charFunctions.getCharPoints(), cost)) {
+                restrict.notEnoughPoints(charFunctions.getCharPoints(char), cost)) {
                 if (stat.level > 0) row.addClass(learnedClass);
                 col.append(' '+cost);
                 btn.addClass(arrowUpClass);

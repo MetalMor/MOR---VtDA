@@ -7,7 +7,8 @@ var toCanvas = {
     convert: function (target, callback) {
         html2canvas(target, {
             onrendered: function (canvas) {
-                var imgCanvas = canvas.toDataURL('image/png');
+                var imgCanvas = canvas.toDataURL('image/png'),
+                    image = '<img src="'+imgCanvas+'" alt="Caracter stats table"/>';
                 if (callback) callback(imgCanvas);
             }
         });

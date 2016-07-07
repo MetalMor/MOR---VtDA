@@ -211,8 +211,9 @@ var table = {
         table.update(stat.name);
     },
     exportPdf: function (table) {
-        //toCanvas.convert(table, function(tableImg) {
-        pdf.convert(table);
-        //});
+        toCanvas.convert(table, function(tableDataUrl) {
+            
+            pdf.convert(tableDataUrl);
+        });
     }
 };

@@ -5,10 +5,10 @@
 
 var pdf = {
     convert: function (source) {
-        /*var doc = new jsPDF('p', 'mm');
-         doc.addImage(source, 'PNG');
-         doc.save(Date.now()+'.pdf');*/
-        var pdf = new jsPDF('p', 'pt', 'letter'),
+        var doc = new jsPDF('p', 'mm');
+         doc.addImage(source, 'PNG', 0, 0);
+         doc.save(Date.now()+'.pdf');
+        /*var pdf = new jsPDF('p', 'pt', 'letter'),
             margins = {
                 top: 80,
                 bottom: 60,
@@ -22,6 +22,6 @@ var pdf = {
         pdf.fromHTML(source, margins.left, margins.top, options,
             function (dispose) {
                 pdf.save(Date.now() + '.pdf');
-            }, margins);
+            }, margins);*/
     }
 };

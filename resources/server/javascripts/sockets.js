@@ -4,14 +4,14 @@
  * Created by mor on 25/04/16.
  */
 
-var mongoUsers = require('./../db/mongoUsers');
-var mongoGames = require('./../db/mongoGames');
-var util = require('./util');
+var mongoUsers = require('../../../db/mongoUsers');
+var mongoGames = require('../../../db/mongoGames');
+var util = require('../../both/javascripts/util');
 
 module.exports = function (io) {
     io.on('connection', function(socket) {
         var user, char, game;
-        var charFunctions = require('./charServer');
+        var charFunctions = require('../../both/javascripts/charFunctions');
         var charName, hasChar;
         if(hasChar)
             console.log('[socket] user connected');

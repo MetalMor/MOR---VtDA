@@ -4,7 +4,7 @@
  * Created by mor on 8/05/16.
  */
 
-var util = require('../../server/util');
+var util = require('../../resources/both/javascripts/util');
 
 module.exports = function(n) {
     this.name = util.clean(n);

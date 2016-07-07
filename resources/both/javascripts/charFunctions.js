@@ -1,9 +1,9 @@
 /**
- * Funciones para el personaje en el lado servidor
- * Created by mor on 18/05/2016.
+ * Objeto que contiene diversas utilidades para el objeto personaje..
+ * Created by mor on 10/05/16.
  */
 
-var util = require('./util');
+if(typeof require !== 'undefined') var util = require('./util');
 
 var charFunctions = {
     /**
@@ -17,40 +17,52 @@ var charFunctions = {
      * @param mode Tipo de puntos que otorgar
      * @param points Experiencia a definir
      */
-    setCharPoints: function (mode, points) {
+    setCharPoints: function(char, mode, points) {
         if (mode === 'xp' || mode === 'fp') {
-            char[mode] = points;
+            if(char.hasOwnProperty(mode))
+                char[mode] = points;
         }
     },
     /**
      * Retorna los puntos de aprendizaje del personaje.
      * @returns {number}
      */
-    getCharPoints: function () {
-        return char.fp > 0 ? char.fp : char.xp;
+    getCharPoints: function (char) {
+        if(char.hasOwnProperty('fp') && char.hasOwnProperty('xp'))
+            return char.fp > 0 ? char.fp : char.xp;
+        else return char.xp || char.fp || 0;
     },
     /**
      * Define el nombre del usuario propietario del personaje
      * @param char Personaje
      * @param user Usuario propietario
      */
-    setOwner: function(char, user) {char.owner = user.name},
+    setOwner: function(char, user) {
+        if(user.hasOwnProperty('name'))
+            char.owner = user.name
+    },
     /**
      * Añade un personaje a la lista de personajes o npcs de una partida
      * @param char Personaje
      * @param list Lista a la que añadirlo ('npc' o 'char')
      * @param game Partida a la que añadirlo
      */
-    addCharacter: function(char, list,  game) {game[list+'List'].push(char)},
+    addCharacter: function(char, list,  game) {
+        var requiredList = list+'List';
+        if(game.hasOwnProperty(requiredList))
+            game[requiredList].push(char);
+    },
     /**
      * Calcula la reserva de sangre inicial de un vampiro
      * @param char Personaje
      */
     initBlood: function(char) {
         var blood = charFunctions.findStat(char, 'sangre');
-        blood.level = Math.floor(Math.random()*blood.max+1);
-        charFunctions.setStat(char, 'sangre', blood);
-        table.updateOther();
+        if(!util.isUndefined(blood)) {
+            blood.level = Math.floor(Math.random() * blood.max + 1);
+            charFunctions.setStat(char, 'sangre', blood);
+            table.updateOther();
+        }
     },
     /**
      * Calcula la reserva de sangre máxima de un vampiro en base a su generación
@@ -61,6 +73,20 @@ var charFunctions = {
         var gen = parseInt(charFunctions.findData(char, 'generacion').value);
         var bloodEqv = [0, 300, 200, 100, 50, 40, 30, 20, 15, 14, 13, 12, 11, 10];
         return bloodEqv[gen];
+    },
+    /**
+     * Actualiza un objeto personaje en la lista de personajes que le corresponde del objeto partida.
+     * @param char
+     */
+    updateChar: function (char) {
+        var listName = char.npc ? 'npcList' : 'charList', list = game[listName],
+            charName = charFunctions.findData(char, 'nombre').value, newList = [];
+        list.forEach(function (ch) {
+            if (charName === charFunctions.findData(ch, 'nombre').value)
+                ch = char;
+            newList.push(ch);
+        });
+        game[listName] = newList;
     },
     /**
      * Lista de disciplinas de cada clan
@@ -86,10 +112,11 @@ var charFunctions = {
      * Incrementa el nivel de una estadística y actualiza los datos en el display de la ficha del personaje
      * @param stat Estadística a incrementar
      */
-    growStat: function (stat) {
+    growStat: function(stat) {
         console.log('[client] clicked on ' + stat.name + '(' + stat.level + ')');
         var cost = charFunctions.xpCost(stat);
         stat.level++;
+        if(util.is(util.maxStat, stat)) stat.max++;
         charFunctions.setStat(char, stat, stat);
         charFunctions.withdrawXp(cost);
         table.updateXp(char);
@@ -112,14 +139,12 @@ var charFunctions = {
      */
     getDiscs: function(n) {
         var ret = [], self = this, list = charFunctions.clans[util.clean(n)];
-        list.forEach(function (disc) {
-            ret.push(self.createDisc(util.clean(disc)))
-        });
+        list.forEach(function(disc) {ret.push(self.createDisc(util.clean(disc)))});
         return ret;
     },
     /**
      * Guarda la lista de disciplinas en el objeto modelo.
-     * @param list
+     * @param list Lista de disciplinas
      */
     setDiscs: function(list) {
         //var discs = char.stats[2].stats[0].stats;
@@ -135,7 +160,7 @@ var charFunctions = {
      * @param stat Estadística a validar (objeto o string)
      * @returns {boolean}
      */
-    hasStat: function (stat) {
+    hasStat: function(stat) {
         var s;
         return !util.isUndefined(s = charFunctions.findStat(char, stat)) && s.level > 0;
     },
@@ -148,19 +173,33 @@ var charFunctions = {
         return {name: n, level: 0, limit: 10, mod: 0, cost: 5};
     },
     /**
+     * Calcula la "fuerza" total de una estadística, es decir, su nivel más su modificador y todos los ascendientes.
+     * @param stat Objeto estadística de la que calcular la fuerza.
+     * @param ch Objeto personaje del que calcular la fuerza de la estadística.
+     * @returns {number}
+     */
+    getStatForce: function(stat, ch) {
+        var force =  stat.level + (stat.mod || 0);
+        while (util.is(util.char, stat)) {
+            stat = charFunctions.findParent(ch, stat);
+            force += (stat.mod || 0);
+        }
+        return force;
+    },
+    /**
      * Retorna el padre de la estadística especificada
      * @param obj Objeto global en el que buscar
      * @param stat Estadistica de la que se requiere el padre (o string nombre de la estadistica)
      * @param parent Objeto padre del que se está iterando en la recursividad
      */
-    findParent: function (obj, stat, parent) {
+    findParent: function(obj, stat, parent) {
         if(!util.isUndefined(parent)) {
-            if (charFunctions.found(obj, stat))
+            if(charFunctions.found(obj, stat))
                 return parent;
         } if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var ret, self = this;
             obj.stats.forEach(function(o) {
-                if (util.isUndefined(ret)) ret = self.findParent(o, stat, obj)
+                if(util.isUndefined(ret)) ret = self.findParent(o, stat, obj)
             });
             return ret;
         }
@@ -169,36 +208,36 @@ var charFunctions = {
      * Quita puntos de experiencia o gratuitos al personaje (según si ha aplicado ya los gratuitos o aún no)
      * @param qty Cantidad de puntos a retirar
      */
-    withdrawXp: function (qty) {
+    withdrawXp: function(qty) {
         var source, freePts = false;
-        if (char.fp > 0) {
+        if(char.fp > 0) {
             freePts = true;
             source = 'fp';
         }
-        else if (char.xp > 0) source = 'xp';
+        else if(char.xp > 0) source = 'xp';
         char[source] -= qty;
+        if (char.fp <= 0 && freePts) {
+            char.xp += 15;
+            sockets.update();
+        }
     },
     /**
      * Calcula el coste de la estadística especificada por parámetro
      * @param stat Estadística (objeto o nombre)
      * @returns {number}
      */
-    xpCost: function (stat) {
+    xpCost: function(stat) {
         var subParent = charFunctions.findParent(char, stat),
             supParent = charFunctions.findParent(char, subParent),
             clan = charFunctions.findData(char, 'clan'),
-            regularCost = function (a) {
-                return stat.level * (stat.cost + a)
-            },
-            initialCost = function () {
-                return stat.cost
-            };
-        if (char.fp > 0) {
+            regularCost = function(a) {return stat.level * (stat.cost+a)},
+            initialCost = function() {return stat.cost};
+        if(char.fp > 0) {
             return initialCost();
         } else {
             if (subParent.name === 'disciplinas') {
                 var discs = charFunctions.getDiscs(clan.value);
-                if (discs.indexOf(clan.value) > 0) return regularCost(0);
+                if (discs.indexOf(clan.value)>0) return regularCost(0);
                 else if (charFunctions.hasStat(stat)) return regularCost(2);
                 else return 10;
             } else if (supParent.name === 'habilidades') {
@@ -213,15 +252,15 @@ var charFunctions = {
      * @param stat Nombre de la estadística a encontrar
      * @returns {*}
      */
-    findStat: function (obj, stat) {
+    findStat: function(obj, stat) {
         var found = charFunctions.found(obj, stat);
         if(util.is(util.stat, obj)) {
-            if (found) return obj;
+            if(found) return obj;
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var self = this, ret;
-            if (found) ret = obj;
+            if(found) ret = obj;
             obj.stats.forEach(function(o) {
-                if (util.isUndefined(ret)) ret = self.findStat(o, stat);
+                if(util.isUndefined(ret)) ret = self.findStat(o, stat);
                 //if(!util.isUndefined(tmpRet)) ret = tmpRet;
             });
             return ret;
@@ -233,17 +272,15 @@ var charFunctions = {
      * @param data Nombre del campo de datos a encontrar
      * @returns {*}
      */
-    findData: function (obj, data) {
+    findData: function(obj, data) {
         if(util.is(util.field, obj)) {
-            if (charFunctions.found(obj, data)) {
-                return obj
-            }
+            if(charFunctions.found(obj, data)) {return obj}
         } else {
             var prop, ret, self = this;
             if(util.is(util.data, obj)) prop = 'fields';
             else if(util.is(util.char, obj)) prop = 'data';
             obj[prop].forEach(function(o) {
-                if (util.isUndefined(ret)) ret = self.findData(o, data);
+                if(util.isUndefined(ret)) ret = self.findData(o, data);
             });
             return ret;
         }
@@ -254,7 +291,7 @@ var charFunctions = {
      * @param stat Objeto B a comparar
      * @returns {boolean}
      */
-    found: function (obj, stat) {
+    found: function(obj, stat) {
         return !util.isUndefined(obj.name) && (obj.name === stat || (!util.isUndefined(stat.name) && obj.name == stat.name));
     },
     /**
@@ -265,7 +302,7 @@ var charFunctions = {
      */
     setStat: function(obj, stat, value) {
         if(util.is(util.stat, obj)) {
-            if (charFunctions.found(obj, stat)) {
+            if(charFunctions.found(obj, stat)) {
                 if(util.isBoolean(value)) {
                     if (value) obj.level++;
                     else obj.level--;
@@ -286,7 +323,7 @@ var charFunctions = {
      * @param value Nuevo valor del campo de datos.
      */
     setData: function(obj, field, value) {
-        if (util.is(util.field, obj) && charFunctions.found(obj, field)) {
+        if(util.is(util.field, obj) && charFunctions.found(obj, field)) {
             if(util.isString(value) || util.isNumber(value)) obj.value = value;
             else if (util.is(util.field, value)) obj = value;
         } else {
@@ -298,4 +335,5 @@ var charFunctions = {
     }
 };
 
-module.exports = charFunctions;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = charFunctions;
