@@ -97,7 +97,7 @@ var button = {
         var element = $('span#xp-giver');
         button.setButtonClick(element, function () {
             char.xp++;
-            table.exportPdf($('table#show-stats')[0]);
+            //table.exportPdf($('table#show-stats')[0]);
             overlay.gameWindow(char);
             sockets.update();
         });
@@ -265,9 +265,9 @@ var button = {
      * @param cls Clase del icono: set, unset o max
      */
     statButtonClick: function(id, cls) {
-        if (cls === table.icons.unset.class)
+        if (cls === "unset")
             mode = true;
-        else if (cls === table.icons.set.class)
+        else if (cls === "set")
             mode = false;
 
         var stat = charFunctions.findStat(char, id),

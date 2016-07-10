@@ -273,16 +273,22 @@ var charFunctions = {
      * @returns {*}
      */
     findData: function(obj, data) {
-        if(util.is(util.field, obj)) {
-            if(charFunctions.found(obj, data)) {return obj}
+        if (!util.isUndefined(obj)) {
+            if (util.is(util.field, obj)) {
+                if (charFunctions.found(obj, data)) {
+                    return obj
+                }
+            } else {
+                var prop, ret, self = this;
+                if (util.is(util.data, obj)) prop = 'fields';
+                else if (util.is(util.char, obj)) prop = 'data';
+                obj[prop].forEach(function (o) {
+                    if (util.isUndefined(ret)) ret = self.findData(o, data);
+                });
+                return ret;
+            }
         } else {
-            var prop, ret, self = this;
-            if(util.is(util.data, obj)) prop = 'fields';
-            else if(util.is(util.char, obj)) prop = 'data';
-            obj[prop].forEach(function(o) {
-                if(util.isUndefined(ret)) ret = self.findData(o, data);
-            });
-            return ret;
+            return {name: "", value: ""};
         }
     },
     /**
