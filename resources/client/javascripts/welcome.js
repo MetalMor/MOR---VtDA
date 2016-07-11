@@ -4,6 +4,9 @@
  */
 
 var welcome = {
+    /**
+     * Lista de mensajes aleatorios.
+     */
     messages: [
         {font: 'Kaushan Script', message: "It is the blood of Caine which makes our fate."},
         {font: 'Papyrus', message: "SPAGHETTI AND PUZZLES!"},
@@ -14,10 +17,18 @@ var welcome = {
         {font: 'Determination', message: "...but nobody came."}/*,
         {font: 'Wingdings', message: 'ENTRY NUMBER SEVENTEEN DARK DARKER YET DARKER'}*/
     ],
+    /**
+     * Define el mensaje aleatorio que se mostrará.
+     * @param element Elemento en el que mostrar el texto aleatorio.
+     */
     setMessage: function(element) {
         var chosen = welcome.getMessage();
         element.text(chosen.message).css('font-family', chosen.font);
     },
+    /**
+     * Retorna el mensaje aleatorio que se está mostrando.
+     * @returns {object}
+     */
     getMessage: function() {
         var list = welcome.messages, max = list.length,
             index = Math.floor(Math.random() * max);

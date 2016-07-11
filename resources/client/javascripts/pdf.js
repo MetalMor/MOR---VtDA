@@ -4,24 +4,13 @@
  */
 
 var pdf = {
+    /**
+     * Convierte un elemento imagen en un documento PDF.
+     * @param source Elemento imagen a convertir.
+     */
     convert: function (source) {
         var doc = new jsPDF('p', 'mm');
          doc.addImage(source, 'PNG', 0, 0);
          doc.save(Date.now()+'.pdf');
-        /*var pdf = new jsPDF('p', 'pt', 'letter'),
-            margins = {
-                top: 80,
-                bottom: 60,
-                left: 40,
-                width: 522
-            },
-            options = {
-                width: margins.width
-            }
-
-        pdf.fromHTML(source, margins.left, margins.top, options,
-            function (dispose) {
-                pdf.save(Date.now() + '.pdf');
-            }, margins);*/
     }
 };
