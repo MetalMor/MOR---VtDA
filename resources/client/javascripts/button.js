@@ -76,6 +76,15 @@ var button = {
         }
     },
     /**
+     * Define la función llamada al pulsar el botón de descargar la ficha en forma de imagen.
+     * @param element Botón que llamará a la función.
+     */
+    setDownloader: function() {
+        button.setButtonClick($('span#download'), function() {
+            table.exportImg($('table#show-stats')[0]);
+        });
+    },
+    /**
      * Establece los eventos de botones de la tabla del personaje.
      * @param id Tabla o fila de la que establecer el evento.
      */
@@ -97,7 +106,6 @@ var button = {
         var element = $('span#xp-giver');
         button.setButtonClick(element, function () {
             char.xp++;
-            table.exportPdf($('table#show-stats')[0]);
             overlay.gameWindow(char);
             sockets.update();
         });

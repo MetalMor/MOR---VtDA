@@ -194,7 +194,7 @@ var charFunctions = {
      */
     findParent: function(obj, stat, parent) {
         if(!util.isUndefined(parent)) {
-            if(charFunctions.found(obj, stat))
+            if(charFunctions.areEquals(obj, stat))
                 return parent;
         } if(util.is(util.stats, obj) || util.is(util.char, obj)) {
             var ret, self = this;
@@ -253,7 +253,7 @@ var charFunctions = {
      * @returns {*}
      */
     findStat: function(obj, stat) {
-        var found = charFunctions.found(obj, stat);
+        var found = charFunctions.areEquals(obj, stat);
         if(util.is(util.stat, obj)) {
             if(found) return obj;
         } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
@@ -273,16 +273,20 @@ var charFunctions = {
      * @returns {*}
      */
     findData: function(obj, data) {
-        if(util.is(util.field, obj)) {
-            if(charFunctions.found(obj, data)) {return obj}
-        } else {
-            var prop, ret, self = this;
-            if(util.is(util.data, obj)) prop = 'fields';
-            else if(util.is(util.char, obj)) prop = 'data';
-            obj[prop].forEach(function(o) {
-                if(util.isUndefined(ret)) ret = self.findData(o, data);
-            });
-            return ret;
+        if(!util.isUndefined(obj)) {
+            if (util.is(util.field, obj)) {
+                if (charFunctions.areEquals(obj, data)) {
+                    return obj
+                }
+            } else {
+                var prop, ret, self = this;
+                if (util.is(util.data, obj)) prop = 'fields';
+                else if (util.is(util.char, obj)) prop = 'data';
+                obj[prop].forEach(function (o) {
+                    if (util.isUndefined(ret)) ret = self.findData(o, data);
+                });
+                return ret;
+            }
         }
     },
     /**
@@ -291,7 +295,7 @@ var charFunctions = {
      * @param stat Objeto B a comparar
      * @returns {boolean}
      */
-    found: function(obj, stat) {
+    areEquals: function(obj, stat) {
         return !util.isUndefined(obj.name) && (obj.name === stat || (!util.isUndefined(stat.name) && obj.name == stat.name));
     },
     /**
@@ -302,7 +306,7 @@ var charFunctions = {
      */
     setStat: function(obj, stat, value) {
         if(util.is(util.stat, obj)) {
-            if(charFunctions.found(obj, stat)) {
+            if(charFunctions.areEquals(obj, stat)) {
                 if(util.isBoolean(value)) {
                     if (value) obj.level++;
                     else obj.level--;
@@ -323,7 +327,7 @@ var charFunctions = {
      * @param value Nuevo valor del campo de datos.
      */
     setData: function(obj, field, value) {
-        if(util.is(util.field, obj) && charFunctions.found(obj, field)) {
+        if(util.is(util.field, obj) && charFunctions.areEquals(obj, field)) {
             if(util.isString(value) || util.isNumber(value)) obj.value = value;
             else if (util.is(util.field, value)) obj = value;
         } else {

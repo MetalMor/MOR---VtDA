@@ -210,10 +210,10 @@ var table = {
         charFunctions.setStat(char, stat, mode);
         table.update(stat.name);
     },
-    exportPdf: function (table) {
+    exportImg: function (table) {
         toCanvas.convert(table, function(tableDataUrl) {
-            
-            pdf.convert(tableDataUrl);
+            window.open(tableDataUrl);
+            //pdf.convert(tableDataUrl);
         });
     }
 };

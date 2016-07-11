@@ -108,27 +108,25 @@ var overlay = {
      * Muestra la ventana de información del personaje
      */
     playerPanel: function() {
-        var panel = $('#panel'),
-            sheet = {user: user, game: game, char: char};
+        var sheet = {user: user, game: game, char: char};
         overlay.open('panel');
         overlay.setPanelButtons();
         overlay.gameWindow(char);
         sockets.player();
         sockets.server('login', sheet);
-        //socket.emit('loginChar', sheet);
+        button.setDownloader();
     },
     /**
      * Muestra la ventana de información del director.
      */
     masterPanel: function () {
-        var panel = $('#panel'),
-            sheet = {user: user, game: game, char: false};
         overlay.open('panel');
         overlay.setPanelButtons();
         char = game.charList[0];
         list.load();
         if (!util.isUndefined(char))
             overlay.gameWindow(char);
+        button.setDownloader($('table#show-stats')[0]);
         button.setXpGiver();
         button.setCharCreationButton();
         button.setRollPanelButton();

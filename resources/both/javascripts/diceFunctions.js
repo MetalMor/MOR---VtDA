@@ -63,3 +63,6 @@ var diceFunctions = {
         return rolls[util.getIndexOfMin(results)];
     }
 };
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+    module.exports = diceFunctions;
