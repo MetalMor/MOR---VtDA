@@ -273,9 +273,9 @@ var charFunctions = {
      * @returns {*}
      */
     findData: function(obj, data) {
-        if(!util.isUndefined(obj)) {
+        if (!util.isUndefined(obj)) {
             if (util.is(util.field, obj)) {
-                if (charFunctions.areEquals(obj, data)) {
+                if (charFunctions.found(obj, data)) {
                     return obj
                 }
             } else {
@@ -287,6 +287,8 @@ var charFunctions = {
                 });
                 return ret;
             }
+        } else {
+            return {name: "", value: ""};
         }
     },
     /**
