@@ -5,7 +5,8 @@
 
 var server = {
     cookieKey: 'm3t4Lm0R',
-    routes: require('./routes/Routes')
+    routes: require('./routes/Routes'),
+    db: require('./database/Database')
 };
 
 module.exports = server;

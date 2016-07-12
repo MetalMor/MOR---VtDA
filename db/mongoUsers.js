@@ -8,9 +8,10 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
 var util = require('../resources/both/javascripts/util');
+var constants = require('../objects/constants/Constants').server.db;
 
-var dbUrl = 'mongodb://localhost:27017/vtda';
-var col = 'users';
+var dbUrl = constants.url.prod;
+var col = constants.collections.users;
 
 //
 // MEET THE PYRAMID OF DOOM ò___ó
