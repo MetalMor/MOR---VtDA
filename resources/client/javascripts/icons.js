@@ -1,5 +1,5 @@
 /**
- * Cargador de iconos.
+ * Preargador de iconos.
  * Created by mor on 5/07/16.
  */
 

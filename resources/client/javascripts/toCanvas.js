@@ -4,6 +4,11 @@
  */
 
 var toCanvas = {
+    /**
+     * Convierte un elemento en una imagen y llama al callback.
+     * @param target Elemento a convertir.
+     * @param callback Función a llamar una vez renderizada la imagen.
+     */
     convert: function (target, callback) {
         html2canvas(target, {
             onrendered: function (canvas) {
