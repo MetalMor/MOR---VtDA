@@ -44,7 +44,7 @@ app.use(helmet());
 app.use(http.addHeaders);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser(constants.server.cookieKey));
+app.use(cookieParser(constants.server.session.secret));
 app.use(urlCleaner.inspect);
 var statics = constants.server.routes.statics.list;
 statics.forEach(function(st) {

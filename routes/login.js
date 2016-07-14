@@ -16,7 +16,7 @@ var util = require('../resources/both/javascripts/util'), // utils
     Game = require('../objects/models/Game'), // game model
     constants = require('../objects/constants/Constants'); // constants object
 
-var sessionDuration = 5 * Math.pow(60, 2) * 1000; // session duration: 5h
+var sessionDuration = constants.server.session.duration; // session duration: 5h
 var view, user, game, games, users; // users & games list
 var routes = constants.server.routes;
 var setGames = function (list) {
@@ -24,9 +24,6 @@ var setGames = function (list) {
     },
     setUsers = function (list) {
         users = list
-    },
-    goToLogin = function (res) {
-        res.redirect(routes.root)
     };
 
 var express = require('express'),
@@ -104,7 +101,7 @@ router.get(routes.login.access.user, function (req, res) {
     if (typeof userName != 'undefined') {
         if (key !== sha1(userName)) {
             view.data.error = 1;
-            goToLogin(res);
+            http.goToLogin(res);
         } else {
             console.log("[server] game choice view");
             view = new ViewData(views.game, userName + ' - VtDA', 'Selección de partida: ' + userName, 0);
@@ -138,7 +135,7 @@ router.post(routes.login.access.user, function (req, res) {
             }
         });
     } else {
-        goToLogin(res);
+        http.goToLogin(res);
     }
 });
 console.log('[server] game choice validation set');
@@ -149,7 +146,7 @@ router.get(routes.login.new.game, function (req, res) {
     if (key === sha1(user.name)) {
         mongoUsers.findUserByName(user, function (u) {
             if (util.isNull(u)) {
-                goToLogin(res);
+                http.goToLogin(res);
             } else {
                 user = u;
                 console.log("[server] new game creation view");
@@ -159,7 +156,7 @@ router.get(routes.login.new.game, function (req, res) {
             }
         });
     } else {
-        goToLogin(res);
+        http.goToLogin(res);
     }
 });
 console.log('[server] new game route set');
@@ -199,7 +196,7 @@ router.post(routes.login.new.game, function (req, res) {
             }
         });
     } else {
-        goToLogin(res);
+        http.goToLogin(res);
     }
 });
 console.log('[server] new game validation set');

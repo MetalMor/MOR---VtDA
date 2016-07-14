@@ -2,7 +2,8 @@
  * Propiedades de las cabeceras HTTP predefinidas.
  * Created by becari on 30/06/2016.
  */
-var util = require('../../both/javascripts/util');
+var util = require('../../both/javascripts/util'),
+    constants = require('../../../objects/constants/Constants').server;
 
 var http = {
     /**
@@ -44,6 +45,9 @@ var http = {
             res.setHeader(cur.nm, cur.val);
         }
         next();
+    },
+    goToLogin: function(res) {
+        res.redirect(constants.router.root);
     }
 };
 

@@ -67,13 +67,13 @@ router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
                             res.render(view.file, view.data);
                         }
                     } else {
-                        goToLogin(res);
+                        http.goToLogin(res);
                     }
                 });
             }
         });
     } else {
-        goToLogin(res);
+        http.goToLogin(res);
     }
 });
 console.log('[server] game panel route set');
@@ -85,5 +85,10 @@ router.get(constants.server.routes.game.access.initChar, function (req, res) {
     res.send(JSON.stringify(ret));
 });
 console.log('[server] init char request route set');
+
+router.get(constants.server.routes.game.access.dataObject, function (req, res) {
+    var ret = require('../objects/constants/Constants');
+    res.send(JSON.stringify(ret));
+});
 
 module.exports = router;

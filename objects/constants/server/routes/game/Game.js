@@ -7,7 +7,8 @@ var game = {
     root: '/game',
     access: {
         gamePanel: '/:user/:game',
-        initChar: '/initChar'
+        initChar: '/initChar',
+        dataObject: '/dataObject'
     }
 };
 

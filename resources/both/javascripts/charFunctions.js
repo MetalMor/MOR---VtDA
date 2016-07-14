@@ -275,7 +275,7 @@ var charFunctions = {
     findData: function(obj, data) {
         if (!util.isUndefined(obj)) {
             if (util.is(util.field, obj)) {
-                if (charFunctions.found(obj, data)) {
+                if (charFunctions.areEquals(obj, data)) {
                     return obj
                 }
             } else {
