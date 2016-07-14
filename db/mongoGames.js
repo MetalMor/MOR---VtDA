@@ -10,7 +10,7 @@ var assert = require('assert');
 var util = require('../resources/both/javascripts/util');
 var constants = require('../objects/constants/Constants').server.db;
 
-var dbUrl = constants.url.prod;
+var dbUrl = constants.url.dev;
 var col = constants.collections.games;
 
 console.log("[mongo] db URL: "+dbUrl);
