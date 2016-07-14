@@ -43,9 +43,10 @@ console.log('[server] login route set');
 // VALIDACION LOGIN
 router.post(routes.root, function (req, res) {
     console.log("[server] validate user login");
-    user = new User(req.body.name, sha1(req.body.passwd));
-    mongoUsers.findUserByCreds(user, function (u) {
+    var creds = new User(new RegExp(req.body.name, 'i'), sha1(req.body.passwd));
+    mongoUsers.findUserByCreds(creds, function (u) {
         if (!util.isNull(u) && !util.isUndefined(u)) {
+            user = u;
             cookies.new(res, 'key', user.name, sessionDuration);
             res.redirect('/login/' + u.name + '/');
         } else { // ERROR usuario no encontrado
@@ -69,7 +70,7 @@ router.post(routes.login.new.user, function (req, res) {
     console.log("[server] validate new user");
     var passwdArray = req.body.passwd;
     user = new User(req.body.name, sha1(req.body.passwd[0]));
-    mongoUsers.findUserByName(user, function (u) {
+    mongoUsers.findUserByName(new RegExp(req.body.name, 'i'), function (u) {
         view = new ViewData(views.newUser, 'MOR - VtDA', 'Nuevo Usuario', 1);
         if (!util.type(util.arr, passwdArray) || passwdArray[0] !== passwdArray[1]) { // ERROR distintos passwd
             view.data.error = 4;
@@ -118,7 +119,7 @@ console.log('[server] game choice route set');
 router.post(routes.login.access.user, function (req, res) {
     console.log("[server] validate chosen game");
     var key = req.cookies.key;
-    game = {name: req.body.name};
+    game = new Game(req.body.name);
     view = new ViewData(views.game, req.params.user + ' - VtDA', 'Selección de partida: ' + req.params.user, 0);
     if (game.name === '') {
         view.data.error = 2;
