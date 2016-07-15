@@ -22,7 +22,7 @@ var login = require('./routes/login'),
     game = require('./routes/game');
 var cookies = require('./resources/server/javascripts/cookies');
 
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.OPENSHIFT_NODEJS_IP || 3000;
 console.log('[server] init server vars');
 
 /**
