@@ -71,7 +71,7 @@ app.get(constants.server.routes.test, function (req, res) {
     res.send(200);
 });
 
-server.listen(PORT);
+server.listen(PORT, process.env.OPENSHIFT_NODEJS_IP);
 console.log('[server] started at port ' + PORT);
 
 // ***** EJECUTA LOS SOCKETS! *****
