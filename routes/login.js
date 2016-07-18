@@ -4,6 +4,7 @@
  */
 
 var sha1 = require('sha1');
+var CryptoJS = require("crypto-js");
 
 var mongoUsers = require('../db/mongoUsers'), // db users controller
     mongoGames = require('../db/mongoGames'); // db games controller
@@ -43,7 +44,7 @@ console.log('[server] login route set');
 // VALIDACION LOGIN
 router.post(routes.root, function (req, res) {
     console.log("[server] validate user login");
-    var creds = new User(new RegExp(req.body.name, 'i'), sha1(req.body.passwd));
+    var creds = new User(req.body.name, sha1(req.body.passwd));
     mongoUsers.findUserByCreds(creds, function (u) {
         if (!util.isNull(u) && !util.isUndefined(u)) {
             user = u;
@@ -70,7 +71,7 @@ router.post(routes.login.new.user, function (req, res) {
     console.log("[server] validate new user");
     var passwdArray = req.body.passwd;
     user = new User(req.body.name, sha1(req.body.passwd[0]));
-    mongoUsers.findUserByName(new RegExp(req.body.name, 'i'), function (u) {
+    mongoUsers.findUserByName(user, function (u) {
         view = new ViewData(views.newUser, 'MOR - VtDA', 'Nuevo Usuario', 1);
         if (!util.type(util.arr, passwdArray) || passwdArray[0] !== passwdArray[1]) { // ERROR distintos passwd
             view.data.error = 4;

@@ -14,6 +14,15 @@ var util = {
     field: "value",
     char: "xp",
     /**
+     * Construye una expresión regular a partir de un patrón pat y unas opciones globales opt.
+     * @param pat Patrón String de la expresión regular.
+     * @param opt Opciones de la expresión regular (por ejemplo, 'i' es case insensitive.
+     * @returns {RegExp}
+     */
+    toRegExp: function (pat, opt) {
+        return new RegExp(pat, opt);
+    },
+    /**
      * Deshabilita la funcionalidad de escribir en un input especificado.
      * @param selector Selector del/los elemento/s
      */
@@ -68,7 +77,7 @@ var util = {
      * @returns {boolean}
      */
     isBoolean: function (o) {
-        return $.type(o) === 'boolean'
+        return typeof o === 'boolean'
     },
     /**
      * Retorna si el objeto es del tipo especificado en base a las propiedades que posee.

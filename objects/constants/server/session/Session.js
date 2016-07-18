@@ -5,7 +5,10 @@
 
 var session = {
     duration: 5 * Math.pow(60, 2) * 1000,
-    secret: 'm3t4Lm0R'
+    secrets: {
+        cookies: 'm3t4Lm0R',
+        encrypt: 'm3t4Lm0R'
+    }
 };
 
 module.exports = session;

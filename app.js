@@ -12,7 +12,8 @@ var express = require('express'), // express dependencies models
     io = require('socket.io')(server), // asyncronous client-server communication
     bodyParser = require('body-parser'), // POST parameters
     cookieParser = require('cookie-parser'), // cookie parser&controller
-    helmet = require('helmet'); // HTTP security extension
+    helmet = require('helmet')/*, // HTTP security extension
+ favicon = require('serve-favicon')*/;
 
 var urlCleaner = require('./resources/server/javascripts/url_cleaner'),
     http = require('./resources/server/javascripts/http'),
@@ -43,13 +44,14 @@ app.use(helmet());
 app.use(http.addHeaders);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser(constants.server.session.secret));
+app.use(cookieParser(constants.server.session.secrets.cookies));
 app.use(urlCleaner.inspect);
 var statics = constants.server.routes.statics.list;
 statics.forEach(function(st) {
     console.log('[statics] loading path '+st.path+' at '+st.source);
     app.use(st.path, express.static(__dirname + st.source));
 });
+//app.use(express.favicon(__dirname + '/img/icon/favicon.ico'));
 console.log('[server] middleware set');
 
 app.use(constants.server.routes.login.root, login);

@@ -17,7 +17,8 @@ var util = require('../resources/both/javascripts/util'), // utils
     CharFactory = require('../objects/factory/CharFactory'),
     constants = require('../objects/constants/Constants'), // constants object
     clans = require('../objects/models/Clans'),
-    generations = require('../objects/models/Generations');
+    generations = require('../objects/models/Generations'),
+    charFunctions = require('../resources/both/javascripts/charFunctions');
 
 var cf = new CharFactory();
 
@@ -53,7 +54,7 @@ router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
                         if (!util.isMaster(user, game)) { // player
                             console.log("[server] logging player in: " + game.name);
                             view.file = views.player;
-                            char = util.findChar(user, game);
+                            char = charFunctions.findChar(user, game);
                             if (!char) {
                                 var cf = new CharFactory();
                                 char = cf.initChar();

@@ -47,7 +47,7 @@ var http = {
         next();
     },
     goToLogin: function(res) {
-        res.redirect(constants.router.root);
+        res.redirect(constants.routes.root);
     }
 };
 

@@ -266,6 +266,14 @@ var charFunctions = {
             return ret;
         }
     },
+    findChar: function (user, game) {
+        var list = game.charList, ret;
+        list.forEach(function (ch) {
+            if (util.isUndefined(ret) && user.name === ch.owner)
+                ret = ch;
+        });
+        return ret;
+    },
     /**
      * Obtiene mediante recursividad el campo de datos requerido de un personaje especificado por parámetro.
      * @param obj Objeto en el que buscar el campo de datos
