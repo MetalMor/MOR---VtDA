@@ -12,8 +12,8 @@ var express = require('express'), // express dependencies models
     io = require('socket.io')(server), // asyncronous client-server communication
     bodyParser = require('body-parser'), // POST parameters
     cookieParser = require('cookie-parser'), // cookie parser&controller
-    helmet = require('helmet')/*, // HTTP security extension
- favicon = require('serve-favicon')*/;
+    helmet = require('helmet'), // HTTP security extension
+    favicon = require('serve-favicon');
 
 var urlCleaner = require('./resources/server/javascripts/url_cleaner'),
     http = require('./resources/server/javascripts/http'),
@@ -35,7 +35,6 @@ logger.log('server', 'init server vars');
 // ***** JADE TEMPLATES *****
 app.set('view engine', 'jade');
 logger.log('server', 'view engine set');
-//console.log('[server] view engine set');
 
 // ***** ENV VARS *****
 app.set('port', PORT);
@@ -53,7 +52,7 @@ statics.forEach(function(st) {
     logger.log('statics', 'loading path '+st.path+' at '+st.source);
     app.use(st.path, express.static(__dirname + st.source));
 });
-//app.use(express.favicon(__dirname + '/img/icon/favicon.ico'));
+app.use(favicon(__dirname + '/resources/client/images/icon/favicon.ico'));
 logger.log('server', 'middleware set');
 
 app.use(constants.server.routes.login.root, login);
