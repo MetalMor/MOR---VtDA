@@ -3,7 +3,10 @@
  * Created by mor on 10/05/16.
  */
 
-if(typeof require !== 'undefined') var util = require('./util');
+if(typeof require !== 'undefined') {
+    var util = require('./util'),
+        logger = require('.logger');
+}
 
 var charFunctions = {
     /**
@@ -113,7 +116,7 @@ var charFunctions = {
      * @param stat Estadística a incrementar
      */
     growStat: function(stat) {
-        console.log('[client] clicked on ' + stat.name + '(' + stat.level + ')');
+        logger.log('client', 'clicked on ' + stat.name + '(' + stat.level + ')');
         var cost = charFunctions.xpCost(stat);
         stat.level++;
         if(util.is(util.maxStat, stat)) stat.max++;

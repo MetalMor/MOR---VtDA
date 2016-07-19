@@ -189,7 +189,7 @@ var util = {
      * Muestra por consola los datos del objeto personaje alojado en el cliente, para debugar.
      */
     printJson: function (obj) {
-        console.log("[client] object: " + JSON.stringify(obj, null, 4))
+        logger.log("util", "object: " + JSON.stringify(obj, null, 4))
     },
     /**
      * Valida si ninguno de los inputs dentro de un elemento especificado por parámetro está vacío.
