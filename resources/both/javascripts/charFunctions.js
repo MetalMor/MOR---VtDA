@@ -5,7 +5,7 @@
 
 if(typeof require !== 'undefined') {
     var util = require('./util'),
-        logger = require('.logger');
+        logger = require('./logger');
 }
 
 var charFunctions = {
