@@ -1,7 +1,7 @@
 {
   "name": "MOR-VtDA",
-  "version": "0.5.5",
-  "description": "Gestor de partidas de rol de Vampiro: la Mascarada [ALPHA HAS BEGUN]",
+  "version": "0.5.6",
+  "description": "Gestor de partidas de rol de Vampiro: la Mascarada",
   "author": "srgark@gmail.com",
   "license": "GPL-3.0",
   "scripts": {
