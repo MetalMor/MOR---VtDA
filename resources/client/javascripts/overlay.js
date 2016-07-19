@@ -103,6 +103,7 @@ var overlay = {
     gameWindow: function (char) {
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
+        list.loadStatSelection();
     },
     /**
      * Muestra la ventana de información del personaje
@@ -123,7 +124,7 @@ var overlay = {
         overlay.open('panel');
         overlay.setPanelButtons();
         char = game.charList[0];
-        list.load();
+        list.loadCharSelection();
         if (!util.isUndefined(char))
             overlay.gameWindow(char);
         button.setDownloader($('table#show-stats')[0]);

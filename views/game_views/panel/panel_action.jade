@@ -8,21 +8,20 @@
             span#roll-closer.glyphicon.glyphicon-remove.formatted-span-button.right-align
         .panel.body
             #roll-options(hidden)
-                #attr-select
-                    label="Atributo"
+                .action-description
+                    label="Describe la acción del personaje"
+                    input(type="text")
+                .stat-select
+                    label="Escoge una estadística"
                     select
-                        option="Bla"
-                        option="Blo"
-                        option="Bli"
-                #skill-select
-                    label="Habilidad"
+                .stat-select
+                    label="Escoge una estadística"
                     select
-                        option="Bla"
-                        option="Blo"
-                        option="Bli"
-                #dif
+                #action-dif
                     label="Dificultad"
-                    input(type="number", min="1", max="10", value="4")
+                    input(type="number", min="1", max="11", value="6")
+                input#next.btn.btn-danger.btn-lg.right-align(type="button", value="Siguiente")
+
             #roll-result(hidden)
                 table
                     thead: th="Resultados"

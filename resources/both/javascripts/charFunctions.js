@@ -222,6 +222,26 @@ var charFunctions = {
         }
     },
     /**
+     * Construye un array con las estadísticas de un personaje.
+     * @param obj Objeto personaje del que extraer las estadísticas.
+     * @returns {Array}
+     */
+    statsToArray: function(obj) {
+        var ret = [];
+        (function extract(obj) {
+            var stats;
+            if (util.is(util.char, obj) || util.is(util.stats, obj)) {
+                stats = obj.stats;
+                stats.forEach(function (s) {
+                    extract(s);
+                });
+            } else if (util.is(util.stat, obj)) {
+                ret.push(obj);
+            }
+        })(obj);
+        return ret;
+    },
+    /**
      * Calcula el coste de la estadística especificada por parámetro
      * @param stat Estadística (objeto o nombre)
      * @returns {number}

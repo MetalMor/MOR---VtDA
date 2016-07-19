@@ -11,16 +11,13 @@ if (window["WebSocket"]) {
         function connectPlayer() {
             var charElement;
             if ((charElement = $("div#char")).length) {
-                var socket = io.connect();
-                sockets.setLink(socket);
+                sockets.setLink(io.connect());
                 char = JSON.parse(charElement.text());
                 user = JSON.parse($("div#user").text());
                 game = JSON.parse($("div#game").text());
                 if (!util.isUndefined(char)) {
-                    if (!char.ready)
-                        overlay.initCharPanel();
-                    else
-                        overlay.playerPanel();
+                    if (char.ready) overlay.playerPanel();
+                    else overlay.initCharPanel();
                 }
             }
         }
@@ -28,8 +25,7 @@ if (window["WebSocket"]) {
     });
     $('#wrapper-master').ready(function () {
         function connectMaster() {
-            var socket = io.connect();
-            sockets.setLink(socket);
+            sockets.setLink(io.connect());
             user = JSON.parse($("div#user").text());
             game = JSON.parse($("div#game").text());
             if (util.isUndefined(char))

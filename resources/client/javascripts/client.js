@@ -39,7 +39,7 @@ var sockets = {
                 overlay.gameWindow(char);
             }
             overlay.gameWindow(char);
-            if (util.isMaster(user, game)) list.load();
+            if (util.isMaster(user, game)) list.loadCharSelection();
         });
     },
     /**

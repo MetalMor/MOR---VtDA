@@ -7,38 +7,40 @@ var list = {
     /**
      * Carga la lista de personajes de la partida en un elemento select.
      */
-    load: function () {
-        var element = $('select#char-list'), charList = game.charList,
-            npcList = game.npcList, event = 'change', childrenSelector = ':selected',
-            separatorElement = '<option>--------------------</option>';
+    loadCharSelection: function () {
+        var element = $('select#char-list'), event = 'change', childrenSelector = ':selected',
+            separatorElement = '<option>--------------------</option>', lists = [game.charList, game.npcList];
         element.empty();
-        list.appendList(element, charList);
-        element.append(separatorElement);
-        list.appendList(element, npcList);
+        lists.forEach(function(l) {
+            list.appendList(element, l, function(child) {
+                var currentCharName = charFunctions.findData(char, 'nombre').value,
+                    otherCharName = charFunctions.findData(child, 'nombre').value,
+                    htmlClass = ((util.isUndefined(child.npc) || !child.npc) ? 'char' : 'npc'),
+                    htmlSelected = (currentCharName === otherCharName ? " selected" : "");
+                return "<option" + htmlSelected + " class='"+htmlClass+"'>" + otherCharName + "</option>"
+            });
+            element.append(separatorElement);
+        });
         element.off(event);
         element.on(event, function () {
             button.charSelectOptionClick(element.children(childrenSelector));
         });
     },
-    /**
-     * Añade elementos option a un elemento select especificado por parámetro.
-     * @param element Elemento select.
-     * @param list Lista de objetos personaje que añadir como elementos option.
-     */
-    appendList: function (element, list) {
-        var childs = "";
-        var addChild = function (c) {
-                childs += c
-            },
-            newChild = function (c) {
-                var currentCharName = charFunctions.findData(char, 'nombre').value,
-                    otherCharName = charFunctions.findData(c, 'nombre').value,
-                    htmlClass = ((util.isUndefined(c.npc) || !c.npc) ? 'char' : 'npc'),
-                    htmlSelected = (currentCharName === otherCharName ? " selected" : "");
-                return "<option" + htmlSelected + " class='"+htmlClass+"'>" + otherCharName + "</option>"
-            };
-        list.forEach(function (ch) {
-            addChild(newChild(ch));
+    loadStatSelection: function() {
+        var statsList = charFunctions.statsToArray(char), element = $('div.stat-select>select'), cur;
+        element.each(function() {
+            cur = $(this).empty();
+            list.appendList(cur, statsList, function(child) {
+                return "<option>" + util.fancy(child.name) + " - " + child.level + "</option>"
+            });
+        });
+    },
+    appendList: function(element, list, newChild) {
+        var childs = "", addChild = function(ch) {
+            childs += ch
+        };
+        list.forEach(function(obj) {
+            addChild(newChild(obj))
         });
         element.append(childs);
     },
