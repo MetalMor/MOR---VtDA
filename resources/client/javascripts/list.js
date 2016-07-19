@@ -26,6 +26,9 @@ var list = {
             button.charSelectOptionClick(element.children(childrenSelector));
         });
     },
+    /**
+     * Carga la lista de estadísticas de un personaje en un elemento select.
+     */
     loadStatSelection: function() {
         var statsList = charFunctions.statsToArray(char), element = $('div.stat-select>select'), cur;
         element.each(function() {
@@ -35,6 +38,12 @@ var list = {
             });
         });
     },
+    /**
+     * Rellena un elemento con una lista de elementos.
+     * @param element Elemento a rellenar.
+     * @param list Lista de elementos.
+     * @param newChild Callback que define cómo se agrega cada elemento hijo.
+     */
     appendList: function(element, list, newChild) {
         var childs = "", addChild = function(ch) {
             childs += ch
