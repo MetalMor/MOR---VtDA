@@ -11,7 +11,10 @@ var logger = {
      */
     log: function(source, message) {
         var time = new Date(),
-            formattedTime = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds(),
+            formatTime = function(t) {
+                return t.toString().length > 1 ? t : '0' + t;
+            },
+            formattedTime = formatTime(time.getHours()) + ":" + formatTime(time.getMinutes()) + ":" + formatTime(time.getSeconds()),
             fullMessage = formattedTime + ": [" + source + "] -> " + message;
         console.log(fullMessage);
     }

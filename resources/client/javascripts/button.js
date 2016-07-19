@@ -76,8 +76,34 @@ var button = {
         }
     },
     /**
+     * Define la función llamada al hacer click en el botón de resolución de tiradas.
+     */
+    setRollResolutionButton: function() {
+        var getValue = function(element) {return parseInt(element.val())};
+        button.setButtonClick($('span#roll-button'), function() {
+            var stats = [], dif = getValue($('tr#action-dif input')),
+                mod = getValue($('tr#action-mod input')),
+                wins = getValue($('tr#action-wins input')),
+                will = charFunctions.findStat(char, 'fuerza_de_voluntad'),
+                blood = charFunctions.findStat(char, 'sangre'),
+                useMaxable = function(stat, param) {
+                    if (param > 0 && stat.level >= param) {
+                        stat.level -= param;
+                        charFunctions.setStat(char, stat, stat);
+                    }
+                };
+            $('tr.stat-select select>option:selected').each(function() {
+                stats.push(charFunctions.findStat(char, $(this).attr('id')));
+            });
+            useMaxable(will, wins);
+            useMaxable(blood, mod);
+            var rollSet = dice.RollSet(stats, dif, mod, wins);
+            table.showRollSet(rollSet.resolve());
+            sockets.update();
+        })
+    },
+    /**
      * Define la función llamada al pulsar el botón de descargar la ficha en forma de imagen.
-     * @param element Botón que llamará a la función.
      */
     setDownloader: function() {
         button.setButtonClick($('span#download'), function() {
@@ -251,21 +277,17 @@ var button = {
             options = $('div#roll div#roll-options'),
             overlayId = 'roll', animationSpeed = 'fast';
         button.setButtonClick(opener, function () {
-            var stats = [], rollSet;
             overlay.open(overlayId, animationSpeed, function (e) {
                 overlay.show(options);
             });
-            stats.push(charFunctions.findStat(char, 'destreza'));
-            stats.push(charFunctions.findStat(char, 'atletismo'));
-            rollSet = dice.RollSet(stats, 5).resolve();
-            util.printJson(rollSet);
         });
         button.setButtonClick(closer, function() {
             overlay.close(overlayId, animationSpeed, function (e) {
                 overlay.hide(options)
             });
         });
-        util.disable("div#dif>input");
+        button.setRollResolutionButton();
+        util.disable('tr#action-dif input');
     },
     /**
      * Función destinada a llamarse al hacer clic en uno de los iconos de nivel de la ficha del personaje.

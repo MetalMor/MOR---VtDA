@@ -30,11 +30,11 @@ var list = {
      * Carga la lista de estadísticas de un personaje en un elemento select.
      */
     loadStatSelection: function() {
-        var statsList = charFunctions.statsToArray(char), element = $('div.stat-select>select'), cur;
+        var statsList = charFunctions.statsToArray(char), element = $('tr.stat-select select'), cur;
         element.each(function() {
             cur = $(this).empty();
             list.appendList(cur, statsList, function(child) {
-                return "<option>" + util.fancy(child.name) + " - " + child.level + "</option>"
+                return "<option id='"+child.name+"'>" + util.fancy(child.name) + " - " + child.level + "</option>"
             });
         });
     },

@@ -16,12 +16,13 @@ var dice = {
      * Retorna un conjunto de tiradas de dados a partir de unas estadísticas.
      * @param stats Lista de estadísticas a partir de las que se generarán las tiradas.
      * @param dif Umbral de éxito de las tiradas (dificultad).
+     * @param mod Número modificador de la reserva de dados (se añade al total de las estadísticas).
      * @param wins Victorias iniciales por fuerza de voluntad.
      * @returns {RollSet}
      * @constructor
      */
-    RollSet: function (stats, dif, wins) {
-        var rollSet, initWins = wins || 0, fails = 0, nextRollId = 0, rollSetId = dice.nextId++;
+    RollSet: function (stats, dif, mod, wins) {
+        var rollSet, initWins = wins || 0, fails = 0, nextRollId = 0, rollSetId = dice.nextId++, mod = mod || 0;
         return rollSet = {
             /**
              * Identificador numérico del conjunto de tiradas.
@@ -115,7 +116,7 @@ var dice = {
             init: function () {
                 var diceQty = 0,
                     stats = rollSet.stats, rolls = rollSet.rolls = [], dif = rollSet.dif;
-                stats.forEach(function(s) {diceQty += charFunctions.getStatForce(s, char)});
+                stats.forEach(function(s) {diceQty += (rollSet.mod = charFunctions.getStatForce(s, char) + mod)});
                 for (diceCnt = 0; diceCnt < diceQty; diceCnt++) {
                     var newDice = dice.Roll(nextRollId++, dif);
                     rolls.push(newDice);
@@ -194,7 +195,7 @@ var dice = {
              */
             throw: function () {
                 roll.res = Math.floor(Math.random() * dice.max) + 1;
-                console.log("Threw dice: "+roll.res);
+                //logger.log("dice", "Threw dice: "+roll.res);
                 return roll;
             }
         }

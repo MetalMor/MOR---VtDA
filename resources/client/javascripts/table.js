@@ -39,10 +39,11 @@ var table = {
      */
     showRollSet: function(rollSet) {
         if(rollSet.resolved) {
-            var rolls = rollSet.rolls;
+            var rolls = rollSet.rolls, mainTable = $('table#rolls'), tableBody = "";
             rolls.forEach(function(r) {
-                // TODO mostrar todos los resultados de la tirada asi como sus caracteristicas (dificultad, victorias, niveles de stats, modificadores, etc)
+                logger.log('table', 'filling table with roll: ' + r.res + ' ' + (r.dif > r.res ? 'fail' : 'success' ));
             });
+            overlay.gameWindow(char);
         }
     },
     /**
