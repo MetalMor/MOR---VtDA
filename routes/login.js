@@ -15,7 +15,8 @@ var util = require('../resources/both/javascripts/util'), // utils
     views = require('../objects/system/views'),
     User = require('../objects/models/User'), // user model
     Game = require('../objects/models/Game'), // game model
-    constants = require('../objects/constants/Constants'); // constants object
+    constants = require('../objects/constants/Constants'), // constants object
+    logger = require('../resources/both/javascripts/logger');
 
 var sessionDuration = constants.server.session.duration; // session duration: 5h
 var view, user, game, games, users; // users & games list
@@ -35,12 +36,12 @@ mongoGames.listAllGames(setGames);
 
 // LOGIN
 router.get(routes.root, function (req, res) {
-    console.log("[server] user login view");
+    logger.log("server", "user login view");
     view = new ViewData(views.user, 'MOR - VtDA', 'Login', 0);
     res.render(view.file, view.data);
 });
 
-console.log('[server] login route set');
+logger.log('server', 'login route set');
 // VALIDACION LOGIN
 router.post(routes.root, function (req, res) {
     console.log("[server] validate user login");
@@ -56,19 +57,19 @@ router.post(routes.root, function (req, res) {
         }
     });
 });
-console.log('[server] login validation set');
+logger.log('server', 'login validation set');
 
 // NUEVO USUARIO
 router.get(routes.login.new.user, function (req, res) {
-    console.log("[server] new user creation view");
+    logger.log("server", "new user creation view");
     view = new ViewData(views.newUser, 'MOR - VtDA', 'Nuevo Usuario', 0);
     res.render(view.file, view.data);
 });
-console.log('[server] new user route set');
+logger.log('server', 'new user route set');
 
 // VALIDACION NUEVO USUARIO
 router.post(routes.login.new.user, function (req, res) {
-    console.log("[server] validate new user");
+    logger.log("server", "validate new user");
     var passwdArray = req.body.passwd;
     user = new User(req.body.name, sha1(req.body.passwd[0]));
     mongoUsers.findUserByName(user, function (u) {
@@ -85,7 +86,7 @@ router.post(routes.login.new.user, function (req, res) {
         } else { // OK
             mongoUsers.insertUser(user, function () {
                 mongoUsers.listAllUsers(setUsers);
-                console.log("[server] new user: " + user.name);
+                logger.log("server", "new user: " + user.name);
                 view.data.games = games;
                 view.data.user = user;
                 cookies.new(res, 'key', user.name, sessionDuration);
@@ -94,7 +95,7 @@ router.post(routes.login.new.user, function (req, res) {
         }
     });
 });
-console.log('[server] new user validation set');
+logger.log('server', 'new user validation set');
 
 // ESCOGER PARTIDA
 router.get(routes.login.access.user, function (req, res) {
@@ -105,7 +106,7 @@ router.get(routes.login.access.user, function (req, res) {
             view.data.error = 1;
             http.goToLogin(res);
         } else {
-            console.log("[server] game choice view");
+            logger.log("server", "game choice view");
             view = new ViewData(views.game, userName + ' - VtDA', 'Selección de partida: ' + userName, 0);
             view.data.user = {name: userName};
             view.data.games = games;
@@ -114,11 +115,11 @@ router.get(routes.login.access.user, function (req, res) {
         }
     }
 });
-console.log('[server] game choice route set');
+logger.log('server', 'game choice route set');
 
 // VALIDACION PARTIDA ESCOGIDA
 router.post(routes.login.access.user, function (req, res) {
-    console.log("[server] validate chosen game");
+    logger.log("server", "validate chosen game");
     var key = req.cookies.key;
     game = new Game(req.body.name);
     view = new ViewData(views.game, req.params.user + ' - VtDA', 'Selección de partida: ' + req.params.user, 0);
@@ -140,7 +141,7 @@ router.post(routes.login.access.user, function (req, res) {
         http.goToLogin(res);
     }
 });
-console.log('[server] game choice validation set');
+logger.log('server', 'game choice validation set');
 
 // NUEVA PARTIDA
 router.get(routes.login.new.game, function (req, res) {
@@ -151,7 +152,7 @@ router.get(routes.login.new.game, function (req, res) {
                 http.goToLogin(res);
             } else {
                 user = u;
-                console.log("[server] new game creation view");
+                logger.log("server", "new game creation view");
                 view = new ViewData(views.newGame, user.name + ' - VtDA', 'Nueva partida: ' + req.params.user, 0);
                 view.data.user = user;
                 res.render(view.file, view.data);
@@ -161,17 +162,17 @@ router.get(routes.login.new.game, function (req, res) {
         http.goToLogin(res);
     }
 });
-console.log('[server] new game route set');
+logger.log('server', 'new game route set');
 
 // VALIDACION NUEVA PARTIDA
 router.post(routes.login.new.game, function (req, res) {
-    console.log("[server] validate new game");
+    logger.log("server", "validate new game");
     var key = req.cookies.key;
     game = {name: req.body.name};
     if (sha1(req.params.user) === key) {
         mongoGames.findGameByName(game, function (g) {
             if (!util.isNull(g)) {
-                console.log("[server] game already exists: " + g.name);
+                logger.log("server", "game already exists: " + g.name);
                 view = new ViewData(views.newGame, req.params.user + ' - VtDA', 'Nueva Partida: ' + req.params.user, 2);
                 view.data.user = {name: req.params.user};
                 res.render(view.file, view.data);
@@ -201,6 +202,6 @@ router.post(routes.login.new.game, function (req, res) {
         http.goToLogin(res);
     }
 });
-console.log('[server] new game validation set');
+logger.log('server', 'new game validation set');
 
 module.exports = router;

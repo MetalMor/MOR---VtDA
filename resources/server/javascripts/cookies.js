@@ -4,6 +4,7 @@
  */
 
 var util = require('../../both/javascripts/util'),
+    logger = require('../../both/javascripts/logger'),
     sha1 = require('sha1');
 
 var cookies = {
@@ -20,7 +21,7 @@ var cookies = {
         params.push(value);
         if (!util.isUndefined(expires)) params.push(expires);
         res.cookie.apply(res, params);
-        console.log('[cookies] new cookie: ' + name + '(' + value + ')');
+        logger.log('cookies', 'new cookie: ' + name + '(' + value + ')');
         return res;
     },
     /**
@@ -38,7 +39,7 @@ var cookies = {
             return res;
         } else {
             res.clearCookie(cookie);
-            console.log('[cookies] cleared cookie: ' + cookie);
+            logger.log('cookies', 'cleared cookie: ' + cookie);
             return res;
         }
     }

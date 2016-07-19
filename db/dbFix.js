@@ -2,6 +2,7 @@
  * Objeto que contiene scripts para modificar ciertos aspectos de la base de datos.
  * Created by becari on 06/07/2016.
  */
+var logger = require('../resources/both/javascripts/logger');
 
 var fix = {
     /**
@@ -12,9 +13,9 @@ var fix = {
         var statsGroupList, statsSetList, statList,
             replaceName = function (stat) {
                 if (nameEqv.hasOwnProperty(stat.name)) {
-                    console.log("[stats] name (bf): " + stat.name);
+                    logger.log("stats", "name (bf): " + stat.name);
                     stat.name = nameEqv[stat.name];
-                    console.log("[stats] name (at): " + stat.name);
+                    logger.log("stats", "name (at): " + stat.name);
                 }
             };
         mongoGames.findOwnedList(game, 'npcList', function (npcList) {
@@ -35,7 +36,7 @@ var fix = {
             });
             game.npcList = npcList;
             mongoGames.updateGame(game, function () {
-                console.log("[stats] update ok");
+                logger.log("stats", "update ok");
             });
         });
     }

@@ -8,12 +8,13 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
 var util = require('../resources/both/javascripts/util');
+var logger = require('../resources/both/javascripts/logger');
 var constants = require('../objects/constants/Constants').server.db;
 
 var dbUrl = constants.url.dev;
 var col = constants.collections.games;
 
-console.log("[mongo] db URL: "+dbUrl);
+logger.log("mongo", "db URL: "+dbUrl);
 
 module.exports = {
 
@@ -29,7 +30,7 @@ module.exports = {
                 client.collection(col).find().toArray(function (err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    console.log("[mongo] listing all games: " + doc.length);
+                    logger.log("mongo", "listing all games: " + doc.length);
                     if (callback) callback(doc);
                 });
             });
@@ -49,7 +50,7 @@ module.exports = {
                 client.collection(col).insertOne(game, function (err, result) {
                     db.close();
                     assert.equal(null, err);
-                    console.log("[mongo] inserted game: " + game.name);
+                    logger.log("mongo", "inserted game: " + game.name);
                     if (callback) callback();
                 });
             });
@@ -71,7 +72,7 @@ module.exports = {
                 client.collection(col).updateOne({name: game.name}, {$set: game}, function (err, result) {
                     db.close();
                     assert.equal(null, err);
-                    console.log("[mongo] updated game: " + game.name);
+                    logger.log("mongo", "updated game: " + game.name);
                     if (callback) callback();
                 });
             });
@@ -84,7 +85,7 @@ module.exports = {
      * @param callback Función a la que enviar el resultado.
      */
     findGameByName: function (game, callback) {
-        console.log("[mongo] looking for game: " + game.name);
+        logger.log("mongo", "looking for game: " + game.name);
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
             db.open(function (err, client) {
@@ -92,8 +93,8 @@ module.exports = {
                 client.collection(col).findOne({name: game.name}, function (err, doc) {
                     db.close();
                     assert.equal(null, err);
-                    if (doc) console.log("[mongo] found game: " + doc.name);
-                    else console.log("[mongo] game not found: " + game.name);
+                    if (doc) logger.log("mongo", "found game: " + doc.name);
+                    else logger.log("mongo", "game not found: " + game.name);
                     if (callback) callback(doc);
                 });
             });
@@ -107,7 +108,7 @@ module.exports = {
      * @param callback Función a la que enviar el resultado.
      */
     findOwnedList: function (game, field, callback) {
-        console.log("[mongo] looking for list in: " + game.name);
+        logger.log("mongo", "looking for list in: " + game.name);
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
             db.open(function (err, client) {
@@ -115,8 +116,8 @@ module.exports = {
                 client.collection(col).findOne(game, function (err, list) {
                     db.close();
                     assert.equal(null, err);
-                    if (list) console.log("[mongo] found game: " + list.name);
-                    else console.log("[mongo] game not found: " + game.name);
+                    if (list) logger.log("mongo", "found game: " + list.name);
+                    else logger.log("mongo", "game not found: " + game.name);
                     if (callback) callback(list[field]);
                 });
             });

@@ -17,14 +17,15 @@ var express = require('express'), // express dependencies models
 
 var urlCleaner = require('./resources/server/javascripts/url_cleaner'),
     http = require('./resources/server/javascripts/http'),
-    dbFix = require('./db/dbFix');
+    dbFix = require('./db/dbFix'),
+    logger = require('./resources/both/javascripts/logger');
 
 var login = require('./routes/login'),
     game = require('./routes/game');
 var cookies = require('./resources/server/javascripts/cookies');
 
 var PORT = process.env.OPENSHIFT_NODEJS_IP || 3000;
-console.log('[server] init server vars');
+logger.log('server', 'init server vars');
 
 /**
  * TODO limpiar las entradas de parametros en la query (evitar caracteres maliciosos)
@@ -33,11 +34,12 @@ console.log('[server] init server vars');
 
 // ***** JADE TEMPLATES *****
 app.set('view engine', 'jade');
-console.log('[server] view engine set');
+logger.log('server', 'view engine set');
+//console.log('[server] view engine set');
 
 // ***** ENV VARS *****
 app.set('port', PORT);
-console.log('[server] env vars set');
+logger.log('server', 'env vars set');
 
 // ***** MIDDLEWARE *****
 app.use(helmet());
@@ -48,25 +50,25 @@ app.use(cookieParser(constants.server.session.secrets.cookies));
 app.use(urlCleaner.inspect);
 var statics = constants.server.routes.statics.list;
 statics.forEach(function(st) {
-    console.log('[statics] loading path '+st.path+' at '+st.source);
+    logger.log('statics', 'loading path '+st.path+' at '+st.source);
     app.use(st.path, express.static(__dirname + st.source));
 });
 //app.use(express.favicon(__dirname + '/img/icon/favicon.ico'));
-console.log('[server] middleware set');
+logger.log('server', 'middleware set');
 
 app.use(constants.server.routes.login.root, login);
 app.use(constants.server.routes.game.root, game);
 
 // ROOT redirecciona al login
 app.get(constants.server.routes.root, function(req, res) {
-    console.log('[server] redirect to login');
+    logger.log('server', 'redirect to login');
     cookies.clear(res, req.cookies);
     res.redirect(constants.server.routes.login.root);
 });
-console.log('[server] root route set');
+logger.log('server', 'root route set');
 
 app.get(constants.server.routes.test, function (req, res) {
-    console.log("[server] fix updateNames");
+    logger.log('server', 'fix updateNames');
     var game = {name: 'Blood Money'},
         equiv = {reserva_de_sangre: 'sangre'};
     dbFix.updateNames(game, equiv);
@@ -74,7 +76,7 @@ app.get(constants.server.routes.test, function (req, res) {
 });
 
 server.listen(PORT);
-console.log('[server] started at port ' + PORT);
+logger.log('server', 'started at port ' + PORT);
 
 // ***** EJECUTA LOS SOCKETS! *****
 require('./resources/server/javascripts/sockets.js')(io);

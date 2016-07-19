@@ -18,14 +18,12 @@ var util = require('../resources/both/javascripts/util'), // utils
     constants = require('../objects/constants/Constants'), // constants object
     clans = require('../objects/models/Clans'),
     generations = require('../objects/models/Generations'),
-    charFunctions = require('../resources/both/javascripts/charFunctions');
+    charFunctions = require('../resources/both/javascripts/charFunctions'),
+    logger = require('../resources/both/javascripts/logger');
 
 var cf = new CharFactory();
 
 var view, user, game, char = cf.initChar();
-var goToLogin = function (res) {
-    res.redirect('/')
-};
 
 var express = require('express'),
     router = express.Router({caseSensitive: true});
@@ -52,7 +50,7 @@ router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
                         view.data.gens = generations;
                         view.data.playerFlag = true;
                         if (!util.isMaster(user, game)) { // player
-                            console.log("[server] logging player in: " + game.name);
+                            logger.log("server", "logging player in: " + game.name);
                             view.file = views.player;
                             char = charFunctions.findChar(user, game);
                             if (!char) {
@@ -64,7 +62,7 @@ router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
                             res.render(view.file, view.data);
                         } else { // master
                             view.data.playerFlag = false;
-                            console.log("[server] logging master " + user.name + " in: " + game.name);
+                            logger.log("server", "logging master " + user.name + " in: " + game.name);
                             res.render(view.file, view.data);
                         }
                     } else {
@@ -77,15 +75,16 @@ router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
         http.goToLogin(res);
     }
 });
-console.log('[server] game panel route set');
+logger.log('server', 'game panel route set');
 
 router.get(constants.server.routes.game.access.initChar, function (req, res) {
+    logger.log('server', 'sending initialized character');
     var ret = cf.initChar();
     ret.npc = true;
     http.contentType(res, 'application/json');
     res.send(JSON.stringify(ret));
 });
-console.log('[server] init char request route set');
+logger.log('server', 'init char request route set');
 
 router.get(constants.server.routes.game.access.dataObject, function (req, res) {
     var ret = require('../objects/constants/Constants');
