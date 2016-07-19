@@ -39,10 +39,27 @@ var table = {
      */
     showRollSet: function(rollSet) {
         if(rollSet.resolved) {
-            var rolls = rollSet.rolls, mainTable = $('table#rolls'), tableBody = "";
+            var rolls = rollSet.rolls, mainTable = $('div#roll-result>table>tbody').empty(), tableBody = "", count = 0,
+                result, mainTableHead = $('div#roll-result>table>thead').empty(), tableHead = "",
+                counters = {success: 0, failure: 0};
+            mainTable.empty();
+            mainTableHead.empty();
             rolls.forEach(function(r) {
-                logger.log('table', 'filling table with roll: ' + r.res + ' ' + (r.dif > r.res ? 'fail' : 'success' ));
+                result = r.isWin() ? "success" : "failure";
+                counters[result]++;
+                logger.log('table', 'filling table with roll: ' + r.res + ' ' + result);
+                tableBody += "<tr class='" + (result === "success" ? result : "danger") + "'>" +
+                    "<td>" + ++count + "</td>" +
+                    "<td>Result: " + r.res + "</td>" +
+                    "<td>" + util.fancy(result) + "!</td>" +
+                    "</tr>";
             });
+            var header = rollSet.fail ?
+                ("<th colspan='2'>FALLO</th>") :
+                ("<th>Éxitos: " + counters.success + "</th><th>Fallos: " + counters.failure + "</th>");
+            tableHead = "<tr><th>Resultados</th>" + header + "</tr>";
+            mainTableHead.append(tableHead);
+            mainTable.append(tableBody);
             overlay.gameWindow(char);
         }
     },

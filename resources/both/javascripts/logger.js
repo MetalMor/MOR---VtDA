@@ -15,7 +15,7 @@ var logger = {
                 return t.toString().length > 1 ? t : '0' + t;
             },
             formattedTime = formatTime(time.getHours()) + ":" + formatTime(time.getMinutes()) + ":" + formatTime(time.getSeconds()),
-            fullMessage = formattedTime + ": [" + source + "] -> " + message;
+            fullMessage = formattedTime + ": [" + source + "]\t-> " + message;
         console.log(fullMessage);
     }
 };

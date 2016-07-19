@@ -81,25 +81,29 @@ var button = {
     setRollResolutionButton: function() {
         var getValue = function(element) {return parseInt(element.val())};
         button.setButtonClick($('span#roll-button'), function() {
-            var stats = [], dif = getValue($('tr#action-dif input')),
-                mod = getValue($('tr#action-mod input')),
-                wins = getValue($('tr#action-wins input')),
-                will = charFunctions.findStat(char, 'fuerza_de_voluntad'),
-                blood = charFunctions.findStat(char, 'sangre'),
-                useMaxable = function(stat, param) {
-                    if (param > 0 && stat.level >= param) {
-                        stat.level -= param;
-                        charFunctions.setStat(char, stat, stat);
-                    }
-                };
-            $('tr.stat-select select>option:selected').each(function() {
-                stats.push(charFunctions.findStat(char, $(this).attr('id')));
-            });
-            useMaxable(will, wins);
-            useMaxable(blood, mod);
-            var rollSet = dice.RollSet(stats, dif, mod, wins);
-            table.showRollSet(rollSet.resolve());
-            sockets.update();
+            if ($('div#roll-result>table>tbody').is(':hidden')) {
+                var stats = [], dif = getValue($('tr#action-dif input')),
+                    mod = getValue($('tr#action-mod input')),
+                    wins = getValue($('tr#action-wins input')),
+                    will = charFunctions.findStat(char, 'fuerza_de_voluntad'),
+                    blood = charFunctions.findStat(char, 'sangre'),
+                    useMaxable = function (stat, param) {
+                        if (param > 0 && stat.level >= param) {
+                            stat.level -= param;
+                            charFunctions.setStat(char, stat, stat);
+                        }
+                    };
+                $('tr.stat-select select>option:selected').each(function () {
+                    stats.push(charFunctions.findStat(char, $(this).attr('id')));
+                });
+                useMaxable(will, wins);
+                useMaxable(blood, mod);
+                var rollSet = dice.RollSet(stats, dif, mod, wins);
+                table.showRollSet(rollSet.resolve());
+                overlay.show($('div#roll div#roll-result'));
+                overlay.hide($('div#roll div#roll-options'));
+                sockets.update();
+            }
         })
     },
     /**
@@ -275,15 +279,18 @@ var button = {
     setRollPanelButton: function () {
         var opener = $('span#roll-opener'), closer = $('div#roll span#roll-closer'),
             options = $('div#roll div#roll-options'),
+            result = $('div#roll div#roll-result'),
             overlayId = 'roll', animationSpeed = 'fast';
         button.setButtonClick(opener, function () {
             overlay.open(overlayId, animationSpeed, function (e) {
                 overlay.show(options);
+                overlay.hide(result);
             });
         });
         button.setButtonClick(closer, function() {
             overlay.close(overlayId, animationSpeed, function (e) {
-                overlay.hide(options)
+                overlay.hide(options);
+                overlay.hide(result);
             });
         });
         button.setRollResolutionButton();
