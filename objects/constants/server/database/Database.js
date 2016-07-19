@@ -6,7 +6,7 @@
 var database = {
     url: {
         dev: 'mongodb://localhost:27017/vtda',
-        prod: 'mongodb://mor:roflmao1@olympia.modulusmongo.net:27017/idusuR3y'
+        prod: 'mongodb://admin:bhWFe9S3ZJWE@olympia.modulusmongo.net:27017/vtm'
     },
     collections: {
         games: 'games',
