@@ -7,27 +7,29 @@
             span#roll-button.glyphicon.glyphicon-check.formatted-span-button.left-align
             span#roll-closer.glyphicon.glyphicon-remove.formatted-span-button.right-align
         .panel.body
-            #roll-options(hidden)
-                table
-                    tr.action-description
-                        td: label="Describe la acción del personaje"
-                        td: input(type="text", value="some action text")
-                    tr.stat-select
-                        td: label="Escoge una estadística"
-                        td: select
-                    tr.stat-select
-                        td: label="Escoge otra estadística"
-                        td: select
-                    tr#action-wins
-                        td: label="Victorias por fuerza de voluntad"
-                        td: input(type="number", value="0")
-                    tr#action-mod
-                        td: label="Modificador por sangre"
-                        td: input(type="number", value="0")
-                    tr#action-dif
-                        td: label="Dificultad"
-                        td: input(type="number", min="1", max="10", value="6")
-
+            #roll-options.table-responsive(hidden)
+                table.table
+                    thead
+                        tr: th(colspan="2")="Opciones de la tirada"
+                    tbody
+                        tr.action-description
+                            td: label="Describe la acción del personaje"
+                            td: input(type="text", value="some action text", placeholder="descripción...")
+                        tr.stat-select
+                            td: label="Escoge una estadística"
+                            td: select
+                        tr.stat-select
+                            td: label="Escoge otra estadística"
+                            td: select
+                        tr#action-wins
+                            td: label="Éxitos por fuerza de voluntad"
+                            td: input(type="number", value="0", placeholder="éxitos...")
+                        tr#action-mod
+                            td: label="Modificador por sangre"
+                            td: input(type="number", value="0", placeholder="modificador...")
+                        tr#action-dif
+                            td: label="Dificultad"
+                            td: input(type="number", min="1", max="10", value="6", placeholder="dificultad...")
             #roll-result.table-responsive(hidden)
                 table.table
                     thead

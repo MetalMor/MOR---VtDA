@@ -69,8 +69,14 @@ var mongoUsers = {
             assert.equal(null, err);
             db.open(function(err, client) {
                 assert.equal(null, err);
-                var regExpOptions = 'i';
-                client.collection(col).findOne({name: util.toRegExp(user.name, regExpOptions)}, function (err, doc) {
+                var regExpOptions = 'i', regExpName;
+                try {
+                    regExpName = util.toRegExp(util.clean(user.name), regExpOptions);
+                } catch(err) {
+                    logger.log('mongo', err.toString());
+                    regExpName = 'nobody';
+                }
+                client.collection(col).findOne({name: regExpName}, function (err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if(doc) logger.log("mongo", "found user: "+doc.name);

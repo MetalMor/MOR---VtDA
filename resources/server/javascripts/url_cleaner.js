@@ -8,7 +8,7 @@ var urlClean = {
     inspect: function(req, res, next) {
         var param, params = req.params, illegal = false;
         for (param in params) {
-            if(!illegal && param.search(/[^\w\.\/\-]/g) >= 0) // ojito acordarse que esta mierda hace q la partida del roger sea inaccesible, hacer una funcion q sustituya los espacios por guiones bajos en vez de porcentaje-noseque
+            if(!illegal && param.search(/[^\w\.\/\-]/gi) >= 0) // ojito acordarse que esta mierda hace q la partida del roger sea inaccesible, hacer una funcion q sustituya los espacios por guiones bajos en vez de porcentaje-noseque
                 illegal = true;
         }
         if(illegal)

@@ -83,6 +83,7 @@ var button = {
         button.setButtonClick($('span#roll-button'), function() {
             if ($('div#roll-result>table>tbody').is(':hidden')) {
                 var stats = [], dif = getValue($('tr#action-dif input')),
+                    desc = $('tr#action-description input').val(),
                     mod = getValue($('tr#action-mod input')),
                     wins = getValue($('tr#action-wins input')),
                     will = charFunctions.findStat(char, 'fuerza_de_voluntad'),
@@ -103,6 +104,7 @@ var button = {
                 overlay.show($('div#roll div#roll-result'));
                 overlay.hide($('div#roll div#roll-options'));
                 sockets.update();
+                logger.log('action', charFunctions.findData(char, 'nombre').value + desc + ': ' + rolLSet.isWin());
             }
         })
     },

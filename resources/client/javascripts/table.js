@@ -47,17 +47,16 @@ var table = {
             rolls.forEach(function(r) {
                 result = r.isWin() ? "success" : "failure";
                 counters[result]++;
-                logger.log('table', 'filling table with roll: ' + r.res + ' ' + result);
                 tableBody += "<tr class='" + (result === "success" ? result : "danger") + "'>" +
                     "<td>" + ++count + "</td>" +
-                    "<td>Result: " + r.res + "</td>" +
+                    "<td>Resultado: " + r.res + "</td>" +
                     "<td>" + util.fancy(result) + "!</td>" +
                     "</tr>";
             });
             var header = rollSet.fail ?
-                ("<th colspan='2'>FALLO</th>") :
+                "<th colspan='2'>FALLO</th>" :
                 ("<th>Éxitos: " + counters.success + "</th><th>Fallos: " + counters.failure + "</th>");
-            tableHead = "<tr><th>Resultados</th>" + header + "</tr>";
+            tableHead = "<tr><th>Tabla de resultados</th>" + header + "</tr>";
             mainTableHead.append(tableHead);
             mainTable.append(tableBody);
             overlay.gameWindow(char);

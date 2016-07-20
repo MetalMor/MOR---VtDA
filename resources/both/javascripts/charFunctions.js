@@ -276,18 +276,19 @@ var charFunctions = {
      * @returns {*}
      */
     findStat: function(obj, stat) {
-        var found = charFunctions.areEquals(obj, stat);
-        if(util.is(util.stat, obj)) {
-            if(found) return obj;
-        } else if(util.is(util.stats, obj) || util.is(util.char, obj)) {
-            var self = this, ret;
-            if(found) ret = obj;
-            obj.stats.forEach(function(o) {
-                if(util.isUndefined(ret)) ret = self.findStat(o, stat);
-                //if(!util.isUndefined(tmpRet)) ret = tmpRet;
-            });
-            return ret;
-        }
+        if (!util.isUndefined(obj)) {
+            var found = charFunctions.areEquals(obj, stat);
+            if (util.is(util.stat, obj)) {
+                if (found) return obj;
+            } else if (util.is(util.stats, obj) || util.is(util.char, obj)) {
+                var self = this, ret;
+                if (found) ret = obj;
+                obj.stats.forEach(function (o) {
+                    if (util.isUndefined(ret)) ret = self.findStat(o, stat);
+                });
+                return ret;
+            }
+        } else return {name: "", level: -1};
     },
     findChar: function (user, game) {
         var list = game.charList, ret;
@@ -306,9 +307,7 @@ var charFunctions = {
     findData: function(obj, data) {
         if (!util.isUndefined(obj)) {
             if (util.is(util.field, obj)) {
-                if (charFunctions.areEquals(obj, data)) {
-                    return obj
-                }
+                if (charFunctions.areEquals(obj, data)) return obj;
             } else {
                 var prop, ret, self = this;
                 if (util.is(util.data, obj)) prop = 'fields';

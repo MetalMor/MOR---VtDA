@@ -12,7 +12,7 @@ var ajax = {
             url: url,
             cache: false,
             success: function (data, textStatus, jqXHR) {
-                console.log("[ajax] request sent to " + url + ", success");
+                logger.log("ajax", "request sent to " + url + ", success");
                 if (util.type(util.func, callback))
                     callback(data, textStatus, jqXHR);
             }

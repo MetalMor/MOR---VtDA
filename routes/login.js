@@ -16,6 +16,7 @@ var util = require('../resources/both/javascripts/util'), // utils
     User = require('../objects/models/User'), // user model
     Game = require('../objects/models/Game'), // game model
     constants = require('../objects/constants/Constants'), // constants object
+    http = require('../resources/server/javascripts/http'),
     logger = require('../resources/both/javascripts/logger');
 
 var sessionDuration = constants.server.session.duration; // session duration: 5h
@@ -44,18 +45,23 @@ router.get(routes.root, function (req, res) {
 logger.log('server', 'login route set');
 // VALIDACION LOGIN
 router.post(routes.root, function (req, res) {
-    console.log("[server] validate user login");
-    var creds = new User(req.body.name, sha1(req.body.passwd));
-    mongoUsers.findUserByCreds(creds, function (u) {
-        if (!util.isNull(u) && !util.isUndefined(u)) {
-            user = u;
-            cookies.new(res, 'key', user.name, sessionDuration);
-            res.redirect('/login/' + u.name + '/');
-        } else { // ERROR usuario no encontrado
-            view = new ViewData(views.user, 'MOR - VtDA', 'Login', 1);
-            res.render(view.file, view.data);
-        }
-    });
+    logger.log("server", "validate user login");
+    if(!util.isUndefined(req.body.passwd)) {
+        var creds = new User(req.body.name, sha1(req.body.passwd));
+        mongoUsers.findUserByCreds(creds, function (u) {
+            if (!util.isNull(u) && !util.isUndefined(u)) {
+                user = u;
+                cookies.new(res, 'key', user.name, sessionDuration);
+                res.redirect('/login/' + u.name + '/');
+            } else { // ERROR usuario no encontrado
+                view = new ViewData(views.user, 'MOR - VtDA', 'Login', 1);
+                res.render(view.file, view.data);
+            }
+        });
+    } else {
+        view = new ViewData(views.user, 'MOR - VtDA', 'Login', 1);
+        res.render(view.file, view.data);
+    }
 });
 logger.log('server', 'login validation set');
 

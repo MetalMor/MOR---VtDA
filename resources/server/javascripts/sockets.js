@@ -4,10 +4,9 @@
  * Created by mor on 25/04/16.
  */
 
-var mongoUsers = require('../../../db/mongoUsers');
-var mongoGames = require('../../../db/mongoGames');
-var logger = require('../../both/javascripts/logger');
-var util = require('../../both/javascripts/util');
+var mongoGames = require('../../../db/mongoGames'),
+    logger = require('../../both/javascripts/logger'),
+    util = require('../../both/javascripts/util');
 
 module.exports = function (io) {
     io.on('connection', function(socket) {
@@ -33,8 +32,8 @@ module.exports = function (io) {
             socket.emit('update', sheet);
         });
         socket.on('disconnect', function() {
-            if (hasChar/*!(util.isUndefined(char) || util.isBoolean(char))*/)
-                logger.log('socket', 'goodbye '+charFunctions.findData(char, 'nombre').value + "(" + user.name + ")");
+            if (hasChar)
+                logger.log('socket', 'goodbye ' + charFunctions.findData(char, 'nombre').value + "(" + user.name + ")");
         });
         function updateChar(sheet) {
             user = sheet.user;

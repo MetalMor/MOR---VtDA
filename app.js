@@ -13,12 +13,12 @@ var express = require('express'), // express dependencies models
     bodyParser = require('body-parser'), // POST parameters
     cookieParser = require('cookie-parser'), // cookie parser&controller
     helmet = require('helmet'), // HTTP security extension
-    favicon = require('serve-favicon');
+    favicon = require('serve-favicon'); // application icon
 
 var urlCleaner = require('./resources/server/javascripts/url_cleaner'),
     http = require('./resources/server/javascripts/http'),
     dbFix = require('./db/dbFix'),
-    logger = require('./resources/both/javascripts/logger');
+    logger = require('./resources/both/javascripts/logger').activate();
 
 var login = require('./routes/login'),
     game = require('./routes/game');
@@ -47,12 +47,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser(constants.server.session.secrets.cookies));
 app.use(urlCleaner.inspect);
+app.use(favicon(__dirname + '/resources/client/images/icon/favicon.ico'));
 var statics = constants.server.routes.statics.list;
 statics.forEach(function(st) {
     logger.log('statics', 'loading path '+st.path+' at '+st.source);
     app.use(st.path, express.static(__dirname + st.source));
 });
-app.use(favicon(__dirname + '/resources/client/images/icon/favicon.ico'));
 logger.log('server', 'middleware set');
 
 app.use(constants.server.routes.login.root, login);
