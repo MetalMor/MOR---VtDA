@@ -33,7 +33,7 @@ logger.log('server', 'init server vars');
  */
 
 // ***** JADE TEMPLATES *****
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 logger.log('server', 'view engine set');
 
 // ***** ENV VARS *****

@@ -5,7 +5,7 @@
 
 var talents = {
     name: "Talentos",
-    list: ["Alerta", "Atletismo", "Callejeo", "Conciencia", "Empatía","Expresión", "Intimidación", "Liderazgo", "Pelea", "Subterfugio"]
+    list: ["Alerta", "Atletismo", "Callejeo", "Consciencia", "Empatía","Expresión", "Intimidación", "Liderazgo", "Pelea", "Subterfugio"]
 };
 
 module.exports = talents;

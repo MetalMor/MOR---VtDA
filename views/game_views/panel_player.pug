@@ -1,22 +1,19 @@
-// Ventana del master
-   Created by mor on 6/05/16.
-
 extends ../layout
 
 block content
+    // Ventana del jugador
+       Created by mor on 6/05/16.
     script(type="text/javascript" src="/js/main.js")
     #user(hidden)=userJSON
+    #char(hidden)=charJSON
     #game(hidden)=gameJSON
     include panel/panel_data
     include panel/panel_sheet
-    #wrapper-master
+    include panel/panel_action
+    #wrapper-player
         .container
             #panel.panel.panel-primary.overlay(hidden)
                 .panel-heading.text-center=user.name + ' - ' + game.name
-                    .frorm-group.left-align
-                        label="Selección de personaje:"
-                        select#char-list
-                    span#char-creation-button.glyphicon.glyphicon-user.left-align.formatted-span-button
                 .panel-body.overlay-content
                     #char-data.panel.panel-primary
                         .panel-heading="Datos del personaje"
@@ -30,13 +27,10 @@ block content
                                 p#story
                     #char-stats.panel.panel-primary
                         .panel-heading="Ficha del personaje"
+                            span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer
                             span#download.text-center.glyphicon.glyphicon-download-alt.formatted-span-button
-                            span#char-xp.left-align.formatted-span-button
-                            span#char-stats-button.glyphicon.glyphicon-minus.right-align.closer.formatted-span-button
-                            span#xp-giver.left-align.glyphicon.glyphicon-plus-sign.formatted-span-button
-                            span#roll-opener.right-align.glyphicon.glyphicon-th.formatted-span-button
+                            span#char-xp.left-align
                         .panel-body
-                            include panel/panel_action
                             .table-responsive
                                 table#show-stats.table
                                     tbody

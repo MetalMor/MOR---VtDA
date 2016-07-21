@@ -1,6 +1,6 @@
 {
   "name": "MOR-VtDA",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Gestor de partidas de rol de Vampiro: la Mascarada",
   "author": "srgark@gmail.com",
   "license": "GPL-3.0",
@@ -23,6 +23,7 @@
     "helmet": "*",
     "jade": "*",
     "mongodb": "*",
+    "pug": "^2.0.0-beta4",
     "serve-favicon": "^2.3.0",
     "sha1": "*",
     "socket.io": "*"
