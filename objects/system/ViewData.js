@@ -8,6 +8,8 @@ module.exports = function(f, wt, dt, e) {
     this.data = {
         w_title: wt,
         d_title: dt,
+        stylesheets: require('./view_data/stylesheets'),
+        scripts: require('./view_data/scripts'),
         error: e
     };
 };
