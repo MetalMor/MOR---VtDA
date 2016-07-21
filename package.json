@@ -16,17 +16,16 @@
     "url": "https://github.com/MetalMor/MOR-VtDA/issues"
   },
   "dependencies": {
-    "body-parser": "*",
-    "cookie-parser": "*",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "crypto-js": "^3.1.6",
-    "express": "*",
-    "helmet": "*",
-    "jade": "*",
-    "mongodb": "*",
+    "express": "^4.14.0",
+    "helmet": "^2.1.1",
+    "mongodb": "^2.2.4",
     "pug": "^2.0.0-beta4",
     "serve-favicon": "^2.3.0",
-    "sha1": "*",
-    "socket.io": "*"
+    "sha1": "^1.1.1",
+    "socket.io": "^1.4.5"
   },
   "engines": {
     "node": "4.3.2"
