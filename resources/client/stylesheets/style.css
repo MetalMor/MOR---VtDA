@@ -31,7 +31,7 @@ table#stats td>img:not([class='max']) {
     cursor: pointer;
 }
 
-table#show-stats td > span {
+table#show-stats td>span {
     cursor: pointer;
 }
 
@@ -57,7 +57,6 @@ div#panel {
 }
 
 div#roll {
-    max-width: 40%;
     text-align: center;
     z-index: 2;
     position: relative;

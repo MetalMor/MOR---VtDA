@@ -224,8 +224,8 @@ var button = {
     charSelectOptionClick: function (option) {
         var optionClass;
         if(!util.isUndefined(optionClass = option.attr('class'))) {
-            var o = option, charName = o.text(), tmpChar, charList = game.charList, npcList = game.npcList;
-            var list = game[optionClass + 'List'];
+            var o = option, charName = o.text(), tmpChar,
+                list = game[optionClass + 'List'];
             list.forEach(function (ch) {
                 if (util.isUndefined(tmpChar) &&
                     charName === charFunctions.findData(ch, 'nombre').value)
@@ -263,15 +263,15 @@ var button = {
     },
     /**
      * Define el botón de apertura/cierre de un panel desplegable
-     * @param panelId Identificador del panel desplegable
+     * @param element Elemento panel desplegable
      */
-    setPanelButton: function(panelId) {
-        var element = $('#'+panelId+'>.panel-heading>span.glyphicon'),
-            panel = $('#'+panelId+' .panel-body'), mode, own, cls;
-        button.setButtonClick(element, function() {
-            if((cls = (own = $(this)).attr('class')).indexOf('opener') > 0) {
+    setPanelButton: function(element) {
+        var spanBtn = element.find('.panel-heading>span.glyphicon'),
+            panel = element.find('.panel-body'), mode, own, ownClassList;
+        button.setButtonClick(spanBtn, function() {
+            if((ownClassList = (own = $(this)).attr('class')).indexOf('opener') > 0) {
                 mode = 'openPanel';
-            } else if(cls.indexOf('closer') > 0) {
+            } else if(ownClassList.indexOf('closer') > 0) {
                 mode = 'closePanel';
             }
             if(!util.isUndefined(mode))
@@ -282,9 +282,11 @@ var button = {
         var opener = $('span#roll-opener'), closer = $('div#roll span#roll-closer'),
             options = $('div#roll div#roll-options'),
             result = $('div#roll div#roll-result'),
-            overlayId = 'roll', animationSpeed = 'fast';
+            statsTable = $('table#show-stats'),
+            overlayId = 'roll', animationSpeed = 'faster';
         button.setButtonClick(opener, function () {
             overlay.open(overlayId, animationSpeed, function (e) {
+                overlay.hide(statsTable);
                 overlay.show(options);
                 overlay.hide(result);
             });
@@ -293,14 +295,29 @@ var button = {
             overlay.close(overlayId, animationSpeed, function (e) {
                 overlay.hide(options);
                 overlay.hide(result);
+                overlay.show(statsTable);
             });
         });
         button.setRollResolutionButton();
         util.disable('tr#action-dif input');
     },
+    setMaxableStatButton: function() {
+        var elements = $('img.max.levelbutton');
+        elements.each(function() {
+            var current = $(this);
+            current.css('cursor', 'pointer');
+            button.setButtonClick(current, function() {
+                var parent = current.parent();
+                var stat = charFunctions.findStat(char, parent.attr('id'));
+                charFunctions.setStat(char, stat, true);
+                overlay.gameWindow(char);
+                sockets.update();
+            });
+        });
+    },
     /**
      * Función destinada a llamarse al hacer clic en uno de los iconos de nivel de la ficha del personaje.
-     * @param id String identificador del elemento padre del icpno (correspondiente a la estadistica a la que pertenece)
+     * @param id String identificador del elemento padre del icono (correspondiente a la estadistica a la que pertenece)
      * @param cls Clase del icono: set, unset o max
      */
     statButtonClick: function(id, cls) {

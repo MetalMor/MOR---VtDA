@@ -120,6 +120,8 @@ var table = {
             mainTable.append(content);
             table.updateXp(statsObj);
             button.setXpButtons();
+            if(util.isMaster(user, game))
+                button.setMaxableStatButton();
         }
     },
     /**

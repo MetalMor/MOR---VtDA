@@ -11,8 +11,7 @@ module.exports = function(n, c) {
     this.level = 0;
     this.limit = n === constants.stats.miscellaneous.list[2] ? 20 : 10;
     this.max = 0;
-    if(util.isUndefined(c))
-        this.cost = c;
+    if(util.isUndefined(c)) this.cost = c;
     this.setMod = function(m) {this.max = m};
     this.addLevel = function() {this.level++};
     this.decLevel = function() {this.level--};

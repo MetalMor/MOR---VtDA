@@ -9,7 +9,6 @@ block content
     #game(hidden)=gameJSON
     include panel/panel_data
     include panel/panel_sheet
-    include panel/panel_action
     #wrapper-master
         .container
             #panel.panel.panel-primary.overlay(hidden)
@@ -37,6 +36,7 @@ block content
                             span#xp-giver.left-align.glyphicon.glyphicon-plus-sign.formatted-span-button
                             span#roll-opener.right-align.glyphicon.glyphicon-th.formatted-span-button
                         .panel-body
+                            include panel/panel_action
                             .table-responsive
                                 table#show-stats.table
                                     tbody

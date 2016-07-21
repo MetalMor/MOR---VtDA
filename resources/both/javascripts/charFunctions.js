@@ -220,7 +220,6 @@ var charFunctions = {
         else if(char.xp > 0) source = 'xp';
         char[source] -= qty;
         if (char.fp <= 0 && freePts) {
-            char.xp += 15;
             sockets.update();
         }
     },

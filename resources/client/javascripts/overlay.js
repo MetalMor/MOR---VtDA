@@ -86,8 +86,8 @@ var overlay = {
      * Llama a las funciones que definen los botones del panel de creación del personaje
      */
     setPanelButtons: function () {
-        button.setPanelButton('char-data');
-        button.setPanelButton('char-stats');
+        button.setPanelButton($('div#char-data'));
+        button.setPanelButton($('div#char-stats'));
     },
     /**
      * Llama a las funciones que definen los botones de preferencias de estadísticas.
