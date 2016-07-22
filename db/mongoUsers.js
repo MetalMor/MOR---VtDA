@@ -4,15 +4,15 @@
  * Created by mor on 21/04/16.
  */
 
-var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectId;
-var assert = require('assert');
-var util = require('../resources/both/javascripts/util');
-var logger = require('../resources/both/javascripts/logger');
-var constants = require('../objects/constants/Constants').server.db;
+var MongoClient = require('mongodb').MongoClient,
+    ObjectId = require('mongodb').ObjectId,
+    assert = require('assert'),
+    util = require('../resources/both/javascripts/util'),
+    logger = require('../resources/both/javascripts/logger'),
+    constants = require('../objects/constants/Constants').server.db;
 
-var dbUrl = constants.url.dev;
-var col = constants.collections.users;
+var dbUrl = constants.url.dev,
+    col = constants.collections.users;
 
 //
 // MEET THE PYRAMID OF DOOM ò___ó
@@ -27,15 +27,15 @@ var mongoUsers = {
     listAllUsers: function(callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
+            //db.open(function(err, client) {
+                //assert.equal(null, err);
                 client.collection(col).find().toArray(function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "listing all users: "+doc.length);
                     if(callback) callback(doc);
                 });
-            });
+            //});
         });
     },
 
@@ -47,15 +47,15 @@ var mongoUsers = {
     insertUser: function (user, callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
+            //db.open(function(err, client) {
+                //assert.equal(null, err);
                 client.collection(col).insertOne(user, function(err, result) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "inserted user: " + user.name);
                     if(callback) callback();
                 });
-            });
+            //});
         });
     },
 
@@ -67,8 +67,8 @@ var mongoUsers = {
     findUserByName: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
+            //db.open(function(err, client) {
+                //assert.equal(null, err);
                 var regExpOptions = 'i', regExpName;
                 try {
                     regExpName = util.toRegExp(util.clean(user.name), regExpOptions);
@@ -83,7 +83,7 @@ var mongoUsers = {
                     else logger.log("mongo", "user not found: "+user.name);
                     if(callback) callback(doc);
                 });
-            });
+            //});
         });
     },
 
@@ -95,8 +95,8 @@ var mongoUsers = {
     findUserByCreds: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
+            //db.open(function(err, client) {
+                //assert.equal(null, err);
                 client.collection(col).findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
@@ -104,7 +104,7 @@ var mongoUsers = {
                     else logger.log("mongo", "user not found: "+user.name);
                     if(callback) callback(doc);
                 });
-            });
+            //});
         });
     },
 
@@ -116,8 +116,8 @@ var mongoUsers = {
     listOwnedGames: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
+            //db.open(function(err, client) {
+                //assert.equal(null, err);
                 client.collection(col).findOne({name: user.name}, {gameList: true}).toArray(function(err, list) {
                     db.close();
                     assert.equal(null, err);
@@ -125,7 +125,7 @@ var mongoUsers = {
                     else logger.log("mongo", "gameList not found: "+user.name);
                     if(callback) callback(list);
                 });
-            });
+            //});
         });
     },
 
@@ -137,8 +137,8 @@ var mongoUsers = {
     updateUser: function(user, callback) {
         MongoClient.connect(dbUrl, function(err, db) {
             assert.equal(null, err);
-            db.open(function(err, client) {
-                assert.equal(null, err);
+            //db.open(function(err, client) {
+                //assert.equal(null, err);
                 if(!util.isUndefined(user._id))
                     delete user._id;
                 logger.log("mongo", "preparing user update");
@@ -148,7 +148,7 @@ var mongoUsers = {
                     logger.log("mongo", "updated user: "+user.name);
                     callback();
                 });
-            });
+            //});
         });
     }
 };

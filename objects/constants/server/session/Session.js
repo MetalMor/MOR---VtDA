@@ -7,7 +7,7 @@ var session = {
     duration: 5 * Math.pow(60, 2) * 1000,
     secrets: {
         cookies: 'm3t4Lm0R',
-        encrypt: 'm3t4Lm0R'
+        encrypt: 'd4Fuq1nM0r'
     }
 };
 

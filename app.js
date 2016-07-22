@@ -24,11 +24,11 @@ var login = require('./routes/login'),
     game = require('./routes/game');
 var cookies = require('./resources/server/javascripts/cookies');
 
-var PORT = process.env.OPENSHIFT_NODEJS_IP || 3000;
+var PORT = process.env.PORT || 3000;
 logger.log('server', 'init server vars');
 
 /**
- * TODO limpiar las entradas de parametros en la query (evitar caracteres maliciosos)
+ * TODO limpiar las entradas de parametros en la query (evitar caracteres chungos)
  * TODO fichero de constantes!!! [WORKIN ON IT]
  */
 

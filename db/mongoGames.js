@@ -4,15 +4,15 @@
  * Created by mor on 5/05/16.
  */
 
-var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectId;
-var assert = require('assert');
-var util = require('../resources/both/javascripts/util');
-var logger = require('../resources/both/javascripts/logger');
-var constants = require('../objects/constants/Constants').server.db;
+var MongoClient = require('mongodb').MongoClient,
+    ObjectId = require('mongodb').ObjectId,
+    assert = require('assert'),
+    util = require('../resources/both/javascripts/util'),
+    logger = require('../resources/both/javascripts/logger'),
+    constants = require('../objects/constants/Constants').server.db;
 
-var dbUrl = constants.url.dev;
-var col = constants.collections.games;
+var dbUrl = constants.url.dev,
+    col = constants.collections.games;
 
 logger.log("mongo", "db URL: "+dbUrl);
 
@@ -25,15 +25,15 @@ module.exports = {
     listAllGames: function (callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function (err, client) {
-                assert.equal(null, err);
-                client.collection(col).find().toArray(function (err, doc) {
+            //db.open(function (err, client) {
+                //assert.equal(null, err);
+                db.collection(col).find().toArray(function (err, doc) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "listing all games: " + doc.length);
                     if (callback) callback(doc);
                 });
-            });
+            //});
         });
     },
 
@@ -45,15 +45,15 @@ module.exports = {
     insertGame: function (game, callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function (err, client) {
-                assert.equal(null, err);
-                client.collection(col).insertOne(game, function (err, result) {
+            //db.open(function (err, client) {
+                //assert.equal(null, err);
+                db.collection(col).insertOne(game, function (err, result) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "inserted game: " + game.name);
                     if (callback) callback();
                 });
-            });
+            //});
         });
     },
 
@@ -65,17 +65,17 @@ module.exports = {
     updateGame: function (game, callback) {
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function (err, client) {
-                assert.equal(null, err);
+            //db.open(function (err, client) {
+                //assert.equal(null, err);
                 //if (!util.isUndefined(game._id))
                 delete game._id;
-                client.collection(col).updateOne({name: game.name}, {$set: game}, function (err, result) {
+                db.collection(col).updateOne({name: game.name}, {$set: game}, function (err, result) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "updated game: " + game.name);
                     if (callback) callback();
                 });
-            });
+            //});
         });
     },
 
@@ -88,16 +88,16 @@ module.exports = {
         logger.log("mongo", "looking for game: " + game.name);
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function (err, client) {
-                assert.equal(null, err);
-                client.collection(col).findOne({name: game.name}, function (err, doc) {
+            //db.open(function (err, client) {
+                //assert.equal(null, err);
+                db.collection(col).findOne({name: game.name}, function (err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if (doc) logger.log("mongo", "found game: " + doc.name);
                     else logger.log("mongo", "game not found: " + game.name);
                     if (callback) callback(doc);
                 });
-            });
+            //});
         });
     },
 
@@ -111,8 +111,8 @@ module.exports = {
         logger.log("mongo", "looking for list in: " + game.name);
         MongoClient.connect(dbUrl, function (err, db) {
             assert.equal(null, err);
-            db.open(function (err, client) {
-                assert.equal(null, err);
+            //db.open(function (err, client) {
+                //assert.equal(null, err);
                 client.collection(col).findOne(game, function (err, list) {
                     db.close();
                     assert.equal(null, err);
@@ -120,7 +120,7 @@ module.exports = {
                     else logger.log("mongo", "game not found: " + game.name);
                     if (callback) callback(list[field]);
                 });
-            });
+            //});
         });
     }
 };
