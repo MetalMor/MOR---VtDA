@@ -39,16 +39,16 @@ var table = {
      */
     showRollSet: function(rollSet) {
         if(rollSet.resolved) {
-            var rolls = rollSet.rolls, mainTable = $('div#roll-result>table>tbody').empty(), tableBody = "", count = 0,
+            var rolls = rollSet.rolls, mainTable = $('div#roll-result>table>tbody').empty(), tableBody = "",
                 result, mainTableHead = $('div#roll-result>table>thead').empty(), tableHead = "",
-                counters = {success: 0, failure: 0};
+                counters = {global: 0, success: 0, failure: 0};
             mainTable.empty();
             mainTableHead.empty();
             rolls.forEach(function(r) {
                 result = r.isWin() ? "success" : "failure";
                 counters[result]++;
                 tableBody += "<tr class='" + (result === "success" ? result : "danger") + "'>" +
-                    "<td>" + ++count + "</td>" +
+                    "<td>" + ++counters.global + "</td>" +
                     "<td>Resultado: " + r.res + "</td>" +
                     "<td>" + util.fancy(result) + "!</td>" +
                     "</tr>";
