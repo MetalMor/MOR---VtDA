@@ -283,6 +283,9 @@ var button = {
                 button[mode](panel, own);
         });
     },
+    /**
+     * Define la acción realizada por el botón de abrir el panel de tiradas de dados.
+     */
     setRollPanelButton: function () {
         var opener = $('span#roll-opener'), closer = $('div#roll span#roll-closer'),
             options = $('div#roll div#roll-options'),
@@ -306,6 +309,9 @@ var button = {
         button.setRollResolutionButton();
         util.disable('tr#action-dif input');
     },
+    /**
+     * Define la acción realizada al hacer clic en un icono de estadística.
+     */
     setMaxableStatButton: function() {
         var elements = $('img.max.levelbutton');
         elements.each(function() {

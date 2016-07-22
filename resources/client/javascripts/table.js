@@ -35,7 +35,7 @@ var table = {
     },
     /**
      * Muestra el resultado de un conjunto de dados en la pantalla, formatado correctamente.
-     * @param rollSet
+     * @param rollSet Objeto de conjunto de dados.
      */
     showRollSet: function(rollSet) {
         if(rollSet.resolved) {
