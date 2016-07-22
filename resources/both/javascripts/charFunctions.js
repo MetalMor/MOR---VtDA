@@ -244,6 +244,16 @@ var charFunctions = {
         return ret;
     },
     /**
+     * Sobreescribe las estadísticas de un personaje con los valores de los objetos de la lista enviada por parámetro.
+     * @param char Objeto personaje a modificar.
+     * @param list Array lista de objetos estadísticas.
+     */
+    arrayToStats: function(char, list) {
+        list.forEach(function(stat) {
+            charFunctions.setStat(char, stat, stat);
+        });
+    },
+    /**
      * Calcula el coste de la estadística especificada por parámetro
      * @param stat Estadística (objeto o nombre)
      * @returns {number}
@@ -272,7 +282,7 @@ var charFunctions = {
      * Obtiene mediante recursividad la estadística requerida de un personaje especificado por parámetro.
      * @param obj Objeto en el que buscar la estadística
      * @param stat Nombre de la estadística a encontrar
-     * @returns {*}
+     * @returns {object}
      */
     findStat: function(obj, stat) {
         if (!util.isUndefined(obj)) {
@@ -287,7 +297,7 @@ var charFunctions = {
                 });
                 return ret;
             }
-        } else return {name: "", level: -1};
+        } else return {name: "void", level: -1};
     },
     findChar: function (user, game) {
         var list = game.charList, ret;
@@ -301,7 +311,7 @@ var charFunctions = {
      * Obtiene mediante recursividad el campo de datos requerido de un personaje especificado por parámetro.
      * @param obj Objeto en el que buscar el campo de datos
      * @param data Nombre del campo de datos a encontrar
-     * @returns {*}
+     * @returns {object}
      */
     findData: function(obj, data) {
         if (!util.isUndefined(obj)) {
@@ -317,7 +327,7 @@ var charFunctions = {
                 return ret;
             }
         } else {
-            return {name: "", value: ""};
+            return {name: "void", value: "nothing"};
         }
     },
     /**

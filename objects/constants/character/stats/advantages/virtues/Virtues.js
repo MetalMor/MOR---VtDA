@@ -5,7 +5,7 @@
 
 var virtues = {
     name: "Virtudes",
-    list: ["Consciencia", "Autocontrol", "Coraje"],
+    list: ["Conciencia", "Autocontrol", "Coraje"],
     cost: 2,
     initPoints: 7
 };

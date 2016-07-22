@@ -113,7 +113,11 @@ var button = {
      */
     setDownloader: function() {
         button.setButtonClick($('span#download'), function() {
-            table.exportImg($('table#show-stats')[0]);
+            table.exportImg($('table#show-stats')[0], function(dataUrl) {
+                ajax.request('download', dataUrl, function (data, textStatus, jqXHR) {
+                    logger.log('file', "got file from server");
+                });
+            });
         });
     },
     /**
@@ -127,7 +131,8 @@ var button = {
             if(restrict.lookRestriction(attrName))
                 button.setButtonClick(e, function() {
                     var firstClass = e.attr('class').split(' ')[0]; // set, unset o max
-                    button.statButtonClick(attrName, firstClass)
+                    button.statButtonClick(attrName, firstClass);
+                    e.css('cursor', 'pointer');
                 });
         });
     },
@@ -148,7 +153,7 @@ var button = {
     setCharCreationButton: function () {
         var element = $('span#char-creation-button');
         button.setButtonClick(element, function () {
-            ajax.charRequest(function (ch, textStatus, jqXHR) {
+            ajax.request('initChar', "", function (ch, textStatus, jqXHR) {
                 char = ch;
                 overlay.initCharPanel(function () {
                     overlay.close('panel');
@@ -320,8 +325,34 @@ var button = {
      * @param id String identificador del elemento padre del icono (correspondiente a la estadistica a la que pertenece)
      * @param cls Clase del icono: set, unset o max
      */
-    statButtonClick: function(id, cls) {
+    statButtonClick: function(id, cls, e) {
         if (cls === "unset")
+            mode = true;
+        else if (cls === "set")
+            mode = false;
+
+        var stat = charFunctions.findStat(char, id),
+            parent = charFunctions.findParent(char, id),
+            isMaster = util.isMaster(user, game);
+
+        if(restrict.notUpdatable(stat) && restrict.lookRestriction(stat)) {
+            if(mode && ((parent.initPoints > 0 && restrict.maxLevelRestriction(stat)) || isMaster)) {
+                parent.initPoints--;
+                table.modStat(stat, mode);
+                if(!char.ready && !isMaster) table.updateInitPoints(parent);
+            } else if(!mode && (parent.initPoints >= 0 || isMaster) && restrict.levelZeroRestriction(stat)) {
+                if(!char.ready || isMaster) {
+                    parent.initPoints++;
+                    table.modStat(stat, mode);
+                    if(!char.ready && !isMaster) table.updateInitPoints(parent);
+                }
+            }
+            table.updateOther();
+            sockets.update();
+        }
+        // ESTO QUEDA AQUI COMENTADITO Y GUARDADITO POR SI ACASO HUBIESE LIADO UN PERCAL DE LA HOSTIA CON ESTOS CAMBIOS
+        // ( thank u past-myself ^^ )
+        /*if (cls === "unset")
             mode = true;
         else if (cls === "set")
             mode = false;
@@ -343,6 +374,6 @@ var button = {
             }
             table.updateOther();
             sockets.update();
-        }
+        }*/
     }
 };

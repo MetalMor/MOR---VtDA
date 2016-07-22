@@ -17,7 +17,7 @@ var table = {
             var tableAdd = function(a) {subTable += a};
             tableAdd("<td><div class='table-responsive'><table id='"+statsObj.name+"' class='table'>");
             tableAdd("<thead><th>"+util.fancy(statsObj.name)+ "</th>");
-            if(!util.isUndefined(statsObj.initPoints) && statsObj.initPoints > 0)
+            if(!util.isUndefined(statsObj.initPoints) && statsObj.initPoints > 0 && util.isPlayer(user, game))
                 tableAdd("<th>"+statsObj.initPoints+"</th>");
             tableAdd("</thead><tbody><tr>");
             stats.forEach(function(s) {tableAdd(self.build(s, tableId))}); // <-- RECURSIVIDAD HERE
@@ -152,7 +152,12 @@ var table = {
      * @param stat
      */
     updateInitPoints: function(stat) {
-        $("table#"+stat.name+" th:nth-child(2)").text(stat.initPoints);
+        var element = $("table#"+stat.name+" th:nth-child(2)");
+        if(util.isPlayer(user, game)) {
+            element.text(stat.initPoints);
+        } else {
+            overlay.hide(element);
+        }
     },
     /**
      * Actualiza el display de todas las estadísticas de la tabla del personaje (me parece que caerá en el olvido...).
@@ -169,11 +174,11 @@ var table = {
      * @param name Nombre (id) de la estadística
      */
     update: function(name) {
-        var statElement = $('table[id*=stats] td#'+name), stat = charFunctions.findStat(char, name), ap;
+        var element = $('table[id*=stats] td#'+name), stat = charFunctions.findStat(char, name), ap;
         if (!util.isUndefined(stat)) {
-            statElement.empty();
+            element.empty();
             ap = table.level(stat);
-            statElement.append(ap);
+            element.append(ap);
             button.setTableButtons(name);
         }
     },
@@ -229,10 +234,10 @@ var table = {
         charFunctions.setStat(char, stat, mode);
         table.update(stat.name);
     },
-    exportImg: function (table) {
+    exportImg: function (table, callback) {
         toCanvas.convert(table, function(tableDataUrl) {
-            window.open(tableDataUrl);
-            //pdf.convert(tableDataUrl);
+            if(callback) callback(tableDataUrl);
+            else window.open(tableDataUrl);
         });
     }
 };

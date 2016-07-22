@@ -43,8 +43,8 @@ logger.log('server', 'env vars set');
 // ***** MIDDLEWARE *****
 app.use(helmet());
 app.use(http.addHeaders);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser(constants.server.session.secrets.cookies));
 app.use(urlCleaner.inspect);
 app.use(favicon(__dirname + '/resources/client/images/icon/favicon.ico'));

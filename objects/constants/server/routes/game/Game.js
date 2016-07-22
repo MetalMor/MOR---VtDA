@@ -8,6 +8,7 @@ var game = {
     access: {
         gamePanel: '/:user/:game',
         initChar: '/initChar',
+        download: '/downloadSheet',
         dataObject: '/dataObject'
     }
 };

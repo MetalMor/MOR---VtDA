@@ -3,7 +3,8 @@
  * Created by mor on 5/07/16.
  */
 
-var sha1 = require('sha1');
+var sha1 = require('sha1'),
+    fs = require('fs');
 
 var mongoUsers = require('../db/mongoUsers'), // db users controller
     mongoGames = require('../db/mongoGames'); // db games controller
@@ -77,7 +78,7 @@ router.get(constants.server.routes.game.access.gamePanel, function (req, res) {
 });
 logger.log('server', 'game panel route set');
 
-router.get(constants.server.routes.game.access.initChar, function (req, res) {
+router.post(constants.server.routes.game.access.initChar, function (req, res) {
     logger.log('server', 'sending initialized character');
     var ret = cf.initChar();
     ret.npc = true;
@@ -86,7 +87,19 @@ router.get(constants.server.routes.game.access.initChar, function (req, res) {
 });
 logger.log('server', 'init char request route set');
 
-router.get(constants.server.routes.game.access.dataObject, function (req, res) {
+router.post(constants.server.routes.game.access.download, function (req, res) {
+    logger.log('server', 'parsing and sending data');
+    var dataUrl = req.body.data,
+        regex = /^data:.+\/(.+);base64,(.*)$/,
+        matches = dataUrl.match(regex),
+        ext = matches[1],
+        data = matches[2],
+        buffer = new Buffer(data, 'base64');
+    logger.log('server', dataUrl);
+    res.send(fs.writeFileSync('sheet.png', buffer)); // esta mierda no va bien
+});
+
+router.post(constants.server.routes.game.access.dataObject, function (req, res) {
     var ret = require('../objects/constants/Constants');
     res.send(JSON.stringify(ret));
 });

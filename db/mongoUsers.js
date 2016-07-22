@@ -29,7 +29,7 @@ var mongoUsers = {
             assert.equal(null, err);
             //db.open(function(err, client) {
                 //assert.equal(null, err);
-                client.collection(col).find().toArray(function(err, doc) {
+                db.collection(col).find().toArray(function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "listing all users: "+doc.length);
@@ -49,7 +49,7 @@ var mongoUsers = {
             assert.equal(null, err);
             //db.open(function(err, client) {
                 //assert.equal(null, err);
-                client.collection(col).insertOne(user, function(err, result) {
+                db.collection(col).insertOne(user, function(err, result) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "inserted user: " + user.name);
@@ -76,7 +76,7 @@ var mongoUsers = {
                     logger.log('mongo', err.toString());
                     regExpName = 'nobody';
                 }
-                client.collection(col).findOne({name: regExpName}, function (err, doc) {
+                db.collection(col).findOne({name: regExpName}, function (err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if(doc) logger.log("mongo", "found user: "+doc.name);
@@ -97,7 +97,7 @@ var mongoUsers = {
             assert.equal(null, err);
             //db.open(function(err, client) {
                 //assert.equal(null, err);
-                client.collection(col).findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
+                db.collection(col).findOne({name: user.name, passwd: user.passwd}, function(err, doc) {
                     db.close();
                     assert.equal(null, err);
                     if(doc) logger.log("mongo" ,"found user: "+doc.name);
@@ -118,7 +118,7 @@ var mongoUsers = {
             assert.equal(null, err);
             //db.open(function(err, client) {
                 //assert.equal(null, err);
-                client.collection(col).findOne({name: user.name}, {gameList: true}).toArray(function(err, list) {
+                db.collection(col).findOne({name: user.name}, {gameList: true}).toArray(function(err, list) {
                     db.close();
                     assert.equal(null, err);
                     if(list) logger.log("mongo", "found "+user.name+"'s games list: "+list.length);
@@ -142,7 +142,7 @@ var mongoUsers = {
                 if(!util.isUndefined(user._id))
                     delete user._id;
                 logger.log("mongo", "preparing user update");
-                client.collection(col).updateOne({name: user.name}, {$set: user}, function(err, result) {
+                db.collection(col).updateOne({name: user.name}, {$set: user}, function(err, result) {
                     db.close();
                     assert.equal(null, err);
                     logger.log("mongo", "updated user: "+user.name);

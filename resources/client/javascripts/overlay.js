@@ -103,6 +103,7 @@ var overlay = {
     gameWindow: function (char) {
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
+        if(util.isMaster(user, game)) button.setTableButtons('show-stats');
         list.loadStatSelection();
     },
     /**
@@ -118,7 +119,7 @@ var overlay = {
         button.setDownloader();
     },
     /**
-     * Muestra la ventana de información del director.
+     * Muestra la ventana de información del máster.
      */
     masterPanel: function () {
         overlay.open('panel');
