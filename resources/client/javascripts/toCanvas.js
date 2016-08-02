@@ -15,8 +15,9 @@ var toCanvas = {
                 var getImgCanvas = function() {return canvas.toDataURL('image/png')},
                     image = new Image();
                 image.src = getImgCanvas();
-                var url = image.src.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-                if (callback) callback(url);
+                //var url = image.src.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+                //var url = image.src.replace(/^data:image\/[^;]/, 'data:base64');
+                if (callback) callback(image.src);
             }
         });
     }

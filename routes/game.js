@@ -94,13 +94,19 @@ router.post(constants.server.routes.game.access.download, function (req, res) {
         matches = dataUrl.match(regex),
         ext = matches[1],
         data = matches[2],
-        buffer = new Buffer(data, 'base64');
+        buffer = new Buffer(data, 'base64'),
+        file = fs.writeFileSync('sheet.png', buffer);
+    util.printJson(file);
     logger.log('server', dataUrl);
-    res.send(fs.writeFileSync('sheet.png', buffer)); // esta mierda no va bien
+    http.contentType(res, 'image/png');
+    res.setHeader('Content-Length', file.length);
+    res.write(file, 'sheet.png'); // esta mierda no va bien
+    res.end();
 });
 
 router.post(constants.server.routes.game.access.dataObject, function (req, res) {
     var ret = require('../objects/constants/Constants');
+    http.contentType(res, 'application/json');
     res.send(JSON.stringify(ret));
 });
 

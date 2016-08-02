@@ -3,6 +3,9 @@
  * Created by mor on 9/05/16.
  */
 
+if(typeof require !== 'undefined')
+    var logger = require('./logger');
+
 var util = {
     obj: 'Object',
     arr: 'Array',
