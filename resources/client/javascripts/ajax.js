@@ -20,7 +20,7 @@ var ajax = {
         var options = {
             url: url,
             cache: false,
-            data: "data="+data,
+            data: "data="+data+"&user="+user.name+"&char="+charFunctions.findData(char, 'nombre').value+"&game="+game.name,
             type: "POST",
             success: function (data, textStatus, jqXHR) {
                 logger.log("ajax", "request sent to " + url + ", success");

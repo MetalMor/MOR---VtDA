@@ -79,7 +79,7 @@ var button = {
      * Define la función llamada al hacer click en el botón de resolución de tiradas.
      */
     setRollResolutionButton: function() {
-        var getValue = function(element) {return parseInt(element.val())};
+        var getValue = function(element) {return parseInt(element.val()) || 0};
         button.setButtonClick($('span#roll-button'), function() {
             if ($('div#roll-result>table>tbody').is(':hidden')) {
                 var stats = [], dif = getValue($('tr#action-dif input')),
@@ -89,10 +89,19 @@ var button = {
                     will = charFunctions.findStat(char, 'fuerza_de_voluntad'),
                     blood = charFunctions.findStat(char, 'sangre'),
                     useMaxable = function (stat, param) {
-                        if (param > 0 && stat.level >= param) {
+                        var applies = false;
+                        if(stat.name === 'sangre') {
+                            stats.forEach(function(s) {
+                                if(charFunctions.findParent(char, s).name === 'fisicos')
+                                    applies = true;
+                            });
+                        } else {
+                            applies = true;
+                        }
+                        if (applies && param > 0 && stat.level >= param) {
                             stat.level -= param;
                             charFunctions.setStat(char, stat, stat);
-                        }
+                        } else param = 0;
                     };
                 $('tr.stat-select select>option:selected').each(function () {
                     stats.push(charFunctions.findStat(char, $(this).attr('id')));
@@ -100,11 +109,12 @@ var button = {
                 useMaxable(will, wins);
                 useMaxable(blood, mod);
                 var rollSet = dice.RollSet(stats, dif, mod, wins);
+                logger.log('roll', 'blood modificator: '+mod);
                 table.showRollSet(rollSet.resolve());
                 overlay.show($('div#roll div#roll-result'));
                 overlay.hide($('div#roll div#roll-options'));
                 sockets.update();
-                logger.log('action', charFunctions.findData(char, 'nombre').value + desc + ': ' + rolLSet.isWin());
+                logger.log('action', charFunctions.findData(char, 'nombre').value + desc + ': ' + rollSet.isWin());
             }
         })
     },
@@ -115,7 +125,9 @@ var button = {
         button.setButtonClick($('span#download'), function() {
             table.exportImg($('table#show-stats')[0], function(dataUrl) {
                 ajax.request('download', dataUrl, function (data, textStatus, jqXHR) {
-                    logger.log('file', "got file from server");
+                    var logSource = 'file';
+                    logger.log(logSource, "got file from server");
+                    if(!window.open(dataUrl, '_blank')) logger.log(logSource, 'could not open new tab');
                 });
             });
         });
@@ -125,7 +137,7 @@ var button = {
      * @param id Tabla o fila de la que establecer el evento.
      */
     setTableButtons: function(id) {
-        var levelButtons = $('#'+id+' img[class]');
+        var levelButtons = $('img#'+id+' img[class]');
         levelButtons.each(function() {
             var e, attrName = (e = $(this)).closest('td[id]').attr('id');
             if(restrict.lookRestriction(attrName))

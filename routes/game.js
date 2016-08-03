@@ -88,20 +88,16 @@ router.post(constants.server.routes.game.access.initChar, function (req, res) {
 logger.log('server', 'init char request route set');
 
 router.post(constants.server.routes.game.access.download, function (req, res) {
-    logger.log('server', 'parsing and sending data');
-    var dataUrl = req.body.data,
-        regex = /^data:.+\/(.+);base64,(.*)$/,
-        matches = dataUrl.match(regex),
-        ext = matches[1],
-        data = matches[2],
+    logger.log('server', 'saving and sending image data');
+    var data = req.body.data,
+        regex = /^data:image\/\w+;base64,/,
+        //data = data.replace(regex, ''),
         buffer = new Buffer(data, 'base64'),
-        file = fs.writeFileSync('sheet.png', buffer);
-    util.printJson(file);
-    logger.log('server', dataUrl);
-    http.contentType(res, 'image/png');
-    res.setHeader('Content-Length', file.length);
-    res.write(file, 'sheet.png'); // esta mierda no va bien
-    res.end();
+        filePath = "resources/upload/sheets/"+req.body.char+"_"+new Date().getTime()+'.png';
+        http.contentType(res, 'image/png');
+        http.contentLength(res, data.length);
+        res.send(buffer);
+    //util.printJson(data);
 });
 
 router.post(constants.server.routes.game.access.dataObject, function (req, res) {
