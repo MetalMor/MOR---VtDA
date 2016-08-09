@@ -4,6 +4,12 @@
  */
 
 var list = {
+    /*loadVirtueSelection: function () {
+     var element = $()
+     list.appendList(element, statsList, function(child) {
+     return "<option id='"+child.name+"'>" + util.fancy(child.name) + " - " + child.level + "</option>"
+     });
+     },*/
     /**
      * Carga la lista de personajes de la partida en un elemento select.
      */

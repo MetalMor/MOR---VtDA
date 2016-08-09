@@ -15,9 +15,8 @@ var toCanvas = {
                 var getImgCanvas = function() {return canvas.toDataURL('image/png')},
                     image = new Image();
                 image.src = getImgCanvas();
-                //var url = image.src.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-                //var url = image.src.replace(/^data:image\/[^;]/, 'data:base64');
-                if (callback) callback(image.src);
+                // TODO volver a habilitar la mierda de descarga cutre con winow.open, habria que convertir el MIME del dataUrl type a octet-stream
+                if (callback) callback(url);
             }
         });
     }

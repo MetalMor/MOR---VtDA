@@ -11,7 +11,20 @@ var table = {
      */
     build: function(statsObj, tableId) {
         if(util.is(util.stat, statsObj)) { // es un objeto de estadística singular
-            return "<tr><td>"+util.fancy(statsObj.name)+"</td><td id='"+statsObj.name+"'>"+this.level(statsObj)+"</td></tr>"; // <-- ACABA RECURSIVIDAD
+            var element = "<tr><td>", statsObjName = statsObj.name;
+            switch (statsObjName) {
+                case 'conciencia' || 'conviccion':
+                    element += table.createSelectElement('conscOrConv', 'virtue', ['conciencia', 'conviccion']);
+                    break;
+                case 'autocontrol' || 'instinto':
+                    element += table.createSelectElement('autOrInst', 'virtue', ['autocontrol', 'instinto']);
+                    break;
+                default:
+                    element += util.fancy(statsObjName);
+                    break;
+            }
+            element += "<td id='" + statsObj.name + "'>" + this.level(statsObj) + "</td></tr>"; // <-- ACABA RECURSIVIDAD
+            return element;
         } else if(util.is(util.stats, statsObj)) { // es un objeto de conjunto de estadísticas
             var subTable = "", stats = statsObj.stats, self = this;
             var tableAdd = function(a) {subTable += a};
@@ -32,6 +45,13 @@ var table = {
             stats.forEach(function (s) {contentAdd(trPre+self.build(s, tableId)+trPost)}); // <-- RECURSIVIDAD HERE
             mainTable.append(content);
         }
+    },
+    createSelectElement: function (id, className, options) {
+        var ret = "<select id='" + id + "-select' class='" + className + "-select'>";
+        options.forEach(function (opt) {
+            ret += "<option>" + util.fancy(opt) + "</option>";
+        });
+        return ret += "</select></td>";
     },
     /**
      * Muestra el resultado de un conjunto de dados en la pantalla, formatado correctamente.
@@ -179,7 +199,7 @@ var table = {
             element.empty();
             ap = table.level(stat);
             element.append(ap);
-            button.setTableButtons(name);
+            button.setTableButtons(name, 'td');
         }
     },
     /**
@@ -215,7 +235,8 @@ var table = {
     level: function(stat) {
         var ret = "", level = stat.level;
         var icon, max = stat.max, lim = stat.limit;
-        // bucle que inserta la imagen de una esfera de nivel. Si el personaje posee ese nivel aprendido, sera roja, y sino, gris
+        // bucle que inserta la imagen de una esfera de nivel.
+        // Si el personaje posee ese nivel aprendido, sera roja, y sino, gris
         for(var i = 1; i<=lim; i++) {
             if (util.is(util.maxStat, stat))  icon = i <= max ? icons.list.max : icons.list.unset;
             else if (i > level) icon = icons.list.unset;

@@ -103,7 +103,7 @@ var overlay = {
     gameWindow: function (char) {
         table.showData(char, 'show-data');
         table.showStats(char, 'show-stats');
-        if(util.isMaster(user, game)) button.setTableButtons('show-stats');
+        if (util.isMaster(user, game)) button.setTableButtons('show-stats', 'table');
         list.loadStatSelection();
     },
     /**

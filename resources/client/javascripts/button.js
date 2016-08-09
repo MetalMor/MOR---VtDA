@@ -44,7 +44,7 @@ var button = {
             table.build(char, statsTableId);
             table.build(discs, discsTableId);
             charFunctions.setDiscs(discs);
-            button.setTableButtons(statsTableId);
+            button.setTableButtons(statsTableId, 'table');
             table.updateOther();
             overlay.open(overlayId);
         } else {
@@ -123,21 +123,23 @@ var button = {
      */
     setDownloader: function() {
         button.setButtonClick($('span#download'), function() {
-            table.exportImg($('table#show-stats')[0], function(dataUrl) {
+            var tableRawElement = $('table#show-stats')[0];
+            /*table.exportImg(tableRawElement, function(dataUrl) {
                 ajax.request('download', dataUrl, function (data, textStatus, jqXHR) {
                     var logSource = 'file';
                     logger.log(logSource, "got file from server");
                     if(!window.open(dataUrl, '_blank')) logger.log(logSource, 'could not open new tab');
                 });
-            });
+             });*/
+            table.exportImg(tableRawElement);
         });
     },
     /**
      * Establece los eventos de botones de la tabla del personaje.
      * @param id Tabla o fila de la que establecer el evento.
      */
-    setTableButtons: function(id) {
-        var levelButtons = $('img#'+id+' img[class]');
+    setTableButtons: function (id, tag) {
+        var tag = tag || '', levelButtons = $(tag + '#' + id + ' img[class]');
         levelButtons.each(function() {
             var e, attrName = (e = $(this)).closest('td[id]').attr('id');
             if(restrict.lookRestriction(attrName))
