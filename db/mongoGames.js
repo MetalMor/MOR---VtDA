@@ -113,7 +113,7 @@ module.exports = {
             assert.equal(null, err);
             //db.open(function (err, client) {
                 //assert.equal(null, err);
-                client.collection(col).findOne(game, function (err, list) {
+            db.collection(col).findOne(game, function (err, list) {
                     db.close();
                     assert.equal(null, err);
                     if (list) logger.log("mongo", "found game: " + list.name);

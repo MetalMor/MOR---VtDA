@@ -69,9 +69,9 @@ logger.log('server', 'root route set');
 app.get(constants.server.routes.test, function (req, res) {
     logger.log('server', 'fix updateNames');
     var game = {name: 'Blood Money'},
-        equiv = {reserva_de_sangre: 'sangre'};
+        equiv = {conciencia: 'conviccion'};
     dbFix.updateNames(game, equiv);
-    res.send(200);
+    res.sendStatus(200);
 });
 
 server.listen(PORT);
