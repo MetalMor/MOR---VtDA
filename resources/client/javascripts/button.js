@@ -156,6 +156,7 @@ var button = {
     setXpGiver: function () {
         var element = $('span#xp-giver');
         button.setButtonClick(element, function () {
+            char.fp = 0;
             char.xp++;
             overlay.gameWindow(char);
             sockets.update();

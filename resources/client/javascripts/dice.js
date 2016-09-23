@@ -57,6 +57,10 @@ var dice = {
              */
             resolved: false,
             /**
+             * Contador de pifias.
+             */
+            fails: 0,
+            /**
              * Elimina una tirada especificada por parámetro del conjunto de tiradas.
              * @param roll Tirada a eliminar.
              */
@@ -101,6 +105,7 @@ var dice = {
                             rollSet.deleteRoll(maxRoll);
                             rollSet.deleteRoll(minRoll);
                             rollSet.wins--;
+                            rollSet.fails++;
                         } else rollSet.fail = true; // si el más alto no es una victoria, no borra nada y marca el conjunto como pifia total
                     }
                 }
